@@ -627,10 +627,10 @@
                 sa: 1026.95
             },
             services: {
-                comptabilite: 5837.4,
-                tva: 1362,
-                domiciliation: 3243,
-                rhPerEmployee: 1102.6
+                comptabilite: 5400,      // 3000 + 1200 + 1200 HT (sans domiciliation)
+                tva: 1260,               // 390 + 390 + 480 HT
+                domiciliation: 3000,     // 250/mois × 12 HT
+                rhPerEmployee: 1020      // 600 + 420 HT par employé
             },
             revenueMultiplier: {
                 '<100k': 1.0,
@@ -915,11 +915,10 @@
 
                 // COMPTABILITE
                 if (formData.services.includes('comptabilite')) {
-                    const domiciliationHT = 250 * 12; // 3000 HT
                     const comptaMensuelleHT = 250 * 12; // 3000 HT
                     const clotureHT = 1200;
                     const etatsFinanciersHT = 1200;
-                    const totalComptaHT = domiciliationHT + comptaMensuelleHT + clotureHT + etatsFinanciersHT;
+                    const totalComptaHT = comptaMensuelleHT + clotureHT + etatsFinanciersHT;
                     servicesHTBeforeMultiplier += totalComptaHT;
 
                     html += `
@@ -929,10 +928,6 @@
                             </div>
                             
                             <div style="margin-left: 1.5rem; font-size: 0.9rem;">
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                    <span style="color: var(--text-dark);">• Domiciliation (250 CHF/mois × 12)</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${domiciliationHT.toFixed(2)} CHF</span>
-                                </div>
                                 <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
                                     <span style="color: var(--text-dark);">• Comptabilité mensuelle (250 CHF/mois × 12)</span>
                                     <span style="font-weight: 500; color: var(--navy);">${comptaMensuelleHT.toFixed(2)} CHF</span>
