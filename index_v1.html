@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHI Fiduciaire - Générateur de Devis</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a3a52;
+            --secondary: #c9a961;
+            --accent: #8b6f47;
+            --light: #f8f6f3;
+            --white: #ffffff;
+            --gray: #666666;
+            --border: #e0ddd8;
+            --success: #2d5f3f;
+            --error: #c84343;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, #f8f6f3 0%, #e8e5e0 100%);
+            min-height: 100vh;
+            color: var(--primary);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        .logo-accent {
+            color: var(--secondary);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--accent);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(26, 58, 82, 0.12);
+            padding: 50px;
+            animation: fadeInUp 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--light);
+            border-radius: 10px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .step-header {
+            margin-bottom: 35px;
+        }
+
+        .step-number {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .step-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 300;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option-button {
+            padding: 20px 24px;
+            border: 2px solid var(--border);
+            background: var(--white);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .option-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .option-button:hover {
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 58, 82, 0.15);
+        }
+
+        .option-button.selected {
+            border-color: var(--secondary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+        }
+
+        .option-button.selected::before {
+            opacity: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--secondary);
+            background: var(--light);
+        }
+
+        .checkbox-item.checked {
+            border-color: var(--secondary);
+            background: linear-gradient(135deg, rgba(26, 58, 82, 0.05), rgba(201, 169, 97, 0.05));
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: var(--secondary);
+        }
+
+        .checkbox-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--primary);
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Work Sans', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Work Sans', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Work Sans', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(26, 58, 82, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            border-color: var(--secondary);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #3d7a52);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(45, 95, 63, 0.3);
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, rgba(26, 58, 82, 0.05), rgba(201, 169, 97, 0.05));
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            padding: 35px;
+            margin: 30px 0;
+            text-align: center;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .result-label {
+            font-size: 1rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .result-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result-detail {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        .detailed-result {
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid var(--secondary);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .result-item-label {
+            color: var(--primary);
+        }
+
+        .result-item-value {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, var(--success), #3d7a52);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: successPulse 0.6s ease;
+        }
+
+        .success-icon::after {
+            content: '✓';
+            font-size: 3rem;
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        .success-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .info-box {
+            background: rgba(201, 169, 97, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .info-box p {
+            margin: 8px 0;
+            color: var(--primary);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes successPulse {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 30px 25px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .step-title {
+                font-size: 1.5rem;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            .result-price {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function QuotationApp() {
+            const [step, setStep] = useState(1);
+            const [quoteType, setQuoteType] = useState(null);
+            const [formData, setFormData] = useState({
+                companyType: null,
+                employees: null,
+                revenue: null,
+                name: '',
+                firstName: '',
+                company: '',
+                email: '',
+                phone: '',
+                services: [],
+                creationDetails: {
+                    type: null,
+                    domiciliation: null,
+                    director: null
+                },
+                comptaDetails: {
+                    frequency: null,
+                    audit: null,
+                    financialStatements: null
+                },
+                tvaDetails: {
+                    declaration: null,
+                    concordance: null,
+                    fiscal: null
+                },
+                rhDetails: {
+                    socialInsurance: null,
+                    salaryManagement: null
+                },
+                comments: ''
+            });
+            const [calculatedPrice, setCalculatedPrice] = useState(null);
+
+            const totalSteps = quoteType === 'simple' ? 6 : 10;
+            const progress = (step / totalSteps) * 100;
+
+            // Calculation Logic
+            const calculatePrice = (isDetailed = false) => {
+                let basePrice = 0;
+
+                // Base price by company type
+                const basePrices = {
+                    'independant': 1800,
+                    'sarl': 2400,
+                    'sa': 3000,
+                    'creation': 2200,
+                    'autre': 2000
+                };
+                basePrice = basePrices[formData.companyType] || 2000;
+
+                // Employee coefficient
+                const employeeCoeffs = {
+                    'moins5': 0,
+                    'moins10': 200,
+                    'moins20': 400,
+                    'moins50': 800,
+                    'plus50': 1500
+                };
+                const employeeAddition = employeeCoeffs[formData.employees] || 0;
+
+                // Revenue coefficient (percentage increase)
+                const revenueCoeffs = {
+                    'moins100k': 0,
+                    'moins600k': 0.10,
+                    'moins1m': 0.20,
+                    'moins2m': 0.30,
+                    'moins5m': 0.40,
+                    'plus5m': 0.50
+                };
+                const revenueMultiplier = 1 + (revenueCoeffs[formData.revenue] || 0);
+
+                // Calculate base with multipliers
+                let totalPrice = (basePrice + employeeAddition) * revenueMultiplier;
+
+                // Service additions
+                const serviceBreakdown = {};
+                
+                if (formData.services.includes('comptabilite')) {
+                    const comptaBase = 1200;
+                    serviceBreakdown['Comptabilité'] = comptaBase;
+                    totalPrice += comptaBase;
+                }
+
+                if (formData.services.includes('tva')) {
+                    const tvaBase = 600;
+                    serviceBreakdown['TVA & Fiscalité'] = tvaBase;
+                    totalPrice += tvaBase;
+                }
+
+                if (formData.services.includes('rh')) {
+                    const employeeCount = formData.employees === 'moins5' ? 3 : 
+                                        formData.employees === 'moins10' ? 7 : 
+                                        formData.employees === 'moins20' ? 15 : 
+                                        formData.employees === 'moins50' ? 35 : 75;
+                    const rhCost = 400 * employeeCount;
+                    serviceBreakdown['RH & Salaires'] = rhCost;
+                    totalPrice += rhCost;
+                }
+
+                if (formData.services.includes('creation')) {
+                    const creationBase = formData.companyType === 'sa' ? 3000 : 1500;
+                    serviceBreakdown['Création entreprise'] = creationBase;
+                    totalPrice += creationBase;
+                }
+
+                // Detailed pricing adjustments
+                if (isDetailed) {
+                    if (formData.comptaDetails.audit === 'oui') {
+                        serviceBreakdown['Audit'] = 2500;
+                        totalPrice += 2500;
+                    }
+                    if (formData.tvaDetails.concordance === 'oui') {
+                        serviceBreakdown['Concordance TVA'] = 800;
+                        totalPrice += 800;
+                    }
+                }
+
+                // Create price range (±15% for simple, exact for detailed)
+                if (isDetailed) {
+                    return {
+                        exact: Math.round(totalPrice),
+                        breakdown: {
+                            'Base entreprise': basePrice,
+                            'Taille entreprise': employeeAddition,
+                            'Chiffre d\'affaires': Math.round((basePrice + employeeAddition) * (revenueMultiplier - 1)),
+                            ...serviceBreakdown
+                        }
+                    };
+                } else {
+                    const min = Math.round(totalPrice * 0.85);
+                    const max = Math.round(totalPrice * 1.15);
+                    return { min, max, estimate: Math.round(totalPrice) };
+                }
+            };
+
+            // Generate PDF
+            const generatePDF = () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setFontSize(20);
+                doc.text('PHI FIDUCIAIRE', 20, 20);
+                doc.setFontSize(12);
+                doc.text('Devis ' + (quoteType === 'simple' ? 'Simple' : 'Détaillé'), 20, 30);
+                
+                doc.setFontSize(10);
+                doc.text(`Client: ${formData.firstName} ${formData.name}`, 20, 45);
+                doc.text(`Société: ${formData.company}`, 20, 52);
+                doc.text(`Email: ${formData.email}`, 20, 59);
+                doc.text(`Téléphone: ${formData.phone}`, 20, 66);
+                
+                doc.text(`Type entreprise: ${formData.companyType}`, 20, 80);
+                doc.text(`Employés: ${formData.employees}`, 20, 87);
+                doc.text(`CA: ${formData.revenue}`, 20, 94);
+                
+                doc.text('Services:', 20, 108);
+                formData.services.forEach((service, index) => {
+                    doc.text(`- ${service}`, 25, 115 + (index * 7));
+                });
+
+                if (quoteType === 'simple') {
+                    doc.setFontSize(14);
+                    doc.text(`Estimation: ${calculatedPrice.min} - ${calculatedPrice.max} CHF/an`, 20, 140);
+                } else {
+                    doc.setFontSize(12);
+                    doc.text('Détail du devis:', 20, 140);
+                    let yPos = 150;
+                    Object.entries(calculatedPrice.breakdown).forEach(([key, value]) => {
+                        doc.text(`${key}: ${value} CHF`, 25, yPos);
+                        yPos += 7;
+                    });
+                    doc.setFontSize(14);
+                    doc.text(`TOTAL: ${calculatedPrice.exact} CHF/an`, 20, yPos + 10);
+                }
+
+                doc.save(`PHI_Devis_${formData.company}_${Date.now()}.pdf`);
+            };
+
+            // Send emails (simulation)
+            const sendEmails = () => {
+                console.log('Email sent to:', formData.email);
+                console.log('Email sent to: prospect@phi-fiduciaire.ch');
+                console.log('CRM updated with tags:', {
+                    type: quoteType,
+                    services: formData.services,
+                    companyType: formData.companyType
+                });
+            };
+
+            const handleNext = () => {
+                if (step === 6 && quoteType === 'simple') {
+                    const price = calculatePrice(false);
+                    setCalculatedPrice(price);
+                } else if (step === 10) {
+                    const price = calculatePrice(true);
+                    setCalculatedPrice(price);
+                }
+                setStep(step + 1);
+            };
+
+            const handleBack = () => {
+                setStep(step - 1);
+            };
+
+            const handleUpgradeToDetailed = () => {
+                setQuoteType('detailed');
+                setStep(8);
+            };
+
+            const handleFinish = () => {
+                generatePDF();
+                sendEmails();
+                setStep(step + 1);
+            };
+
+            const renderStep = () => {
+                switch(step) {
+                    case 1:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 1 sur {totalSteps}</div>
+                                    <h2 className="step-title">Type de devis</h2>
+                                    <p className="step-subtitle">Choisissez le type de devis souhaité</p>
+                                </div>
+                                <div className="button-group">
+                                    <button 
+                                        className={`option-button ${quoteType === 'simple' ? 'selected' : ''}`}
+                                        onClick={() => setQuoteType('simple')}
+                                    >
+                                        <span>
+                                            <strong>Devis Simple</strong><br/>
+                                            <small>Estimation rapide en quelques minutes</small>
+                                        </span>
+                                    </button>
+                                    <button 
+                                        className={`option-button ${quoteType === 'detailed' ? 'selected' : ''}`}
+                                        onClick={() => setQuoteType('detailed')}
+                                    >
+                                        <span>
+                                            <strong>Devis Détaillé</strong><br/>
+                                            <small>Devis complet et personnalisé</small>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div className="button-container">
+                                    <div></div>
+                                    <button className="btn btn-primary" onClick={handleNext} disabled={!quoteType}>
+                                        <span>Continuer →</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 2:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 2 sur {totalSteps}</div>
+                                    <h2 className="step-title">Type d'entreprise</h2>
+                                    <p className="step-subtitle">Quelle est la forme juridique de votre entreprise?</p>
+                                </div>
+                                <div className="button-group">
+                                    {[
+                                        { value: 'independant', label: 'Indépendant' },
+                                        { value: 'sarl', label: 'Sàrl' },
+                                        { value: 'sa', label: 'SA' },
+                                        { value: 'creation', label: 'Création (future)' },
+                                        { value: 'autre', label: 'Autre' }
+                                    ].map(option => (
+                                        <button
+                                            key={option.value}
+                                            className={`option-button ${formData.companyType === option.value ? 'selected' : ''}`}
+                                            onClick={() => setFormData({...formData, companyType: option.value})}
+                                        >
+                                            <span>{option.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="button-container">
+                                    <button className="btn btn-secondary" onClick={handleBack}>
+                                        <span>← Retour</span>
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleNext} disabled={!formData.companyType}>
+                                        <span>Continuer →</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 3:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 3 sur {totalSteps}</div>
+                                    <h2 className="step-title">Taille de l'entreprise</h2>
+                                    <p className="step-subtitle">Informations sur votre activité</p>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Nombre d'employés</label>
+                                    <select 
+                                        className="form-select"
+                                        value={formData.employees || ''}
+                                        onChange={(e) => setFormData({...formData, employees: e.target.value})}
+                                    >
+                                        <option value="">Sélectionner...</option>
+                                        <option value="moins5">Moins de 5</option>
+                                        <option value="moins10">5 à 10</option>
+                                        <option value="moins20">10 à 20</option>
+                                        <option value="moins50">20 à 50</option>
+                                        <option value="plus50">Plus de 50</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Chiffre d'affaires annuel (CHF)</label>
+                                    <select 
+                                        className="form-select"
+                                        value={formData.revenue || ''}
+                                        onChange={(e) => setFormData({...formData, revenue: e.target.value})}
+                                    >
+                                        <option value="">Sélectionner...</option>
+                                        <option value="moins100k">Moins de 100'000</option>
+                                        <option value="moins600k">100'000 à 600'000</option>
+                                        <option value="moins1m">600'000 à 1'000'000</option>
+                                        <option value="moins2m">1'000'000 à 2'000'000</option>
+                                        <option value="moins5m">2'000'000 à 5'000'000</option>
+                                        <option value="plus5m">Plus de 5'000'000</option>
+                                    </select>
+                                </div>
+                                <div className="button-container">
+                                    <button className="btn btn-secondary" onClick={handleBack}>
+                                        <span>← Retour</span>
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleNext} disabled={!formData.employees || !formData.revenue}>
+                                        <span>Continuer →</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 4:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 4 sur {totalSteps}</div>
+                                    <h2 className="step-title">Coordonnées</h2>
+                                    <p className="step-subtitle">Comment pouvons-nous vous contacter?</p>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Prénom *</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.firstName}
+                                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                                        placeholder="Votre prénom"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Nom *</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                        placeholder="Votre nom"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Société</label>
+                                    <input 
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.company}
+                                        onChange={(e) => setFormData({...formData, company: e.target.value})}
+                                        placeholder="Nom de votre société"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Email *</label>
+                                    <input 
+                                        type="email"
+                                        className="form-input"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                        placeholder="votre@email.ch"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Téléphone *</label>
+                                    <input 
+                                        type="tel"
+                                        className="form-input"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                        placeholder="+41 XX XXX XX XX"
+                                    />
+                                </div>
+                                <div className="button-container">
+                                    <button className="btn btn-secondary" onClick={handleBack}>
+                                        <span>← Retour</span>
+                                    </button>
+                                    <button 
+                                        className="btn btn-primary" 
+                                        onClick={handleNext} 
+                                        disabled={!formData.firstName || !formData.name || !formData.email || !formData.phone}
+                                    >
+                                        <span>Continuer →</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 5:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 5 sur {totalSteps}</div>
+                                    <h2 className="step-title">Services souhaités</h2>
+                                    <p className="step-subtitle">Sélectionnez les services dont vous avez besoin</p>
+                                </div>
+                                <div className="checkbox-group">
+                                    {[
+                                        { value: 'comptabilite', label: 'Comptabilité' },
+                                        { value: 'tva', label: 'TVA & Fiscalité' },
+                                        { value: 'rh', label: 'RH & Salaires' },
+                                        { value: 'creation', label: 'Création d\'entreprise' }
+                                    ].map(service => (
+                                        <label 
+                                            key={service.value}
+                                            className={`checkbox-item ${formData.services.includes(service.value) ? 'checked' : ''}`}
+                                        >
+                                            <input 
+                                                type="checkbox"
+                                                checked={formData.services.includes(service.value)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setFormData({...formData, services: [...formData.services, service.value]});
+                                                    } else {
+                                                        setFormData({...formData, services: formData.services.filter(s => s !== service.value)});
+                                                    }
+                                                }}
+                                            />
+                                            <span className="checkbox-label">{service.label}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                                <div className="button-container">
+                                    <button className="btn btn-secondary" onClick={handleBack}>
+                                        <span>← Retour</span>
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleNext} disabled={formData.services.length === 0}>
+                                        <span>Continuer →</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 6:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 6 sur {totalSteps}</div>
+                                    <h2 className="step-title">Votre devis simple</h2>
+                                    <p className="step-subtitle">Estimation basée sur vos informations</p>
+                                </div>
+                                <div className="result-box">
+                                    <div className="result-label">Estimation annuelle</div>
+                                    <div className="result-price">
+                                        {calculatedPrice?.min.toLocaleString('fr-CH')} - {calculatedPrice?.max.toLocaleString('fr-CH')} CHF
+                                    </div>
+                                    <div className="result-detail">Prix par année (hors TVA)</div>
+                                </div>
+                                <div className="info-box">
+                                    <p><strong>✓</strong> Un PDF avec cette estimation a été généré</p>
+                                    <p><strong>✓</strong> Vous recevrez un email de confirmation à: {formData.email}</p>
+                                    <p><strong>✓</strong> Notre équipe vous contactera sous 24h pour affiner ce devis</p>
+                                </div>
+                                <div className="button-container">
+                                    <button className="btn btn-secondary" onClick={handleFinish}>
+                                        <span>Terminer</span>
+                                    </button>
+                                    <button className="btn btn-success" onClick={handleUpgradeToDetailed}>
+                                        <span>Je veux un devis détaillé →</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 7:
+                        return (
+                            <div className="success-message">
+                                <div className="success-icon"></div>
+                                <h2 className="success-title">Merci!</h2>
+                                <p className="success-text">Votre devis simple a été envoyé à <strong>{formData.email}</strong></p>
+                                <p className="success-text">Un de nos conseillers vous contactera sous 24 heures.</p>
+                                <div className="result-box" style={{marginTop: '30px'}}>
+                                    <div className="result-label">Récapitulatif</div>
+                                    <div className="result-price" style={{fontSize: '2rem'}}>
+                                        {calculatedPrice?.min.toLocaleString('fr-CH')} - {calculatedPrice?.max.toLocaleString('fr-CH')} CHF
+                                    </div>
+                                    <div className="result-detail">par année</div>
+                                </div>
+                                <button className="btn btn-primary" onClick={() => window.location.reload()} style={{marginTop: '30px'}}>
+                                    <span>Nouveau devis</span>
+                                </button>
+                            </div>
+                        );
+
+                    case 8:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 8 sur {totalSteps}</div>
+                                    <h2 className="step-title">Détails techniques</h2>
+                                    <p className="step-subtitle">Précisez vos besoins pour chaque service</p>
+                                </div>
+
+                                {formData.services.includes('creation') && (
+                                    <div style={{marginBottom: '30px'}}>
+                                        <h3 style={{color: 'var(--secondary)', marginBottom: '15px', fontSize: '1.2rem'}}>Création d'entreprise</h3>
+                                        <div className="form-group">
+                                            <label className="form-label">Type de société</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.creationDetails.type || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    creationDetails: {...formData.creationDetails, type: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="sarl">Sàrl</option>
+                                                <option value="sa">SA</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Domiciliation requise?</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.creationDetails.domiciliation || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    creationDetails: {...formData.creationDetails, domiciliation: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="oui">Oui</option>
+                                                <option value="non">Non</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Directeur administratif requis?</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.creationDetails.director || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    creationDetails: {...formData.creationDetails, director: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="oui">Oui</option>
+                                                <option value="non">Non</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {formData.services.includes('comptabilite') && (
+                                    <div style={{marginBottom: '30px'}}>
+                                        <h3 style={{color: 'var(--secondary)', marginBottom: '15px', fontSize: '1.2rem'}}>Comptabilité</h3>
+                                        <div className="form-group">
+                                            <label className="form-label">Fréquence</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.comptaDetails.frequency || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    comptaDetails: {...formData.comptaDetails, frequency: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="mensuelle">Mensuelle</option>
+                                                <option value="annuelle">Annuelle</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Audit requis?</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.comptaDetails.audit || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    comptaDetails: {...formData.comptaDetails, audit: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="oui">Oui</option>
+                                                <option value="non">Non</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">États financiers?</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.comptaDetails.financialStatements || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    comptaDetails: {...formData.comptaDetails, financialStatements: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="oui">Oui</option>
+                                                <option value="non">Non</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {formData.services.includes('tva') && (
+                                    <div style={{marginBottom: '30px'}}>
+                                        <h3 style={{color: 'var(--secondary)', marginBottom: '15px', fontSize: '1.2rem'}}>TVA & Fiscalité</h3>
+                                        <div className="form-group">
+                                            <label className="form-label">Fréquence déclaration TVA</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.tvaDetails.declaration || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    tvaDetails: {...formData.tvaDetails, declaration: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="trimestrielle">Trimestrielle</option>
+                                                <option value="semestrielle">Semestrielle</option>
+                                                <option value="annuelle">Annuelle</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Concordance requise?</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.tvaDetails.concordance || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    tvaDetails: {...formData.tvaDetails, concordance: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="oui">Oui</option>
+                                                <option value="non">Non</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Déclaration fiscale?</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.tvaDetails.fiscal || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    tvaDetails: {...formData.tvaDetails, fiscal: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="oui">Oui</option>
+                                                <option value="non">Non</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {formData.services.includes('rh') && (
+                                    <div style={{marginBottom: '30px'}}>
+                                        <h3 style={{color: 'var(--secondary)', marginBottom: '15px', fontSize: '1.2rem'}}>RH & Salaires</h3>
+                                        <div className="form-group">
+                                            <label className="form-label">Gestion assurances sociales?</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.rhDetails.socialInsurance || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    rhDetails: {...formData.rhDetails, socialInsurance: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="oui">Oui</option>
+                                                <option value="non">Non</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Gestion des salaires?</label>
+                                            <select 
+                                                className="form-select"
+                                                value={formData.rhDetails.salaryManagement || ''}
+                                                onChange={(e) => setFormData({
+                                                    ...formData, 
+                                                    rhDetails: {...formData.rhDetails, salaryManagement: e.target.value}
+                                                })}
+                                            >
+                                                <option value="">Sélectionner...</option>
+                                                <option value="oui">Oui</option>
+                                                <option value="non">Non</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="button-container">
+                                    <button className="btn btn-secondary" onClick={handleBack}>
+                                        <span>← Retour</span>
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleNext}>
+                                        <span>Continuer →</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 9:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 9 sur {totalSteps}</div>
+                                    <h2 className="step-title">Commentaires & précisions</h2>
+                                    <p className="step-subtitle">Informations complémentaires (optionnel)</p>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Avez-vous des précisions à ajouter?</label>
+                                    <textarea 
+                                        className="form-input textarea"
+                                        value={formData.comments}
+                                        onChange={(e) => setFormData({...formData, comments: e.target.value})}
+                                        placeholder="Exemple: logiciel comptable utilisé, délais spécifiques, situations particulières..."
+                                    />
+                                </div>
+                                <div className="info-box">
+                                    <p><strong>Exemples de précisions utiles:</strong></p>
+                                    <p>• Logiciel comptable actuellement utilisé</p>
+                                    <p>• Délais souhaités pour le démarrage</p>
+                                    <p>• Situations particulières ou urgences</p>
+                                    <p>• Questions spécifiques</p>
+                                </div>
+                                <div className="button-container">
+                                    <button className="btn btn-secondary" onClick={handleBack}>
+                                        <span>← Retour</span>
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleNext}>
+                                        <span>Continuer →</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 10:
+                        return (
+                            <>
+                                <div className="step-header">
+                                    <div className="step-number">Étape 10 sur {totalSteps}</div>
+                                    <h2 className="step-title">Votre devis détaillé</h2>
+                                    <p className="step-subtitle">Calcul personnalisé basé sur vos besoins</p>
+                                </div>
+                                <div className="result-box">
+                                    <div className="result-label">Prix total annuel</div>
+                                    <div className="result-price">
+                                        {calculatedPrice?.exact.toLocaleString('fr-CH')} CHF
+                                    </div>
+                                    <div className="result-detail">Prix par année (hors TVA)</div>
+                                </div>
+                                <div className="detailed-result">
+                                    <h3 style={{color: 'var(--primary)', marginBottom: '20px', fontSize: '1.3rem'}}>Détail du devis</h3>
+                                    {Object.entries(calculatedPrice?.breakdown || {}).map(([key, value]) => (
+                                        <div key={key} className="result-item">
+                                            <span className="result-item-label">{key}</span>
+                                            <span className="result-item-value">{value.toLocaleString('fr-CH')} CHF</span>
+                                        </div>
+                                    ))}
+                                    <div className="result-item">
+                                        <span className="result-item-label">TOTAL</span>
+                                        <span className="result-item-value">{calculatedPrice?.exact.toLocaleString('fr-CH')} CHF</span>
+                                    </div>
+                                </div>
+                                <div className="info-box">
+                                    <p><strong>✓</strong> Un PDF détaillé a été généré</p>
+                                    <p><strong>✓</strong> Vous recevrez un email de confirmation à: {formData.email}</p>
+                                    <p><strong>✓</strong> Un conseiller vous contactera sous 24h pour finaliser</p>
+                                </div>
+                                <div className="button-container">
+                                    <button className="btn btn-secondary" onClick={handleBack}>
+                                        <span>← Retour</span>
+                                    </button>
+                                    <button className="btn btn-success" onClick={handleFinish}>
+                                        <span>Télécharger le PDF & Terminer</span>
+                                    </button>
+                                </div>
+                            </>
+                        );
+
+                    case 11:
+                        return (
+                            <div className="success-message">
+                                <div className="success-icon"></div>
+                                <h2 className="success-title">Merci!</h2>
+                                <p className="success-text">Votre devis détaillé a été envoyé à <strong>{formData.email}</strong></p>
+                                <p className="success-text">Un de nos conseillers vous contactera sous 24 heures.</p>
+                                <div className="result-box" style={{marginTop: '30px'}}>
+                                    <div className="result-label">Votre devis</div>
+                                    <div className="result-price" style={{fontSize: '2.5rem'}}>
+                                        {calculatedPrice?.exact.toLocaleString('fr-CH')} CHF
+                                    </div>
+                                    <div className="result-detail">par année (hors TVA)</div>
+                                </div>
+                                <button className="btn btn-primary" onClick={() => window.location.reload()} style={{marginTop: '30px'}}>
+                                    <span>Nouveau devis</span>
+                                </button>
+                            </div>
+                        );
+
+                    default:
+                        return null;
+                }
+            };
+
+            return (
+                <div className="app-container">
+                    <div className="header">
+                        <h1 className="logo">
+                            PHI <span className="logo-accent">Fiduciaire</span>
+                        </h1>
+                        <p className="tagline">Générateur de Devis</p>
+                    </div>
+
+                    <div className="card">
+                        {step <= totalSteps && (
+                            <div className="progress-bar">
+                                <div className="progress-fill" style={{width: `${progress}%`}}></div>
+                            </div>
+                        )}
+                        {renderStep()}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<QuotationApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
