@@ -138,6 +138,23 @@ Le système affiche "Devis sur demande" dans les cas suivants:
 1. **Plus de 20 employés** - Complexité RH trop importante
 2. **Prix > 2.2% du CA** - Prix disproportionné par rapport au revenu
 
+### Affichage Toggle
+
+Lorsqu'un devis est en statut ON_QUOTE, l'utilisateur peut cliquer sur le bouton **"Voir le détail du calcul"** pour afficher:
+
+1. **La raison du ON_QUOTE:**
+   - Si employés > 20: "Plus de 20 employés (X employés). Les entreprises de cette taille nécessitent une analyse personnalisée."
+   - Si prix > 2.2%: "Le prix calculé (X CHF) dépasse 2.2% du chiffre d'affaires (max: Y CHF)."
+
+2. **Le détail complet du calcul:**
+   - Forfait de base
+   - Supplément CA
+   - Supplément employés
+   - Domiciliation (si applicable)
+   - Risk add-ons (si applicable)
+   - Prix calculé total
+   - Guardrails appliqués (min/max)
+
 ---
 
 ## Exemples de Calcul
