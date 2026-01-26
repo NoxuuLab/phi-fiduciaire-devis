@@ -438,7 +438,7 @@
 
             <!-- Step 1: Structure -->
             <div class="step active" id="step1">
-                <p class="step-indicator">ÉTAPE 1 SUR 6</p>
+                <p class="step-indicator">ÉTAPE 1 SUR 7</p>
                 <h2>Structure juridique</h2>
                 <p class="question">Quelle est la forme juridique de votre entreprise?</p>
                 
@@ -457,7 +457,7 @@
 
             <!-- Step 2: Creation Type (if applicable) -->
             <div class="step" id="step2">
-                <p class="step-indicator">ÉTAPE 2 SUR 6</p>
+                <p class="step-indicator">ÉTAPE 2 SUR 7</p>
                 <h2>Type de création</h2>
                 <p class="question">Quel type de société souhaitez-vous créer?</p>
                 
@@ -472,70 +472,81 @@
                 </div>
             </div>
 
-            <!-- Step 3: Services -->
+            <!-- Step 3: Risk Add-ons -->
             <div class="step" id="step3">
-                <p class="step-indicator">ÉTAPE 3 SUR 6</p>
-                <h2>Services souhaités</h2>
-                <p class="question">Quels services souhaitez-vous souscrire?</p>
-                
+                <p class="step-indicator">ÉTAPE 3 SUR 7</p>
+                <h2>Situation de l'entreprise</h2>
+                <p class="question">Cochez les options qui s'appliquent à votre entreprise (optionnel)</p>
+
                 <div class="checkbox-group">
                     <div class="checkbox-option">
-                        <input type="checkbox" id="comptabilite" value="comptabilite">
-                        <label for="comptabilite">Comptabilité mensuelle & clôture</label>
+                        <input type="checkbox" id="vatRegistered" value="vatRegistered">
+                        <label for="vatRegistered">Assujetti à la TVA</label>
                     </div>
                     <div class="checkbox-option">
-                        <input type="checkbox" id="tva" value="tva">
-                        <label for="tva">TVA & Fiscalité</label>
+                        <input type="checkbox" id="foreignActivity" value="foreignActivity">
+                        <label for="foreignActivity">Activité à l'étranger</label>
                     </div>
                     <div class="checkbox-option">
-                        <input type="checkbox" id="rh" value="rh">
-                        <label for="rh">RH & Salaires</label>
+                        <input type="checkbox" id="holdingStructure" value="holdingStructure">
+                        <label for="holdingStructure">Structure holding</label>
                     </div>
                     <div class="checkbox-option">
-                        <input type="checkbox" id="domiciliation" value="domiciliation">
-                        <label for="domiciliation">Domiciliation</label>
+                        <input type="checkbox" id="lateDocuments" value="lateDocuments">
+                        <label for="lateDocuments">Documents en retard</label>
                     </div>
                 </div>
 
                 <div class="navigation">
                     <button class="btn btn-secondary" id="back3">← Retour</button>
-                    <button class="btn btn-primary" id="next3" disabled>Continuer →</button>
+                    <button class="btn btn-primary" id="next3">Continuer →</button>
                 </div>
             </div>
 
-            <!-- Step 4: Company Size - Employees -->
+            <!-- Step 4: Services Selection -->
             <div class="step" id="step4">
-                <p class="step-indicator">ÉTAPE 4 SUR 6</p>
-                <h2>Taille de l'entreprise</h2>
-                <p class="question">Combien d'employés avez-vous?</p>
-                
-                <div class="options-grid">
-                    <button class="option-btn" data-value="0">Pas d'employé</button>
-                    <button class="option-btn" data-value="1-5">1-5 employés</button>
-                    <button class="option-btn" data-value="10-20">10-20 employés</button>
-                    <button class="option-btn" data-value="20-50">20-50 employés</button>
-                    <button class="option-btn" data-value="50+">Plus de 50</button>
+                <p class="step-indicator">ÉTAPE 4 SUR 7</p>
+                <h2>Services souhaités</h2>
+                <p class="question">Quels services souhaitez-vous? (sélectionnez au moins un)</p>
+
+                <div class="checkbox-group">
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="serviceDomiciliation" value="domiciliation">
+                        <label for="serviceDomiciliation">Domiciliation <span style="color: var(--gold); font-size: 0.85rem;">(+250 CHF/mois)</span></label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="serviceComptabilite" value="comptabilite">
+                        <label for="serviceComptabilite">Comptabilité & Clôture annuelle</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="serviceFiscalite" value="fiscalite">
+                        <label for="serviceFiscalite">Fiscalité & Déclarations fiscales</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="serviceRhSalaires" value="rhSalaires">
+                        <label for="serviceRhSalaires">Gestion RH & Fiches de salaires</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="serviceTvaDeclarations" value="tvaDeclarations">
+                        <label for="serviceTvaDeclarations">Déclarations TVA</label>
+                    </div>
                 </div>
 
                 <div class="navigation">
-                    <button class="btn btn-secondary" onclick="goToStep(3)">← Retour</button>
+                    <button class="btn btn-secondary" id="back4">← Retour</button>
                     <button class="btn btn-primary" id="next4" disabled>Continuer →</button>
                 </div>
             </div>
 
-            <!-- Step 5: Company Size - Revenue -->
+            <!-- Step 5: Company Size - Employees -->
             <div class="step" id="step5">
-                <p class="step-indicator">ÉTAPE 5 SUR 6</p>
-                <h2>Chiffre d'affaires</h2>
-                <p class="question">Quel est votre chiffre d'affaires annuel?</p>
-                
-                <div class="options-grid">
-                    <button class="option-btn" data-value="<100k">Moins de 100'000 CHF</button>
-                    <button class="option-btn" data-value="100k-600k">100'000 - 600'000 CHF</button>
-                    <button class="option-btn" data-value="600k-1m">600'000 - 1'000'000 CHF</button>
-                    <button class="option-btn" data-value="1m-2m">1'000'000 - 2'000'000 CHF</button>
-                    <button class="option-btn" data-value="2m-5m">2'000'000 - 5'000'000 CHF</button>
-                    <button class="option-btn" data-value="5m+">Plus de 5'000'000 CHF</button>
+                <p class="step-indicator">ÉTAPE 5 SUR 7</p>
+                <h2>Taille de l'entreprise</h2>
+                <p class="question">Combien d'employés avez-vous?</p>
+
+                <div class="input-group">
+                    <label for="numberOfEmployees">Nombre d'employés</label>
+                    <input type="number" id="numberOfEmployees" min="0" step="1" placeholder="0">
                 </div>
 
                 <div class="navigation">
@@ -544,9 +555,26 @@
                 </div>
             </div>
 
-            <!-- Step 6: Contact Info -->
+            <!-- Step 6: Company Size - Revenue -->
             <div class="step" id="step6">
-                <p class="step-indicator">ÉTAPE 6 SUR 6</p>
+                <p class="step-indicator">ÉTAPE 6 SUR 7</p>
+                <h2>Chiffre d'affaires</h2>
+                <p class="question">Quel est votre chiffre d'affaires annuel?</p>
+
+                <div class="input-group">
+                    <label for="annualRevenue">Chiffre d'affaires annuel (CHF)</label>
+                    <input type="number" id="annualRevenue" min="0" step="1000" placeholder="0">
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="goToStep(5)">← Retour</button>
+                    <button class="btn btn-primary" id="next6" disabled>Continuer →</button>
+                </div>
+            </div>
+
+            <!-- Step 7: Contact Info -->
+            <div class="step" id="step7">
+                <p class="step-indicator">ÉTAPE 7 SUR 7</p>
                 <h2>Vos coordonnées</h2>
                 <p class="question">Pour recevoir votre devis personnalisé</p>
                 
@@ -576,7 +604,7 @@
                 </div>
 
                 <div class="navigation">
-                    <button class="btn btn-secondary" onclick="goToStep(5)">← Retour</button>
+                    <button class="btn btn-secondary" onclick="goToStep(6)">← Retour</button>
                     <button class="btn btn-primary" id="submit">Recevoir mon devis</button>
                 </div>
             </div>
@@ -614,38 +642,66 @@
         const formData = {
             structure: '',
             creationType: '',
-            services: [],
-            employees: '',
-            revenue: '',
+            employees: 0,
+            revenue: 0,
+            // Risk add-ons (booleans)
+            vatRegistered: false,
+            foreignActivity: false,
+            holdingStructure: false,
+            lateDocuments: false,
+            // Services (for sales team info, only domiciliation affects price)
+            services: {
+                domiciliation: false,
+                comptabilite: false,
+                fiscalite: false,
+                rhSalaires: false,
+                tvaDeclarations: false
+            },
             contact: {}
         };
 
-        // Pricing logic
+        // Pricing logic based on new methodology
         const pricing = {
             creation: {
-                sarl: 810.75,
-                sa: 1026.95
+                sarl: 750,
+                sa: 1150
             },
-            services: {
-                comptabilite: 5400,      // 3000 + 1200 + 1200 HT (sans domiciliation)
-                tva: 1260,               // 390 + 390 + 480 HT
-                domiciliation: 3000,     // 250/mois × 12 HT
-                rhPerEmployee: 1020      // 600 + 420 HT par employé
+            // Domiciliation: 250 CHF/month = 3000 CHF/year
+            domiciliation: 3000,
+            // Base Fee (by employees)
+            baseFee: {
+                zero: 3600,      // employees == 0
+                small: 4500,     // employees <= 2
+                medium: 5500     // employees > 2
             },
-            revenueMultiplier: {
-                '<100k': 1.0,
-                '100k-600k': 1.2,
-                '600k-1m': 1.5,
-                '1m-2m': 1.8,
-                '2m-5m': 2.2,
-                '5m+': 2.5
+            // Revenue Add-on thresholds
+            revenueAddon: [
+                { max: 250000, addon: 0 },
+                { max: 500000, addon: 800 },
+                { max: 1000000, addon: 1600 },
+                { max: 2000000, addon: 2500 },
+                { max: Infinity, addon: 3500 }
+            ],
+            // Employee Add-on thresholds
+            employeeAddon: [
+                { max: 0, addon: 0 },
+                { max: 2, addon: 600 },
+                { max: 5, addon: 1400 },
+                { max: 10, addon: 3000 },
+                { max: 20, addon: 6000 }
+                // > 20 = ON_QUOTE
+            ],
+            // Risk Add-ons
+            riskAddons: {
+                vatRegistered: 600,
+                foreignActivity: 1200,
+                holdingStructure: 1000,
+                lateDocuments: 800
             },
-            employeeAverage: {
-                '0': 0,
-                '1-5': 3,
-                '10-20': 15,
-                '20-50': 35,
-                '50+': 60
+            // Guardrails (% of revenue)
+            guardrails: {
+                minPercent: 0.007,  // 0.7%
+                maxPercent: 0.022   // 2.2%
             }
         };
 
@@ -685,18 +741,17 @@
             goToStep(3);
         });
 
-        // Step 3: Services selection
+        // Step 3: Risk Add-ons selection (optional)
         document.querySelectorAll('#step3 input[type="checkbox"]').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 const parent = this.closest('.checkbox-option');
                 if (this.checked) {
                     parent.classList.add('selected');
-                    formData.services.push(this.value);
                 } else {
                     parent.classList.remove('selected');
-                    formData.services = formData.services.filter(s => s !== this.value);
                 }
-                document.getElementById('next3').disabled = formData.services.length === 0;
+                // Update formData based on checkbox id
+                formData[this.id] = this.checked;
             });
         });
 
@@ -712,13 +767,33 @@
             }
         });
 
-        // Step 4: Employees
-        document.querySelectorAll('#step4 .option-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('#step4 .option-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                formData.employees = this.dataset.value;
-                document.getElementById('next4').disabled = false;
+        // Step 4: Services selection
+        function updateServicesNextButton() {
+            const anySelected = Object.values(formData.services).some(v => v === true);
+            document.getElementById('next4').disabled = !anySelected;
+        }
+
+        document.querySelectorAll('#step4 input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const parent = this.closest('.checkbox-option');
+                if (this.checked) {
+                    parent.classList.add('selected');
+                } else {
+                    parent.classList.remove('selected');
+                }
+                // Map checkbox id to service key
+                const serviceMap = {
+                    'serviceDomiciliation': 'domiciliation',
+                    'serviceComptabilite': 'comptabilite',
+                    'serviceFiscalite': 'fiscalite',
+                    'serviceRhSalaires': 'rhSalaires',
+                    'serviceTvaDeclarations': 'tvaDeclarations'
+                };
+                const serviceKey = serviceMap[this.id];
+                if (serviceKey) {
+                    formData.services[serviceKey] = this.checked;
+                }
+                updateServicesNextButton();
             });
         });
 
@@ -726,21 +801,41 @@
             goToStep(5);
         });
 
-        // Step 5: Revenue
-        document.querySelectorAll('#step5 .option-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('#step5 .option-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                formData.revenue = this.dataset.value;
+        document.getElementById('back4').addEventListener('click', function() {
+            goToStep(3);
+        });
+
+        // Step 5: Employees (number input)
+        document.getElementById('numberOfEmployees').addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (!isNaN(value) && value >= 0) {
+                formData.employees = value;
                 document.getElementById('next5').disabled = false;
-            });
+            } else {
+                document.getElementById('next5').disabled = true;
+            }
         });
 
         document.getElementById('next5').addEventListener('click', function() {
             goToStep(6);
         });
 
-        // Step 6: Submit
+        // Step 6: Revenue (number input)
+        document.getElementById('annualRevenue').addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (!isNaN(value) && value >= 0) {
+                formData.revenue = value;
+                document.getElementById('next6').disabled = false;
+            } else {
+                document.getElementById('next6').disabled = true;
+            }
+        });
+
+        document.getElementById('next6').addEventListener('click', function() {
+            goToStep(7);
+        });
+
+        // Step 7: Submit
         document.getElementById('submit').addEventListener('click', function() {
             const prenom = document.getElementById('prenom').value;
             const nom = document.getElementById('nom').value;
@@ -766,78 +861,108 @@
             console.log('Form submitted:', formData);
         });
 
-        // Calculate quote
+        // Calculate quote based on new pricing methodology
         function calculateQuote() {
-            let total = 0;
-            const items = [];
-
-            // Creation fee
-            if (formData.structure === 'creation' && formData.creationType) {
-                const creationFee = pricing.creation[formData.creationType];
-                total += creationFee;
-                items.push({
-                    label: `Création ${formData.creationType.toUpperCase()}`,
-                    value: creationFee,
-                    type: 'creation'
-                });
-            }
-
-            // Services
-            let servicesTotal = 0;
-            const serviceItems = [];
-            
-            formData.services.forEach(service => {
-                if (service === 'rh' && formData.employees) {
-                    const avgEmployees = pricing.employeeAverage[formData.employees];
-                    const rhCost = avgEmployees * pricing.services.rhPerEmployee;
-                    servicesTotal += rhCost;
-                    serviceItems.push({
-                        label: `RH & Salaires`,
-                        detail: `${avgEmployees} employés × ${pricing.services.rhPerEmployee.toFixed(2)} CHF`,
-                        value: rhCost,
-                        type: 'service'
-                    });
-                } else if (pricing.services[service]) {
-                    servicesTotal += pricing.services[service];
-                    const serviceNames = {
-                        comptabilite: 'Comptabilité mensuelle & clôture',
-                        tva: 'TVA & Fiscalité',
-                        domiciliation: 'Domiciliation'
-                    };
-                    const serviceDetails = {
-                        comptabilite: 'Inclut: Comptabilité mensuelle, Clôture annuelle, États financiers',
-                        tva: 'Inclut: Plan comptable, Inscription TVA, Déclarations',
-                        domiciliation: '250 CHF/mois × 12 mois'
-                    };
-                    serviceItems.push({
-                        label: serviceNames[service],
-                        detail: serviceDetails[service],
-                        value: pricing.services[service],
-                        type: 'service'
-                    });
-                }
-            });
-
-            // Store services before multiplier
-            const servicesBeforeMultiplier = servicesTotal;
-
-            // Apply revenue multiplier
-            let multiplier = 1;
-            if (formData.revenue && pricing.revenueMultiplier[formData.revenue]) {
-                multiplier = pricing.revenueMultiplier[formData.revenue];
-                servicesTotal *= multiplier;
-            }
-
-            total += servicesTotal;
-
-            return { 
-                total, 
-                items, 
-                serviceItems, 
-                servicesBeforeMultiplier,
-                multiplier,
-                servicesAfterMultiplier: servicesTotal
+            const result = {
+                status: 'AUTO_PRICED', // or 'ON_QUOTE'
+                baseFee: 0,
+                revenueAddon: 0,
+                employeeAddon: 0,
+                riskAddons: {},
+                riskAddonsTotal: 0,
+                domiciliationFee: 0,
+                subtotal: 0,
+                guardrailApplied: null,
+                finalPrice: 0,
+                monthlyPrice: 0,
+                creationFee: 0
             };
+
+            // Check for ON_QUOTE conditions
+            // 1. More than 20 employees
+            if (formData.employees > 20) {
+                result.status = 'ON_QUOTE';
+                return result;
+            }
+
+            // 1. Base Fee (by employees)
+            if (formData.employees === 0) {
+                result.baseFee = pricing.baseFee.zero;
+            } else if (formData.employees <= 2) {
+                result.baseFee = pricing.baseFee.small;
+            } else {
+                result.baseFee = pricing.baseFee.medium;
+            }
+
+            // 2. Revenue Add-on
+            for (const tier of pricing.revenueAddon) {
+                if (formData.revenue < tier.max) {
+                    result.revenueAddon = tier.addon;
+                    break;
+                }
+            }
+
+            // 3. Employee Add-on
+            for (const tier of pricing.employeeAddon) {
+                if (formData.employees <= tier.max) {
+                    result.employeeAddon = tier.addon;
+                    break;
+                }
+            }
+
+            // 4. Risk Add-ons
+            if (formData.vatRegistered) {
+                result.riskAddons.vatRegistered = pricing.riskAddons.vatRegistered;
+                result.riskAddonsTotal += pricing.riskAddons.vatRegistered;
+            }
+            if (formData.foreignActivity) {
+                result.riskAddons.foreignActivity = pricing.riskAddons.foreignActivity;
+                result.riskAddonsTotal += pricing.riskAddons.foreignActivity;
+            }
+            if (formData.holdingStructure) {
+                result.riskAddons.holdingStructure = pricing.riskAddons.holdingStructure;
+                result.riskAddonsTotal += pricing.riskAddons.holdingStructure;
+            }
+            if (formData.lateDocuments) {
+                result.riskAddons.lateDocuments = pricing.riskAddons.lateDocuments;
+                result.riskAddonsTotal += pricing.riskAddons.lateDocuments;
+            }
+
+            // 5. Domiciliation (adds to price)
+            if (formData.services.domiciliation) {
+                result.domiciliationFee = pricing.domiciliation;
+            }
+
+            // Calculate subtotal
+            result.subtotal = result.baseFee + result.revenueAddon + result.employeeAddon + result.riskAddonsTotal + result.domiciliationFee;
+
+            // 5. Apply Guardrails (only if revenue > 0)
+            if (formData.revenue > 0) {
+                const minPrice = formData.revenue * pricing.guardrails.minPercent;
+                const maxPrice = formData.revenue * pricing.guardrails.maxPercent;
+
+                if (result.subtotal < minPrice) {
+                    result.guardrailApplied = 'min';
+                    result.finalPrice = minPrice;
+                } else if (result.subtotal > maxPrice) {
+                    result.status = 'ON_QUOTE';
+                    result.finalPrice = result.subtotal;
+                } else {
+                    result.finalPrice = result.subtotal;
+                }
+            } else {
+                result.finalPrice = result.subtotal;
+            }
+
+            // Creation fee (one-time, separate)
+            if (formData.structure === 'creation' && formData.creationType) {
+                result.creationFee = pricing.creation[formData.creationType];
+            }
+
+            // Monthly equivalent
+            result.monthlyPrice = result.finalPrice / 12;
+
+            return result;
         }
 
         function generateDetailedCalculation() {
@@ -864,295 +989,181 @@
                 'sa': 'SA (existante)',
                 'creation': `Création de société (${formData.creationType ? formData.creationType.toUpperCase() : ''})`
             };
-            
+
+            // Build services list for display
+            const serviceLabels = {
+                domiciliation: 'Domiciliation',
+                comptabilite: 'Comptabilité & Clôture',
+                fiscalite: 'Fiscalité & Déclarations',
+                rhSalaires: 'Gestion RH & Salaires',
+                tvaDeclarations: 'Déclarations TVA'
+            };
+            const selectedServices = Object.entries(formData.services)
+                .filter(([key, value]) => value)
+                .map(([key]) => serviceLabels[key]);
+
             html += `
                 <div style="background: white; padding: 1.25rem; border-left: 3px solid var(--navy); margin-bottom: 1.5rem; border-radius: 4px;">
-                    <div style="font-size: 0.85rem; color: var(--gold); font-weight: 600; margin-bottom: 0.5rem;">STRUCTURE</div>
+                    <div style="font-size: 0.85rem; color: var(--gold); font-weight: 600; margin-bottom: 0.5rem;">INFORMATIONS</div>
                     <div style="font-size: 1rem; color: var(--text-dark);">${structureLabels[formData.structure]}</div>
-                    ${formData.employees ? `<div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.25rem;">Employés: ${formData.employees}</div>` : ''}
-                    ${formData.revenue ? `<div style="font-size: 0.9rem; color: var(--text-light);">CA annuel: ${getRevenueLabel(formData.revenue)}</div>` : ''}
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.25rem;">Employés: ${formData.employees}</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light);">CA annuel: ${formData.revenue.toLocaleString('fr-CH')} CHF</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Services: ${selectedServices.join(', ')}</div>
                 </div>
             `;
 
-            let totalHT = 0;
-
-            // Creation fees (if applicable)
-            if (quote.items.length > 0 && quote.items[0].type === 'creation') {
-                const creationHT = formData.creationType === 'sarl' ? 750 : 950;
-                totalHT += creationHT;
-                
+            // Check if ON_QUOTE
+            if (quote.status === 'ON_QUOTE') {
                 html += `
-                    <div style="margin-bottom: 2rem;">
-                        <h4 style="font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center;">
-                            <span style="background: var(--navy); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem; font-size: 0.9rem;">1</span>
-                            Frais de création (one-time)
-                        </h4>
-                        <div style="background: rgba(30, 58, 95, 0.03); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                <span style="font-weight: 600; color: var(--text-dark);">Création ${formData.creationType.toUpperCase()}</span>
-                                <span style="font-weight: 600; color: var(--navy); font-size: 1.1rem;">${creationHT.toFixed(2)} CHF</span>
-                            </div>
-                            <div style="font-size: 0.85rem; color: var(--text-light); padding: 0.75rem; background: white; border-radius: 6px;">
-                                💡 Prix de base HT (TVA ajoutée au total final)
-                            </div>
+                    <div style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border-radius: 12px; text-align: center;">
+                        <div style="color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Devis sur demande</div>
+                        <div style="color: rgba(255,255,255,0.9); font-size: 1rem;">
+                            Votre situation nécessite une analyse personnalisée.<br>
+                            Un conseiller PHI Fiduciaire vous contactera prochainement.
                         </div>
                     </div>
                 `;
-            }
+            } else {
+                // Pricing breakdown
+                let stepNumber = 1;
 
-            // Services breakdown - DETAILED
-            if (quote.serviceItems.length > 0) {
-                const stepNumber = quote.items.length > 0 && quote.items[0].type === 'creation' ? '2' : '1';
-                html += `
-                    <div style="margin-bottom: 2rem;">
-                        <h4 style="font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center;">
-                            <span style="background: var(--navy); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem; font-size: 0.9rem;">${stepNumber}</span>
-                            Services annuels - Détail des prix
-                        </h4>
-                `;
-
-                let servicesHTBeforeMultiplier = 0;
-
-                // COMPTABILITE
-                if (formData.services.includes('comptabilite')) {
-                    const comptaMensuelleHT = 250 * 12; // 3000 HT
-                    const clotureHT = 1200;
-                    const etatsFinanciersHT = 1200;
-                    const totalComptaHT = comptaMensuelleHT + clotureHT + etatsFinanciersHT;
-                    servicesHTBeforeMultiplier += totalComptaHT;
-
+                // Creation fees (if applicable)
+                if (quote.creationFee > 0) {
                     html += `
-                        <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1rem;">
-                            <div style="font-weight: 600; color: var(--navy); font-size: 1rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gold);">
-                                📊 Comptabilité mensuelle & clôture
-                            </div>
-                            
-                            <div style="margin-left: 1.5rem; font-size: 0.9rem;">
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                    <span style="color: var(--text-dark);">• Comptabilité mensuelle (250 CHF/mois × 12)</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${comptaMensuelleHT.toFixed(2)} CHF</span>
+                        <div style="margin-bottom: 2rem;">
+                            <h4 style="font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center;">
+                                <span style="background: var(--navy); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem; font-size: 0.9rem;">${stepNumber}</span>
+                                Frais de création (one-time)
+                            </h4>
+                            <div style="background: rgba(30, 58, 95, 0.03); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-weight: 600; color: var(--text-dark);">Création ${formData.creationType.toUpperCase()}</span>
+                                    <span style="font-weight: 600; color: var(--navy); font-size: 1.1rem;">à partir de ${quote.creationFee.toFixed(2)} CHF</span>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                    <span style="color: var(--text-dark);">• Clôture annuelle</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${clotureHT.toFixed(2)} CHF</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
-                                    <span style="color: var(--text-dark);">• États financiers</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${etatsFinanciersHT.toFixed(2)} CHF</span>
-                                </div>
-                            </div>
-                            
-                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--gold); background: rgba(201, 169, 97, 0.08); padding: 0.75rem; border-radius: 6px; margin-left: 0; margin-right: 0;">
-                                <span style="font-weight: 600; color: var(--navy);">Sous-total Comptabilité HT</span>
-                                <span style="font-weight: 700; color: var(--gold); font-size: 1.1rem;">${totalComptaHT.toFixed(2)} CHF</span>
                             </div>
                         </div>
                     `;
+                    stepNumber++;
                 }
 
-                // TVA & FISCALITE
-                if (formData.services.includes('tva')) {
-                    const planComptableHT = 130 * 3; // 390 HT
-                    const tvaInscriptionHT = 130 * 3; // 390 HT
-                    const tvaDeclarationHT = 160 * 3; // 480 HT
-                    const totalTVAHT = planComptableHT + tvaInscriptionHT + tvaDeclarationHT;
-                    servicesHTBeforeMultiplier += totalTVAHT;
-
-                    html += `
-                        <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1rem;">
-                            <div style="font-weight: 600; color: var(--navy); font-size: 1rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gold);">
-                                📋 TVA & Fiscalité
-                            </div>
-                            
-                            <div style="margin-left: 1.5rem; font-size: 0.9rem;">
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                    <span style="color: var(--text-dark);">• Plan comptable (130 CHF/h × 3h)</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${planComptableHT.toFixed(2)} CHF</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                    <span style="color: var(--text-dark);">• TVA Inscription (130 CHF/h × 3h)</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${tvaInscriptionHT.toFixed(2)} CHF</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
-                                    <span style="color: var(--text-dark);">• TVA Déclaration (160 CHF/h × 3h)</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${tvaDeclarationHT.toFixed(2)} CHF</span>
-                                </div>
-                            </div>
-                            
-                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--gold); background: rgba(201, 169, 97, 0.08); padding: 0.75rem; border-radius: 6px; margin-left: 0; margin-right: 0;">
-                                <span style="font-weight: 600; color: var(--navy);">Sous-total TVA & Fiscalité HT</span>
-                                <span style="font-weight: 700; color: var(--gold); font-size: 1.1rem;">${totalTVAHT.toFixed(2)} CHF</span>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                // DOMICILIATION (standalone)
-                if (formData.services.includes('domiciliation') && !formData.services.includes('comptabilite')) {
-                    const domiciliationHT = 250 * 12;
-                    servicesHTBeforeMultiplier += domiciliationHT;
-
-                    html += `
-                        <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1rem;">
-                            <div style="font-weight: 600; color: var(--navy); font-size: 1rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gold);">
-                                🏢 Domiciliation
-                            </div>
-                            
-                            <div style="margin-left: 1.5rem; font-size: 0.9rem;">
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
-                                    <span style="color: var(--text-dark);">• Domiciliation (250 CHF/mois × 12)</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${domiciliationHT.toFixed(2)} CHF</span>
-                                </div>
-                            </div>
-                            
-                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--gold); background: rgba(201, 169, 97, 0.08); padding: 0.75rem; border-radius: 6px; margin-left: 0; margin-right: 0;">
-                                <span style="font-weight: 600; color: var(--navy);">Sous-total Domiciliation HT</span>
-                                <span style="font-weight: 700; color: var(--gold); font-size: 1.1rem;">${domiciliationHT.toFixed(2)} CHF</span>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                // RH & SALAIRES
-                if (formData.services.includes('rh') && formData.employees) {
-                    const avgEmployees = pricing.employeeAverage[formData.employees];
-                    const assurancesSocialesHT = 600 * avgEmployees;
-                    const fichesSalairesHT = 35 * 12 * avgEmployees;
-                    const totalRHHT = assurancesSocialesHT + fichesSalairesHT;
-                    servicesHTBeforeMultiplier += totalRHHT;
-
-                    html += `
-                        <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1rem;">
-                            <div style="font-weight: 600; color: var(--navy); font-size: 1rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gold);">
-                                👥 RH & Salaires (${avgEmployees} employés)
-                            </div>
-                            
-                            <div style="margin-left: 1.5rem; font-size: 0.9rem;">
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                    <span style="color: var(--text-dark);">• Gestion assurances sociales (600 CHF × ${avgEmployees} employés)</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${assurancesSocialesHT.toFixed(2)} CHF</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
-                                    <span style="color: var(--text-dark);">• Fiches de salaires (35 CHF/mois × 12 × ${avgEmployees} employés)</span>
-                                    <span style="font-weight: 500; color: var(--navy);">${fichesSalairesHT.toFixed(2)} CHF</span>
-                                </div>
-                            </div>
-                            
-                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--gold); background: rgba(201, 169, 97, 0.08); padding: 0.75rem; border-radius: 6px; margin-left: 0; margin-right: 0;">
-                                <span style="font-weight: 600; color: var(--navy);">Sous-total RH HT</span>
-                                <span style="font-weight: 700; color: var(--gold); font-size: 1.1rem;">${totalRHHT.toFixed(2)} CHF</span>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                html += `
-                    <div style="background: linear-gradient(135deg, rgba(30, 58, 95, 0.08) 0%, rgba(201, 169, 97, 0.08) 100%); padding: 1.25rem; border-radius: 8px; border: 2px solid var(--gold); margin-top: 1.5rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-weight: 700; color: var(--navy); font-size: 1.1rem;">TOTAL SERVICES HT (avant ajustement)</span>
-                            <span style="font-weight: 700; color: var(--gold); font-size: 1.4rem;">${servicesHTBeforeMultiplier.toFixed(2)} CHF</span>
-                        </div>
-                    </div>
-                </div>
-                `;
-
-                totalHT += servicesHTBeforeMultiplier;
-            }
-
-            // Revenue multiplier
-            if (quote.multiplier > 1) {
-                const stepNumber = (quote.items.length > 0 && quote.items[0].type === 'creation' ? 3 : 2);
-                const servicesHTBeforeMultiplier = totalHT - (quote.items.length > 0 && quote.items[0].type === 'creation' ? (formData.creationType === 'sarl' ? 750 : 950) : 0);
-                const servicesHTAfterMultiplier = servicesHTBeforeMultiplier * quote.multiplier;
-                totalHT = totalHT - servicesHTBeforeMultiplier + servicesHTAfterMultiplier;
-
+                // Pricing components
                 html += `
                     <div style="margin-bottom: 2rem;">
                         <h4 style="font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center;">
                             <span style="background: var(--navy); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem; font-size: 0.9rem;">${stepNumber}</span>
-                            Ajustement selon chiffre d'affaires
+                            Détail du calcul annuel
                         </h4>
-                        <div style="background: rgba(201, 169, 97, 0.08); padding: 1.5rem; border-radius: 8px; border: 2px solid rgba(201, 169, 97, 0.5);">
-                            <div style="margin-bottom: 1.25rem;">
-                                <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">CA annuel sélectionné</div>
-                                <div style="font-weight: 600; color: var(--navy); font-size: 1.1rem;">${getRevenueLabel(formData.revenue)}</div>
+                        <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
+                                <span style="color: var(--text-dark);">Forfait de base (${formData.employees === 0 ? '0 employé' : formData.employees <= 2 ? '1-2 employés' : '3+ employés'})</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.baseFee.toFixed(2)} CHF</span>
                             </div>
-                            
-                            <div style="background: white; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                                    <span style="color: var(--text-dark);">Services HT (avant ajustement)</span>
-                                    <span style="font-weight: 600; color: var(--navy);">${servicesHTBeforeMultiplier.toFixed(2)} CHF</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: rgba(201, 169, 97, 0.1); border-radius: 6px;">
-                                    <span style="color: var(--text-dark); display: flex; align-items: center;">
-                                        Facteur multiplicateur 
-                                        <span style="background: var(--gold); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-left: 0.5rem;">×${quote.multiplier}</span>
-                                    </span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 2px dashed var(--gold);">
-                                    <span style="font-weight: 600; color: var(--navy);">Services HT (après ajustement)</span>
-                                    <span style="font-weight: 700; color: var(--gold); font-size: 1.2rem;">${servicesHTAfterMultiplier.toFixed(2)} CHF</span>
-                                </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
+                                <span style="color: var(--text-dark);">Supplément chiffre d'affaires</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.revenueAddon.toFixed(2)} CHF</span>
                             </div>
-                            
-                            <div style="font-size: 0.85rem; color: var(--text-light); background: white; padding: 1rem; border-radius: 6px; border-left: 3px solid var(--gold);">
-                                💡 <strong>Explication:</strong> Le facteur multiplicateur reflète la complexité accrue de la comptabilité et de la gestion administrative pour les entreprises avec un chiffre d'affaires plus élevé.
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
+                                <span style="color: var(--text-dark);">Supplément employés</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.employeeAddon.toFixed(2)} CHF</span>
+                            </div>
+                `;
+
+                // Domiciliation fee
+                if (quote.domiciliationFee > 0) {
+                    html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
+                                <span style="color: var(--text-dark);">Domiciliation (250 CHF/mois)</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.domiciliationFee.toFixed(2)} CHF</span>
+                            </div>
+                    `;
+                }
+
+                // Risk add-ons
+                if (quote.riskAddonsTotal > 0) {
+                    html += `<div style="margin-top: 0.5rem; padding-top: 0.5rem;">`;
+                    if (quote.riskAddons.vatRegistered) {
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span style="color: var(--text-dark);">+ Assujetti TVA</span>
+                                <span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.vatRegistered.toFixed(2)} CHF</span>
+                            </div>
+                        `;
+                    }
+                    if (quote.riskAddons.foreignActivity) {
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span style="color: var(--text-dark);">+ Activité à l'étranger</span>
+                                <span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.foreignActivity.toFixed(2)} CHF</span>
+                            </div>
+                        `;
+                    }
+                    if (quote.riskAddons.holdingStructure) {
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span style="color: var(--text-dark);">+ Structure holding</span>
+                                <span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.holdingStructure.toFixed(2)} CHF</span>
+                            </div>
+                        `;
+                    }
+                    if (quote.riskAddons.lateDocuments) {
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span style="color: var(--text-dark);">+ Documents en retard</span>
+                                <span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.lateDocuments.toFixed(2)} CHF</span>
+                            </div>
+                        `;
+                    }
+                    html += `</div>`;
+                }
+
+                html += `
+                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding: 1rem; background: rgba(201, 169, 97, 0.08); border-radius: 6px; border-top: 2px solid var(--gold);">
+                                <span style="font-weight: 600; color: var(--navy);">Sous-total</span>
+                                <span style="font-weight: 700; color: var(--gold); font-size: 1.1rem;">${quote.subtotal.toFixed(2)} CHF</span>
                             </div>
                         </div>
                     </div>
                 `;
-            }
 
-            // Final total with TVA
-            const totalTVA = totalHT * 0.081;
-            const totalTTC = totalHT + totalTVA;
+                // Guardrail applied
+                if (quote.guardrailApplied === 'min') {
+                    html += `
+                        <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(201, 169, 97, 0.1); border-radius: 8px; border-left: 4px solid var(--gold);">
+                            <div style="font-size: 0.9rem; color: var(--text-dark);">
+                                <strong>Ajustement minimum appliqué:</strong> Le prix minimum de 0.7% du CA (${(formData.revenue * 0.007).toFixed(2)} CHF) a été appliqué.
+                            </div>
+                        </div>
+                    `;
+                }
 
-            html += `
-                <div style="margin-top: 2.5rem; padding: 2rem; background: linear-gradient(135deg, var(--navy) 0%, #2a4d7a 100%); border-radius: 12px; box-shadow: 0 8px 24px rgba(30, 58, 95, 0.3);">
-                    <div style="text-align: center; margin-bottom: 1.5rem;">
-                        <div style="font-size: 0.9rem; color: rgba(255,255,255,0.8); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;">Récapitulatif Final</div>
-                    </div>
-                    
-                    <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.2);">
-                            <span style="color: rgba(255,255,255,0.9); font-size: 1rem;">Total Hors Taxes (HT)</span>
-                            <span style="color: white; font-weight: 700; font-size: 1.3rem;">${totalHT.toFixed(2)} CHF</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.2);">
-                            <span style="color: rgba(255,255,255,0.9); font-size: 1rem;">TVA (8.1%)</span>
-                            <span style="color: white; font-weight: 600; font-size: 1.2rem;">${totalTVA.toFixed(2)} CHF</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; background: rgba(201, 169, 97, 0.25); border-radius: 8px; margin-top: 1rem;">
+                // Final total
+                html += `
+                    <div style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, var(--navy) 0%, #2a4d7a 100%); border-radius: 12px; box-shadow: 0 8px 24px rgba(30, 58, 95, 0.3);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                             <div>
-                                <div style="color: rgba(255,255,255,0.9); font-size: 0.85rem; margin-bottom: 0.25rem;">TOTAL ANNUEL ESTIMÉ</div>
-                                <div style="color: white; font-size: 0.75rem; opacity: 0.8;">TVA 8.1% incluse</div>
+                                <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; margin-bottom: 0.25rem;">TOTAL ANNUEL</div>
                             </div>
-                            <span style="color: var(--gold); font-weight: 700; font-size: 2.2rem; text-shadow: 0 2px 8px rgba(0,0,0,0.2);">${totalTTC.toFixed(2)} CHF</span>
+                            <span style="color: var(--gold); font-weight: 700; font-size: 2.2rem;">${quote.finalPrice.toFixed(2)} CHF</span>
                         </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                            <div style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">Équivalent mensuel</div>
+                            <span style="color: white; font-weight: 600; font-size: 1.3rem;">${quote.monthlyPrice.toFixed(2)} CHF/mois</span>
+                        </div>
+                        ${quote.creationFee > 0 ? `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; margin-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                            <div style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">+ Frais de création (one-time)</div>
+                            <span style="color: white; font-weight: 600; font-size: 1.1rem;">à partir de ${quote.creationFee.toFixed(2)} CHF</span>
+                        </div>
+                        ` : ''}
                     </div>
-                </div>
-            `;
+                `;
 
-            // Breakdown of what's included
-            const creationCost = quote.items.length > 0 && quote.items[0].type === 'creation' ? (formData.creationType === 'sarl' ? 750 : 950) : 0;
-            const yearlyServicesHT = totalHT - creationCost;
-            
-            if (creationCost > 0) {
+                // Status badge
                 html += `
-                    <div style="margin-top: 1.5rem; padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid var(--border);">
-                        <div style="font-size: 0.85rem; color: var(--gold); font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">📊 Répartition du Total HT</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                            <div style="padding: 1rem; background: rgba(30, 58, 95, 0.05); border-radius: 8px;">
-                                <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem;">Frais de création (one-time)</div>
-                                <div style="font-weight: 700; color: var(--navy); font-size: 1.3rem;">${creationCost.toFixed(2)} CHF</div>
-                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Hors taxes</div>
-                            </div>
-                            <div style="padding: 1rem; background: rgba(201, 169, 97, 0.08); border-radius: 8px;">
-                                <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem;">Services annuels</div>
-                                <div style="font-weight: 700; color: var(--gold); font-size: 1.3rem;">${yearlyServicesHT.toFixed(2)} CHF</div>
-                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Hors taxes</div>
-                            </div>
-                        </div>
+                    <div style="margin-top: 1rem; text-align: center;">
+                        <span style="display: inline-block; padding: 0.5rem 1.5rem; background: #27ae60; color: white; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                            TARIF AUTOMATIQUE
+                        </span>
                     </div>
                 `;
             }
@@ -1162,45 +1173,39 @@
                 <div style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(201, 169, 97, 0.08); border-radius: 8px; border-left: 4px solid var(--gold);">
                     <div style="font-size: 0.85rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">📌 Note importante</div>
                     <div style="font-size: 0.85rem; color: var(--text-dark); line-height: 1.6;">
-                        Ce devis est un <strong>modèle de calcul</strong> pour validation de la logique et des prix. 
-                        Tous les montants sont affichés <strong>Hors Taxes (HT)</strong> avec détail de chaque composante. 
-                        La TVA de 8.1% est appliquée uniquement sur le total final.
+                        Ce devis est une estimation basée sur les informations fournies.
+                        Un conseiller PHI Fiduciaire vous contactera pour finaliser votre offre personnalisée.
                     </div>
+                </div>
+                <div style="margin-top: 1rem; text-align: center;">
+                    <span style="font-size: 0.8rem; color: var(--text-light); font-style: italic;">* Tous les prix affichés sont hors TVA</span>
                 </div>
             `;
 
             document.getElementById('detailedCalculation').innerHTML = html;
         }
 
-        function getRevenueLabel(revenue) {
-            const labels = {
-                '<100k': 'Moins de 100\'000 CHF',
-                '100k-600k': '100\'000 - 600\'000 CHF',
-                '600k-1m': '600\'000 - 1\'000\'000 CHF',
-                '1m-2m': '1\'000\'000 - 2\'000\'000 CHF',
-                '2m-5m': '2\'000\'000 - 5\'000\'000 CHF',
-                '5m+': 'Plus de 5\'000\'000 CHF'
-            };
-            return labels[revenue] || revenue;
+        function formatRevenue(revenue) {
+            return revenue.toLocaleString('fr-CH') + ' CHF';
         }
 
         function goToStep(step) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            
+
             if (step === 'success') {
                 document.getElementById('success').classList.add('active');
-                currentStep = 7;
+                currentStep = 8;
             } else {
                 document.getElementById(`step${step}`).classList.add('active');
                 currentStep = step;
             }
-            
+
             updateProgress();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function updateProgress() {
-            const progress = (currentStep / 6) * 100;
+            const progress = (currentStep / 7) * 100;
             document.getElementById('progressBar').style.width = `${progress}%`;
         }
     </script>
