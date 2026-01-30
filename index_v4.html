@@ -491,6 +491,10 @@
                         <input type="checkbox" id="holdingStructure" value="holdingStructure">
                         <label for="holdingStructure">Structure holding</label>
                     </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="lateDocuments" value="lateDocuments">
+                        <label for="lateDocuments">Documents en retard</label>
+                    </div>
                 </div>
 
                 <div class="navigation">
@@ -648,6 +652,7 @@
             vatRegistered: false,
             foreignActivity: false,
             holdingStructure: false,
+            lateDocuments: false,
             // Services (for sales team info, only domiciliation affects price)
             services: {
                 domiciliation: false,
@@ -698,12 +703,12 @@
                 vatRegistered: 600,
                 foreignActivity: 1200,
                 holdingStructure: 1000,
+                lateDocuments: 800
             },
             // Guardrails (% of revenue)
             guardrails: {
-                minPercent: 0.007,      // 0.7% for CA < 500k
-                minPercentHigh: 0.013,  // 1.3% for CA >= 500k
-                maxPercent: 0.022       // 2.2%
+                minPercent: 0.007,  // 0.7%
+                maxPercent: 0.022   // 2.2%
             }
         };
 
@@ -1021,6 +1026,10 @@
                     result.riskAddons.holdingStructure = pricing.riskAddons.holdingStructure;
                     result.riskAddonsTotal += pricing.riskAddons.holdingStructure;
                 }
+                if (formData.lateDocuments) {
+                    result.riskAddons.lateDocuments = pricing.riskAddons.lateDocuments;
+                    result.riskAddonsTotal += pricing.riskAddons.lateDocuments;
+                }
 
                 // 5. Domiciliation & Administrateur (not available for non-creation, but just in case)
                 if (formData.services.domiciliation) {
@@ -1037,8 +1046,7 @@
 
                 // Apply Guardrails on core subtotal only (if revenue > 0)
                 if (formData.revenue > 0) {
-                    const minPercent = formData.revenue >= 500000 ? pricing.guardrails.minPercentHigh : pricing.guardrails.minPercent;
-                    const minPrice = formData.revenue * minPercent;
+                    const minPrice = formData.revenue * pricing.guardrails.minPercent;
                     const maxPrice = formData.revenue * pricing.guardrails.maxPercent;
                     result.maxGuardrail = maxPrice;
 
@@ -1279,6 +1287,7 @@
                                 ${quote.riskAddons.vatRegistered ? `<div style="display: flex; justify-content: space-between; padding: 0.25rem 0;"><span style="color: var(--text-dark); padding-left: 1rem;">+ Assujetti TVA</span><span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.vatRegistered.toFixed(2)} CHF</span></div>` : ''}
                                 ${quote.riskAddons.foreignActivity ? `<div style="display: flex; justify-content: space-between; padding: 0.25rem 0;"><span style="color: var(--text-dark); padding-left: 1rem;">+ Activité à l'étranger</span><span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.foreignActivity.toFixed(2)} CHF</span></div>` : ''}
                                 ${quote.riskAddons.holdingStructure ? `<div style="display: flex; justify-content: space-between; padding: 0.25rem 0;"><span style="color: var(--text-dark); padding-left: 1rem;">+ Structure holding</span><span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.holdingStructure.toFixed(2)} CHF</span></div>` : ''}
+                                ${quote.riskAddons.lateDocuments ? `<div style="display: flex; justify-content: space-between; padding: 0.25rem 0;"><span style="color: var(--text-dark); padding-left: 1rem;">+ Documents en retard</span><span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.lateDocuments.toFixed(2)} CHF</span></div>` : ''}
                             </div>
                             ` : ''}
 
@@ -1291,7 +1300,7 @@
                             <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(201, 169, 97, 0.1); border-radius: 6px; font-size: 0.85rem;">
                                 <div style="color: var(--text-dark);">
                                     <strong>Guardrails appliqués:</strong><br>
-                                    • Minimum (${formData.revenue >= 500000 ? '1.3' : '0.7'}% du CA): ${(formData.revenue * (formData.revenue >= 500000 ? 0.013 : 0.007)).toLocaleString('fr-CH')} CHF<br>
+                                    • Minimum (0.7% du CA): ${(formData.revenue * 0.007).toLocaleString('fr-CH')} CHF<br>
                                     • Maximum (2.2% du CA): ${(formData.revenue * 0.022).toLocaleString('fr-CH')} CHF
                                 </div>
                             </div>
@@ -1391,6 +1400,14 @@
                             </div>
                         `;
                     }
+                    if (quote.riskAddons.lateDocuments) {
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span style="color: var(--text-dark);">+ Documents en retard</span>
+                                <span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.lateDocuments.toFixed(2)} CHF</span>
+                            </div>
+                        `;
+                    }
                     html += `</div>`;
                 }
 
@@ -1408,7 +1425,7 @@
                     html += `
                         <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(201, 169, 97, 0.1); border-radius: 8px; border-left: 4px solid var(--gold);">
                             <div style="font-size: 0.9rem; color: var(--text-dark);">
-                                <strong>Ajustement minimum appliqué:</strong> Le prix comptable minimum de ${formData.revenue >= 500000 ? '1.3' : '0.7'}% du CA (${(formData.revenue * (formData.revenue >= 500000 ? 0.013 : 0.007)).toFixed(2)} CHF) a été appliqué. Les services domiciliation et directeur administratif sont ajoutés séparément.
+                                <strong>Ajustement minimum appliqué:</strong> Le prix comptable minimum de 0.7% du CA (${(formData.revenue * 0.007).toFixed(2)} CHF) a été appliqué. Les services domiciliation et directeur administratif sont ajoutés séparément.
                             </div>
                         </div>
                     `;
