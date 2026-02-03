@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHI Fiduciaire - Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            color: #eee;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+            padding: 20px 30px;
+            border-bottom: 1px solid #0f3460;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            color: #e94560;
+        }
+
+        .header .subtitle {
+            color: #888;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .save-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status-indicator {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-saved {
+            background: #28a74533;
+            color: #28a745;
+        }
+
+        .status-unsaved {
+            background: #ffc10733;
+            color: #ffc107;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #e94560;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #d63850;
+        }
+
+        .btn-secondary {
+            background: #0f3460;
+            color: #eee;
+        }
+
+        .btn-secondary:hover {
+            background: #16213e;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: #16213e;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #0f3460;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #0f3460;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e94560;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            padding: 10px 12px;
+            border: 1px solid #0f3460;
+            border-radius: 6px;
+            background: #1a1a2e;
+            color: #eee;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+
+        .form-group input:hover {
+            border-color: #e9456066;
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .price-table th,
+        .price-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #0f3460;
+        }
+
+        .price-table th {
+            font-size: 12px;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .price-table td {
+            font-size: 14px;
+        }
+
+        .price-table input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #0f3460;
+            border-radius: 4px;
+            background: #1a1a2e;
+            color: #eee;
+            font-size: 14px;
+        }
+
+        .price-table input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+
+        .revenue-label {
+            color: #e94560;
+            font-weight: 600;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .test-section {
+            position: sticky;
+            top: 20px;
+        }
+
+        .test-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .test-result {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .test-result.auto {
+            background: #28a74522;
+            border: 1px solid #28a745;
+        }
+
+        .test-result.not-interesting {
+            background: #ffc10722;
+            border: 1px solid #ffc107;
+        }
+
+        .test-result.on-quote {
+            background: #dc354522;
+            border: 1px solid #dc3545;
+        }
+
+        .result-status {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .result-price {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result-details {
+            font-size: 12px;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .inline-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .inline-group .form-group {
+            flex: 1;
+        }
+
+        .help-text {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: #0f3460;
+            margin: 10px 0;
+        }
+
+        .reset-btn {
+            font-size: 12px;
+            color: #888;
+            background: none;
+            border: 1px solid #0f3460;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            border-color: #e94560;
+            color: #e94560;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: #28a745;
+            color: white;
+        }
+
+        .toast.error {
+            background: #dc3545;
+            color: white;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .test-section {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>PHI Fiduciaire - Admin Dashboard</h1>
+            <p class="subtitle">Configuration du système de tarification</p>
+        </div>
+        <div class="save-status">
+            <span id="saveStatus" class="status-indicator status-saved">Sauvegardé</span>
+            <button class="btn btn-secondary" onclick="resetToDefaults()">Réinitialiser</button>
+            <button class="btn btn-primary" onclick="saveConfig()">Sauvegarder</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Base Prices -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Prix de Base (0 employé)</h2>
+                        <p class="card-subtitle">Prix annuel par tranche de chiffre d'affaires</p>
+                    </div>
+                </div>
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Chiffre d'Affaires</th>
+                            <th>Prix de Base (CHF/an)</th>
+                            <th>% du CA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="basePricesTable">
+                        <!-- Generated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Employee Multiplier -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Multiplicateur Employés</h2>
+                        <p class="card-subtitle">Chaque employé multiplie le prix par ce facteur (composé)</p>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Multiplicateur</label>
+                        <input type="number" id="employeeMultiplier" step="0.01" min="1" max="2" value="1.10" onchange="markUnsaved(); updateTest();">
+                        <span class="help-text">Ex: 1.10 = +10% par employé</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Impact 3 employés</label>
+                        <input type="text" id="impact3" readonly style="background: #0f3460;">
+                    </div>
+                    <div class="form-group">
+                        <label>Impact 8 employés</label>
+                        <input type="text" id="impact8" readonly style="background: #0f3460;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guardrails -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Guardrails (Limites %)</h2>
+                        <p class="card-subtitle">Limites min/max du prix en pourcentage du chiffre d'affaires</p>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Minimum (% du CA)</label>
+                        <input type="number" id="minPercentage" step="0.1" min="0" max="10" value="1.5" onchange="markUnsaved(); updateTest();">
+                        <span class="help-text">En dessous = "Mandat non rentable"</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Maximum (% du CA)</label>
+                        <input type="number" id="maxPercentage" step="0.1" min="0" max="10" value="3.0" onchange="markUnsaved(); updateTest();">
+                        <span class="help-text">Au dessus = "Devis sur demande"</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+                <div class="form-grid" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label>Exception: 0 employé skip minimum</label>
+                        <select id="skipMinFor0Emp" onchange="markUnsaved(); updateTest();" style="padding: 10px; border: 1px solid #0f3460; border-radius: 6px; background: #1a1a2e; color: #eee;">
+                            <option value="true">Oui - Toujours appliquer le prix de base</option>
+                            <option value="false">Non - Appliquer le guardrail minimum</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Exception: 0 employé + CA ≤ 200K skip maximum</label>
+                        <select id="skipMaxFor0EmpLowRev" onchange="markUnsaved(); updateTest();" style="padding: 10px; border: 1px solid #0f3460; border-radius: 6px; background: #1a1a2e; color: #eee;">
+                            <option value="true">Oui - Toujours appliquer le prix de base</option>
+                            <option value="false">Non - Appliquer le guardrail maximum</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Quote Triggers -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Déclencheurs Devis Manuel</h2>
+                        <p class="card-subtitle">Seuils au-delà desquels un devis personnalisé est requis</p>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>CA Maximum (CHF)</label>
+                        <input type="number" id="maxRevenue" step="100000" min="100000" value="800000" onchange="markUnsaved(); updateTest();">
+                        <span class="help-text">Au dessus = devis personnalisé</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Employés Maximum</label>
+                        <input type="number" id="maxEmployees" step="1" min="1" value="20" onchange="markUnsaved(); updateTest();">
+                        <span class="help-text">Au dessus = devis personnalisé</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar - Test Calculator -->
+        <div class="sidebar">
+            <div class="card test-section">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Test en Direct</h2>
+                        <p class="card-subtitle">Prévisualisation avec la configuration actuelle</p>
+                    </div>
+                </div>
+                <div class="test-inputs">
+                    <div class="form-group">
+                        <label>Chiffre d'Affaires (CHF)</label>
+                        <input type="number" id="testRevenue" value="400000" step="10000" onchange="updateTest();" onkeyup="updateTest();">
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre d'Employés</label>
+                        <input type="number" id="testEmployees" value="3" min="0" onchange="updateTest();" onkeyup="updateTest();">
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="updateTest();">Calculer</button>
+                <div id="testResult" class="test-result auto">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <!-- Quick Scenarios -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Scénarios Rapides</h2>
+                        <p class="card-subtitle">Cliquez pour tester</p>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="btn btn-secondary" onclick="testScenario(400000, 3)">PME Typique (400K, 3 emp)</button>
+                    <button class="btn btn-secondary" onclick="testScenario(100000, 0)">Petit CA (100K, 0 emp)</button>
+                    <button class="btn btn-secondary" onclick="testScenario(600000, 0)">Moyen CA (600K, 0 emp)</button>
+                    <button class="btn btn-secondary" onclick="testScenario(200000, 5)">Beaucoup d'employés (200K, 5 emp)</button>
+                    <button class="btn btn-secondary" onclick="testScenario(900000, 2)">Haut CA (900K, 2 emp)</button>
+                </div>
+            </div>
+
+            <!-- Export -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Export Configuration</h2>
+                        <p class="card-subtitle">Copier pour intégration</p>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;" onclick="exportJS();">Exporter JavaScript</button>
+                <button class="btn btn-secondary" style="width: 100%;" onclick="exportPython();">Exporter Python</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Default configuration
+        const DEFAULT_CONFIG = {
+            basePrices: {
+                100000: 3600,
+                200000: 3960,
+                300000: 4356,
+                400000: 5500,
+                500000: 6050,
+                600000: 6655,
+                700000: 7321,
+                800000: 8053,
+            },
+            employeeMultiplier: 1.10,
+            guardrails: {
+                minPercentage: 1.5,
+                maxPercentage: 3.0,
+            },
+            manualQuoteTriggers: {
+                maxRevenue: 800000,
+                maxEmployees: 20,
+            },
+            exceptions: {
+                skipMinFor0Emp: true,
+                skipMaxFor0EmpLowRev: true,
+            }
+        };
+
+        let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        let hasUnsavedChanges = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfig();
+            renderBasePricesTable();
+            updateMultiplierImpact();
+            updateTest();
+        });
+
+        function loadConfig() {
+            const saved = localStorage.getItem('phiPricingConfig');
+            if (saved) {
+                config = JSON.parse(saved);
+            }
+
+            // Populate form fields
+            document.getElementById('employeeMultiplier').value = config.employeeMultiplier;
+            document.getElementById('minPercentage').value = config.guardrails.minPercentage;
+            document.getElementById('maxPercentage').value = config.guardrails.maxPercentage;
+            document.getElementById('maxRevenue').value = config.manualQuoteTriggers.maxRevenue;
+            document.getElementById('maxEmployees').value = config.manualQuoteTriggers.maxEmployees;
+            document.getElementById('skipMinFor0Emp').value = config.exceptions?.skipMinFor0Emp !== false ? 'true' : 'false';
+            document.getElementById('skipMaxFor0EmpLowRev').value = config.exceptions?.skipMaxFor0EmpLowRev !== false ? 'true' : 'false';
+        }
+
+        function renderBasePricesTable() {
+            const tbody = document.getElementById('basePricesTable');
+            tbody.innerHTML = '';
+
+            const revenues = Object.keys(config.basePrices).map(Number).sort((a, b) => a - b);
+
+            revenues.forEach(revenue => {
+                const price = config.basePrices[revenue];
+                const percentage = ((price / revenue) * 100).toFixed(2);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="revenue-label">${formatCHF(revenue)}</td>
+                    <td>
+                        <input type="number"
+                               value="${price}"
+                               data-revenue="${revenue}"
+                               onchange="updateBasePrice(${revenue}, this.value);"
+                               step="100">
+                    </td>
+                    <td>${percentage}%</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateBasePrice(revenue, value) {
+            config.basePrices[revenue] = parseInt(value) || 0;
+            markUnsaved();
+            renderBasePricesTable();
+            updateTest();
+        }
+
+        function updateMultiplierImpact() {
+            const mult = parseFloat(document.getElementById('employeeMultiplier').value) || 1.10;
+            document.getElementById('impact3').value = `×${Math.pow(mult, 3).toFixed(3)} (+${((Math.pow(mult, 3) - 1) * 100).toFixed(1)}%)`;
+            document.getElementById('impact8').value = `×${Math.pow(mult, 8).toFixed(3)} (+${((Math.pow(mult, 8) - 1) * 100).toFixed(1)}%)`;
+        }
+
+        function getConfigFromForm() {
+            return {
+                basePrices: config.basePrices,
+                employeeMultiplier: parseFloat(document.getElementById('employeeMultiplier').value) || 1.10,
+                guardrails: {
+                    minPercentage: parseFloat(document.getElementById('minPercentage').value) || 1.5,
+                    maxPercentage: parseFloat(document.getElementById('maxPercentage').value) || 3.0,
+                },
+                manualQuoteTriggers: {
+                    maxRevenue: parseInt(document.getElementById('maxRevenue').value) || 800000,
+                    maxEmployees: parseInt(document.getElementById('maxEmployees').value) || 20,
+                },
+                exceptions: {
+                    skipMinFor0Emp: document.getElementById('skipMinFor0Emp').value === 'true',
+                    skipMaxFor0EmpLowRev: document.getElementById('skipMaxFor0EmpLowRev').value === 'true',
+                }
+            };
+        }
+
+        function calculatePrice(revenue, employees, cfg) {
+            // Check manual quote triggers
+            if (revenue > cfg.manualQuoteTriggers.maxRevenue) {
+                return {
+                    status: 'ON_QUOTE',
+                    statusText: 'Devis sur demande',
+                    message: `CA (${formatCHF(revenue)}) dépasse ${formatCHF(cfg.manualQuoteTriggers.maxRevenue)}`,
+                    price: null
+                };
+            }
+
+            if (employees > cfg.manualQuoteTriggers.maxEmployees) {
+                return {
+                    status: 'ON_QUOTE',
+                    statusText: 'Devis sur demande',
+                    message: `Plus de ${cfg.manualQuoteTriggers.maxEmployees} employés`,
+                    price: null
+                };
+            }
+
+            // Get base price
+            const basePrice = getBasePrice(revenue, cfg.basePrices);
+            const multiplier = Math.pow(cfg.employeeMultiplier, employees);
+            const calculatedPrice = Math.round(basePrice * multiplier);
+            const percentage = (calculatedPrice / revenue) * 100;
+
+            const minPrice = revenue * (cfg.guardrails.minPercentage / 100);
+            const maxPrice = revenue * (cfg.guardrails.maxPercentage / 100);
+
+            // Check guardrails with exceptions
+            const skipMin = cfg.exceptions.skipMinFor0Emp && employees === 0;
+            const skipMax = cfg.exceptions.skipMaxFor0EmpLowRev && employees === 0 && revenue <= 200000;
+
+            if (!skipMin && calculatedPrice < minPrice) {
+                return {
+                    status: 'NOT_INTERESTING',
+                    statusText: 'Mandat non rentable',
+                    message: `Prix (${percentage.toFixed(2)}%) < minimum ${cfg.guardrails.minPercentage}%`,
+                    price: calculatedPrice,
+                    basePrice,
+                    multiplier,
+                    percentage,
+                    minPrice,
+                    maxPrice
+                };
+            }
+
+            if (!skipMax && calculatedPrice > maxPrice) {
+                return {
+                    status: 'ON_QUOTE',
+                    statusText: 'Devis sur demande',
+                    message: `Prix (${percentage.toFixed(2)}%) > maximum ${cfg.guardrails.maxPercentage}%`,
+                    price: calculatedPrice,
+                    basePrice,
+                    multiplier,
+                    percentage,
+                    minPrice,
+                    maxPrice
+                };
+            }
+
+            return {
+                status: 'AUTO_PRICED',
+                statusText: 'Prix automatique',
+                message: `${percentage.toFixed(2)}% du CA`,
+                price: calculatedPrice,
+                basePrice,
+                multiplier,
+                percentage,
+                minPrice,
+                maxPrice
+            };
+        }
+
+        function getBasePrice(revenue, basePrices) {
+            if (basePrices[revenue]) {
+                return basePrices[revenue];
+            }
+
+            const brackets = Object.keys(basePrices).map(Number).sort((a, b) => a - b);
+
+            if (revenue < brackets[0]) return basePrices[brackets[0]];
+            if (revenue > brackets[brackets.length - 1]) return basePrices[brackets[brackets.length - 1]];
+
+            for (let i = 0; i < brackets.length - 1; i++) {
+                const r1 = brackets[i];
+                const r2 = brackets[i + 1];
+                if (r1 < revenue && revenue <= r2) {
+                    const p1 = basePrices[r1];
+                    const p2 = basePrices[r2];
+                    return p1 + (p2 - p1) * (revenue - r1) / (r2 - r1);
+                }
+            }
+
+            return basePrices[brackets[brackets.length - 1]];
+        }
+
+        function updateTest() {
+            updateMultiplierImpact();
+
+            const revenue = parseInt(document.getElementById('testRevenue').value) || 0;
+            const employees = parseInt(document.getElementById('testEmployees').value) || 0;
+            const cfg = getConfigFromForm();
+
+            const result = calculatePrice(revenue, employees, cfg);
+            const resultDiv = document.getElementById('testResult');
+
+            let statusClass = 'auto';
+            if (result.status === 'NOT_INTERESTING') statusClass = 'not-interesting';
+            if (result.status === 'ON_QUOTE') statusClass = 'on-quote';
+
+            let html = `
+                <div class="result-status" style="color: ${statusClass === 'auto' ? '#28a745' : statusClass === 'not-interesting' ? '#ffc107' : '#dc3545'}">
+                    ${result.statusText}
+                </div>
+            `;
+
+            if (result.price !== null) {
+                html += `<div class="result-price">${formatCHF(result.price)}/an</div>`;
+                html += `
+                    <div class="result-details">
+                        ${result.message}<br>
+                        Base: ${formatCHF(result.basePrice)} × ${result.multiplier.toFixed(3)}<br>
+                        Mensuel: ${formatCHF(Math.round(result.price / 12))}/mois<br>
+                        Guardrails: ${formatCHF(result.minPrice)} - ${formatCHF(result.maxPrice)}
+                    </div>
+                `;
+            } else {
+                html += `<div class="result-details">${result.message}</div>`;
+            }
+
+            resultDiv.innerHTML = html;
+            resultDiv.className = `test-result ${statusClass}`;
+        }
+
+        function testScenario(revenue, employees) {
+            document.getElementById('testRevenue').value = revenue;
+            document.getElementById('testEmployees').value = employees;
+            updateTest();
+        }
+
+        function formatCHF(amount) {
+            return new Intl.NumberFormat('fr-CH', {
+                style: 'currency',
+                currency: 'CHF',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function markUnsaved() {
+            hasUnsavedChanges = true;
+            document.getElementById('saveStatus').textContent = 'Non sauvegardé';
+            document.getElementById('saveStatus').className = 'status-indicator status-unsaved';
+        }
+
+        function saveConfig() {
+            config = getConfigFromForm();
+            localStorage.setItem('phiPricingConfig', JSON.stringify(config));
+            hasUnsavedChanges = false;
+            document.getElementById('saveStatus').textContent = 'Sauvegardé';
+            document.getElementById('saveStatus').className = 'status-indicator status-saved';
+            showToast('Configuration sauvegardée!', 'success');
+        }
+
+        function resetToDefaults() {
+            if (confirm('Réinitialiser tous les paramètres aux valeurs par défaut?')) {
+                config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+                localStorage.removeItem('phiPricingConfig');
+                loadConfig();
+                renderBasePricesTable();
+                updateTest();
+                hasUnsavedChanges = false;
+                document.getElementById('saveStatus').textContent = 'Sauvegardé';
+                document.getElementById('saveStatus').className = 'status-indicator status-saved';
+                showToast('Configuration réinitialisée', 'success');
+            }
+        }
+
+        function exportJS() {
+            const cfg = getConfigFromForm();
+            const js = `// PHI Fiduciaire - Configuration Pricing
+const BASE_PRICES = ${JSON.stringify(cfg.basePrices, null, 4)};
+
+const EMPLOYEE_MULTIPLIER = ${cfg.employeeMultiplier};
+
+const GUARDRAILS = {
+    min_percentage: ${cfg.guardrails.minPercentage},
+    max_percentage: ${cfg.guardrails.maxPercentage},
+};
+
+const MANUAL_QUOTE_TRIGGERS = {
+    max_revenue: ${cfg.manualQuoteTriggers.maxRevenue},
+    max_employees: ${cfg.manualQuoteTriggers.maxEmployees},
+};
+
+// Exceptions
+const SKIP_MIN_FOR_0_EMPLOYEES = ${cfg.exceptions.skipMinFor0Emp};
+const SKIP_MAX_FOR_0_EMP_LOW_REV = ${cfg.exceptions.skipMaxFor0EmpLowRev};`;
+
+            copyToClipboard(js);
+            showToast('JavaScript copié!', 'success');
+        }
+
+        function exportPython() {
+            const cfg = getConfigFromForm();
+            const py = `# PHI Fiduciaire - Configuration Pricing
+
+BASE_PRICES = {
+${Object.entries(cfg.basePrices).map(([k, v]) => `    ${k}: ${v},`).join('\n')}
+}
+
+EMPLOYEE_MULTIPLIER = ${cfg.employeeMultiplier}
+
+GUARDRAILS = {
+    'min_percentage': ${cfg.guardrails.minPercentage},
+    'max_percentage': ${cfg.guardrails.maxPercentage},
+}
+
+MANUAL_QUOTE_TRIGGERS = {
+    'max_revenue': ${cfg.manualQuoteTriggers.maxRevenue},
+    'max_employees': ${cfg.manualQuoteTriggers.maxEmployees},
+}
+
+# Exceptions
+SKIP_MIN_FOR_0_EMPLOYEES = ${cfg.exceptions.skipMinFor0Emp ? 'True' : 'False'}
+SKIP_MAX_FOR_0_EMP_LOW_REV = ${cfg.exceptions.skipMaxFor0EmpLowRev ? 'True' : 'False'}`;
+
+            copyToClipboard(py);
+            showToast('Python copié!', 'success');
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        // Warn before leaving with unsaved changes
+        window.addEventListener('beforeunload', function(e) {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>

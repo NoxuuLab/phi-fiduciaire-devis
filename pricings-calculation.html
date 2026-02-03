@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHI Fiduciaire - Pricing Specification for Developers</title>
+    <style>
+        :root {
+            --navy: #1e3a5f;
+            --gold: #c9a961;
+            --green: #27ae60;
+            --orange: #e67e22;
+            --red: #e74c3c;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--navy) 0%, #2a4d7a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        header .version {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--navy);
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .toc {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .toc h2 {
+            color: var(--navy);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .toc ol {
+            padding-left: 1.5rem;
+        }
+
+        .toc li {
+            margin: 0.5rem 0;
+        }
+
+        .toc a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: var(--navy);
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: var(--navy);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.2rem;
+        }
+
+        h4 {
+            color: #555;
+            margin: 1rem 0 0.5rem;
+            font-size: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .formula-box {
+            background: var(--navy);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .formula-box .highlight {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        code {
+            background: #e9ecef;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c7254e;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 1rem 0;
+        }
+
+        pre .comment { color: #6a9955; }
+        pre .keyword { color: #569cd6; }
+        pre .string { color: #ce9178; }
+        pre .number { color: #b5cea8; }
+        pre .function { color: #dcdcaa; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        th {
+            background: var(--navy);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: var(--orange);
+        }
+
+        .alert-danger {
+            background: #ffebee;
+            border-color: var(--red);
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            border-color: var(--green);
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        .status-auto { background: var(--green); }
+        .status-not-interesting { background: var(--orange); }
+        .status-on-quote { background: var(--red); }
+
+        .flowchart {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .flowchart-step {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--navy);
+            color: white;
+            border-radius: 8px;
+            margin: 0.5rem;
+            font-weight: 500;
+        }
+
+        .flowchart-arrow {
+            display: inline-block;
+            color: var(--gold);
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+        }
+
+        .flowchart-decision {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--orange);
+            color: white;
+            border-radius: 8px;
+            margin: 0.5rem;
+            font-weight: 500;
+            transform: rotate(0deg);
+        }
+
+        .example-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--navy);
+            margin-top: 0;
+        }
+
+        .example-calc {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .example-result {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .config-table code {
+            background: transparent;
+            color: inherit;
+        }
+
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--navy) 0%, #2a4d7a 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .highlight-box h4 {
+            color: var(--gold);
+            margin-top: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            border-top: 1px solid #dee2e6;
+            margin-top: 2rem;
+        }
+
+        @media print {
+            body { background: white; }
+            section { box-shadow: none; border: 1px solid #ddd; }
+            .container { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>PHI Fiduciaire - Pricing Specification</h1>
+            <p class="subtitle">Technical Documentation for Development Team</p>
+            <span class="version">v4.0 - February 2026</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#overview">Overview & Two Flows</a></li>
+                <li><a href="#formula">Core Pricing Formula</a></li>
+                <li><a href="#base-price">Step 1: Base Price Calculation</a></li>
+                <li><a href="#multiplier">Step 2: Employee Multiplier</a></li>
+                <li><a href="#guardrails">Step 3: Guardrails & Exceptions</a></li>
+                <li><a href="#triggers">Manual Quote Triggers</a></li>
+                <li><a href="#status-codes">Status Codes & UI Display</a></li>
+                <li><a href="#creation-flow">Creation Flow (Different Logic)</a></li>
+                <li><a href="#examples">Complete Examples</a></li>
+                <li><a href="#pseudocode">Pseudocode Implementation</a></li>
+                <li><a href="#config">Configuration Reference</a></li>
+                <li><a href="#edge-cases">Edge Cases & Testing</a></li>
+            </ol>
+        </nav>
+
+        <!-- Section 1: Overview -->
+        <section id="overview">
+            <h2>1. Overview & Two Flows</h2>
+
+            <p>The PHI Fiduciaire pricing system handles <strong>two distinct flows</strong> with completely different calculation logic:</p>
+
+            <div class="two-column">
+                <div class="highlight-box">
+                    <h4>Flow 1: Existing Company</h4>
+                    <p>Uses the <strong>multiplicative formula</strong> with guardrails.</p>
+                    <p>Applies to: Independant, Sàrl, SA</p>
+                    <p><strong>Steps:</strong> Structure → Services → Employees → Revenue → Contact → Quote</p>
+                </div>
+                <div class="highlight-box">
+                    <h4>Flow 2: Company Creation</h4>
+                    <p>Uses <strong>fixed fees</strong> only. No formula calculation.</p>
+                    <p>Applies to: New Sàrl or SA creation</p>
+                    <p><strong>Steps:</strong> Structure → Type → Risk Add-ons → Services → Contact → Quote</p>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <div class="alert-title">Important</div>
+                This document focuses on <strong>Flow 1 (Existing Company)</strong> as it contains the complex pricing logic. Flow 2 is simply fixed fees added together.
+            </div>
+        </section>
+
+        <!-- Section 2: Core Formula -->
+        <section id="formula">
+            <h2>2. Core Pricing Formula</h2>
+
+            <p>For existing companies, the price is calculated using a <strong>multiplicative model</strong>:</p>
+
+            <div class="formula-box">
+                <span class="highlight">Price</span> = BasePrice(Revenue) × (1.10 <sup>employees</sup>)
+            </div>
+
+            <h3>Formula Components</h3>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Description</th>
+                    <th>How It's Determined</th>
+                </tr>
+                <tr>
+                    <td><code>BasePrice(Revenue)</code></td>
+                    <td>Starting price based on annual revenue</td>
+                    <td>Linear interpolation between fixed brackets (see Section 3)</td>
+                </tr>
+                <tr>
+                    <td><code>1.10</code></td>
+                    <td>Employee multiplier constant</td>
+                    <td>Fixed value - each employee increases price by 10%</td>
+                </tr>
+                <tr>
+                    <td><code>employees</code></td>
+                    <td>Number of employees (exponent)</td>
+                    <td>User input (integer, 0-20)</td>
+                </tr>
+            </table>
+
+            <h3>Calculation Flow</h3>
+            <div class="flowchart">
+                <span class="flowchart-step">1. Check Triggers</span>
+                <span class="flowchart-arrow">→</span>
+                <span class="flowchart-step">2. Get Base Price</span>
+                <span class="flowchart-arrow">→</span>
+                <span class="flowchart-step">3. Apply Multiplier</span>
+                <span class="flowchart-arrow">→</span>
+                <span class="flowchart-step">4. Check Guardrails</span>
+                <span class="flowchart-arrow">→</span>
+                <span class="flowchart-step">5. Return Status</span>
+            </div>
+        </section>
+
+        <!-- Section 3: Base Price -->
+        <section id="base-price">
+            <h2>3. Step 1: Base Price Calculation</h2>
+
+            <p>The base price is determined by the company's <strong>annual revenue</strong> using linear interpolation between fixed brackets.</p>
+
+            <h3>Base Price Brackets</h3>
+            <table>
+                <tr>
+                    <th>Revenue (CHF)</th>
+                    <th>Base Price (CHF)</th>
+                </tr>
+                <tr><td>100,000</td><td>3,600</td></tr>
+                <tr><td>200,000</td><td>3,960</td></tr>
+                <tr><td>300,000</td><td>4,356</td></tr>
+                <tr><td>400,000</td><td>5,500</td></tr>
+                <tr><td>500,000</td><td>6,050</td></tr>
+                <tr><td>600,000</td><td>6,655</td></tr>
+                <tr><td>700,000</td><td>7,321</td></tr>
+                <tr><td>800,000</td><td>8,053</td></tr>
+            </table>
+
+            <h3>Interpolation Logic</h3>
+            <div class="alert alert-info">
+                <div class="alert-title">Linear Interpolation Formula</div>
+                <code>BasePrice = P1 + (P2 - P1) × (Revenue - R1) / (R2 - R1)</code>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">Where R1/P1 is the lower bracket and R2/P2 is the upper bracket.</p>
+            </div>
+
+            <h4>Edge Cases</h4>
+            <ul>
+                <li><strong>Revenue &lt; 100,000:</strong> Use the first bracket's price (3,600 CHF)</li>
+                <li><strong>Revenue &gt; 800,000:</strong> Return <code>ON_QUOTE</code> immediately (see Section 6)</li>
+                <li><strong>Exact bracket match:</strong> Return the bracket's price directly (no interpolation needed)</li>
+            </ul>
+
+            <div class="example-box">
+                <h4>Example: Revenue = 350,000 CHF</h4>
+                <div class="example-calc">
+                    Lower bracket: R1 = 300,000 → P1 = 4,356<br>
+                    Upper bracket: R2 = 400,000 → P2 = 5,500<br>
+                    <br>
+                    BasePrice = 4,356 + (5,500 - 4,356) × (350,000 - 300,000) / (400,000 - 300,000)<br>
+                    BasePrice = 4,356 + 1,144 × 0.5<br>
+                    <span class="example-result">BasePrice = 4,928 CHF</span>
+                </div>
+            </div>
+
+            <h3>Implementation Code</h3>
+            <pre><span class="keyword">function</span> <span class="function">getBasePrice</span>(revenue) {
+    <span class="keyword">const</span> basePrices = {
+        <span class="number">100000</span>: <span class="number">3600</span>,
+        <span class="number">200000</span>: <span class="number">3960</span>,
+        <span class="number">300000</span>: <span class="number">4356</span>,
+        <span class="number">400000</span>: <span class="number">5500</span>,
+        <span class="number">500000</span>: <span class="number">6050</span>,
+        <span class="number">600000</span>: <span class="number">6655</span>,
+        <span class="number">700000</span>: <span class="number">7321</span>,
+        <span class="number">800000</span>: <span class="number">8053</span>
+    };
+
+    <span class="comment">// Exact match</span>
+    <span class="keyword">if</span> (basePrices[revenue]) {
+        <span class="keyword">return</span> basePrices[revenue];
+    }
+
+    <span class="keyword">const</span> brackets = Object.keys(basePrices).map(Number).sort((a, b) => a - b);
+
+    <span class="comment">// Below minimum bracket</span>
+    <span class="keyword">if</span> (revenue < brackets[<span class="number">0</span>]) {
+        <span class="keyword">return</span> basePrices[brackets[<span class="number">0</span>]];
+    }
+
+    <span class="comment">// Linear interpolation between brackets</span>
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < brackets.length - <span class="number">1</span>; i++) {
+        <span class="keyword">const</span> r1 = brackets[i];
+        <span class="keyword">const</span> r2 = brackets[i + <span class="number">1</span>];
+
+        <span class="keyword">if</span> (r1 < revenue && revenue <= r2) {
+            <span class="keyword">const</span> p1 = basePrices[r1];
+            <span class="keyword">const</span> p2 = basePrices[r2];
+            <span class="keyword">return</span> p1 + (p2 - p1) * (revenue - r1) / (r2 - r1);
+        }
+    }
+
+    <span class="keyword">return</span> basePrices[brackets[brackets.length - <span class="number">1</span>]];
+}</pre>
+        </section>
+
+        <!-- Section 4: Employee Multiplier -->
+        <section id="multiplier">
+            <h2>4. Step 2: Employee Multiplier</h2>
+
+            <p>Each employee <strong>compounds</strong> the price by 10%. This is exponential, not additive.</p>
+
+            <div class="formula-box">
+                Multiplier = 1.10 <sup>employees</sup>
+            </div>
+
+            <h3>Multiplier Values</h3>
+            <table>
+                <tr>
+                    <th>Employees</th>
+                    <th>Multiplier</th>
+                    <th>Effect on 5,000 CHF Base</th>
+                </tr>
+                <tr><td>0</td><td>×1.000</td><td>5,000 CHF</td></tr>
+                <tr><td>1</td><td>×1.100</td><td>5,500 CHF</td></tr>
+                <tr><td>2</td><td>×1.210</td><td>6,050 CHF</td></tr>
+                <tr><td>3</td><td>×1.331</td><td>6,655 CHF</td></tr>
+                <tr><td>5</td><td>×1.611</td><td>8,053 CHF</td></tr>
+                <tr><td>8</td><td>×2.144</td><td>10,718 CHF</td></tr>
+                <tr><td>10</td><td>×2.594</td><td>12,969 CHF</td></tr>
+                <tr><td>15</td><td>×4.177</td><td>20,886 CHF</td></tr>
+                <tr><td>20</td><td>×6.727</td><td>33,637 CHF</td></tr>
+            </table>
+
+            <div class="alert alert-info">
+                <div class="alert-title">Implementation Note</div>
+                Use <code>Math.pow(1.10, employees)</code> or <code>1.10 ** employees</code> to calculate the multiplier.
+                Round the final calculated price to the nearest integer using <code>Math.round()</code>.
+            </div>
+
+            <h3>Implementation Code</h3>
+            <pre><span class="keyword">const</span> EMPLOYEE_MULTIPLIER = <span class="number">1.10</span>;
+
+<span class="keyword">const</span> multiplier = Math.pow(EMPLOYEE_MULTIPLIER, employees);
+<span class="keyword">const</span> calculatedPrice = Math.round(basePrice * multiplier);</pre>
+        </section>
+
+        <!-- Section 5: Guardrails -->
+        <section id="guardrails">
+            <h2>5. Step 3: Guardrails & Exceptions</h2>
+
+            <p>Guardrails ensure the calculated price stays within a reasonable percentage of the company's revenue.</p>
+
+            <h3>Guardrail Thresholds</h3>
+            <table>
+                <tr>
+                    <th>Guardrail</th>
+                    <th>Threshold</th>
+                    <th>Formula</th>
+                    <th>Result if Triggered</th>
+                </tr>
+                <tr>
+                    <td><strong>Minimum</strong></td>
+                    <td>1.5% of Revenue</td>
+                    <td><code>revenue × 0.015</code></td>
+                    <td><span class="status-badge status-not-interesting">NOT_INTERESTING</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Maximum</strong></td>
+                    <td>3% of Revenue</td>
+                    <td><code>revenue × 0.03</code></td>
+                    <td><span class="status-badge status-on-quote">ON_QUOTE</span></td>
+                </tr>
+            </table>
+
+            <h3>Guardrail Check Logic</h3>
+            <pre><span class="keyword">const</span> minGuardrail = revenue * <span class="number">0.015</span>;  <span class="comment">// 1.5%</span>
+<span class="keyword">const</span> maxGuardrail = revenue * <span class="number">0.03</span>;   <span class="comment">// 3%</span>
+<span class="keyword">const</span> percentage = (calculatedPrice / revenue) * <span class="number">100</span>;
+
+<span class="keyword">if</span> (calculatedPrice < minGuardrail) {
+    status = <span class="string">'NOT_INTERESTING'</span>;  <span class="comment">// Price too low - not profitable</span>
+} <span class="keyword">else if</span> (calculatedPrice > maxGuardrail) {
+    status = <span class="string">'ON_QUOTE'</span>;  <span class="comment">// Price too high - needs manual review</span>
+} <span class="keyword">else</span> {
+    status = <span class="string">'AUTO_PRICED'</span>;  <span class="comment">// Price is valid</span>
+}</pre>
+
+            <h3>Critical: Guardrail Exceptions</h3>
+
+            <div class="alert alert-danger">
+                <div class="alert-title">Exception 1: Skip Minimum for 0 Employees</div>
+                <p>When <code>employees === 0</code>, the <strong>minimum guardrail is bypassed</strong>.</p>
+                <p>Rationale: Companies with no employees are small operations; we always want to offer them the base price even if it's below 1.5%.</p>
+            </div>
+
+            <div class="alert alert-danger">
+                <div class="alert-title">Exception 2: Skip Maximum for 0 Employees + Low Revenue</div>
+                <p>When <code>employees === 0</code> AND <code>revenue ≤ 200,000</code>, the <strong>maximum guardrail is also bypassed</strong>.</p>
+                <p>Rationale: Very small companies (solo, low revenue) may have high percentage prices, but we still want to serve them with the base price.</p>
+            </div>
+
+            <h3>Exception Logic Implementation</h3>
+            <pre><span class="keyword">const</span> SKIP_MIN_FOR_0_EMPLOYEES = <span class="keyword">true</span>;
+<span class="keyword">const</span> SKIP_MAX_FOR_0_EMPLOYEES_LOW_REVENUE = <span class="keyword">true</span>;
+<span class="keyword">const</span> LOW_REVENUE_THRESHOLD = <span class="number">200000</span>;
+
+<span class="comment">// Check minimum guardrail (with exception)</span>
+<span class="keyword">const</span> skipMinGuardrail = SKIP_MIN_FOR_0_EMPLOYEES && employees === <span class="number">0</span>;
+
+<span class="keyword">if</span> (!skipMinGuardrail && calculatedPrice < minGuardrail) {
+    status = <span class="string">'NOT_INTERESTING'</span>;
+}
+
+<span class="comment">// Check maximum guardrail (with exception)</span>
+<span class="keyword">const</span> skipMaxGuardrail = SKIP_MAX_FOR_0_EMPLOYEES_LOW_REVENUE
+                          && employees === <span class="number">0</span>
+                          && revenue <= LOW_REVENUE_THRESHOLD;
+
+<span class="keyword">if</span> (!skipMaxGuardrail && calculatedPrice > maxGuardrail) {
+    status = <span class="string">'ON_QUOTE'</span>;
+}</pre>
+
+            <h3>Decision Matrix</h3>
+            <table>
+                <tr>
+                    <th>Employees</th>
+                    <th>Revenue</th>
+                    <th>Price &lt; 1.5%</th>
+                    <th>Price &gt; 3%</th>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>≤ 200K</td>
+                    <td><span class="status-badge status-auto">AUTO_PRICED</span> (skip min)</td>
+                    <td><span class="status-badge status-auto">AUTO_PRICED</span> (skip max)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>&gt; 200K</td>
+                    <td><span class="status-badge status-auto">AUTO_PRICED</span> (skip min)</td>
+                    <td><span class="status-badge status-on-quote">ON_QUOTE</span></td>
+                </tr>
+                <tr>
+                    <td>1+</td>
+                    <td>Any</td>
+                    <td><span class="status-badge status-not-interesting">NOT_INTERESTING</span></td>
+                    <td><span class="status-badge status-on-quote">ON_QUOTE</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 6: Manual Triggers -->
+        <section id="triggers">
+            <h2>6. Manual Quote Triggers</h2>
+
+            <p>Before any calculation, check these conditions. If either is true, return <code>ON_QUOTE</code> immediately <strong>without calculating</strong>.</p>
+
+            <table>
+                <tr>
+                    <th>Trigger</th>
+                    <th>Condition</th>
+                    <th>Reason</th>
+                </tr>
+                <tr>
+                    <td><strong>High Revenue</strong></td>
+                    <td><code>revenue &gt; 800,000 CHF</code></td>
+                    <td>Large companies need personalized analysis</td>
+                </tr>
+                <tr>
+                    <td><strong>Many Employees</strong></td>
+                    <td><code>employees &gt; 20</code></td>
+                    <td>Complex HR situations need manual review</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-warning">
+                <div class="alert-title">Order of Operations</div>
+                Always check manual triggers <strong>FIRST</strong>, before calculating base price or applying guardrails. This prevents unnecessary computation.
+            </div>
+
+            <pre><span class="keyword">function</span> <span class="function">calculate</span>(revenue, employees) {
+    <span class="comment">// STEP 1: Check manual triggers FIRST</span>
+    <span class="keyword">if</span> (revenue > <span class="number">800000</span>) {
+        <span class="keyword">return</span> { status: <span class="string">'ON_QUOTE'</span>, reason: <span class="string">'revenue'</span>, price: <span class="keyword">null</span> };
+    }
+
+    <span class="keyword">if</span> (employees > <span class="number">20</span>) {
+        <span class="keyword">return</span> { status: <span class="string">'ON_QUOTE'</span>, reason: <span class="string">'employees'</span>, price: <span class="keyword">null</span> };
+    }
+
+    <span class="comment">// STEP 2: Now proceed with calculation...</span>
+    <span class="keyword">const</span> basePrice = getBasePrice(revenue);
+    <span class="comment">// ... rest of logic</span>
+}</pre>
+        </section>
+
+        <!-- Section 7: Status Codes -->
+        <section id="status-codes">
+            <h2>7. Status Codes & UI Display</h2>
+
+            <h3>Status Definitions</h3>
+            <table>
+                <tr>
+                    <th>Status</th>
+                    <th>Meaning</th>
+                    <th>UI Color</th>
+                    <th>Show Price?</th>
+                </tr>
+                <tr>
+                    <td><span class="status-badge status-auto">AUTO_PRICED</span></td>
+                    <td>Price calculated automatically and valid</td>
+                    <td>Green (#27ae60)</td>
+                    <td>Yes - display full price</td>
+                </tr>
+                <tr>
+                    <td><span class="status-badge status-not-interesting">NOT_INTERESTING</span></td>
+                    <td>Price below 1.5% - mandate not profitable</td>
+                    <td>Orange (#e67e22)</td>
+                    <td>Yes - with warning flag</td>
+                </tr>
+                <tr>
+                    <td><span class="status-badge status-on-quote">ON_QUOTE</span></td>
+                    <td>Manual quote required</td>
+                    <td>Red (#e74c3c)</td>
+                    <td>Optional - show calculation details</td>
+                </tr>
+            </table>
+
+            <h3>Reason Codes</h3>
+            <table>
+                <tr>
+                    <th>onQuoteReason</th>
+                    <th>Trigger</th>
+                    <th>User Message</th>
+                </tr>
+                <tr>
+                    <td><code>'revenue'</code></td>
+                    <td>Revenue &gt; 800K</td>
+                    <td>"Revenue exceeds 800,000 CHF. A personalized quote will be prepared."</td>
+                </tr>
+                <tr>
+                    <td><code>'employees'</code></td>
+                    <td>Employees &gt; 20</td>
+                    <td>"More than 20 employees requires personalized analysis."</td>
+                </tr>
+                <tr>
+                    <td><code>'guardrail_max'</code></td>
+                    <td>Price &gt; 3% of Revenue</td>
+                    <td>"Calculated price (X CHF = Y%) exceeds 3% of revenue."</td>
+                </tr>
+                <tr>
+                    <td><code>'guardrail_min'</code></td>
+                    <td>Price &lt; 1.5% of Revenue</td>
+                    <td>"Calculated price (X CHF = Y%) is below 1.5% of revenue. Not profitable."</td>
+                </tr>
+            </table>
+
+            <h3>Return Object Structure</h3>
+            <pre>{
+    status: <span class="string">'AUTO_PRICED'</span> | <span class="string">'NOT_INTERESTING'</span> | <span class="string">'ON_QUOTE'</span>,
+    onQuoteReason: <span class="string">'revenue'</span> | <span class="string">'employees'</span> | <span class="string">'guardrail_min'</span> | <span class="string">'guardrail_max'</span> | <span class="keyword">null</span>,
+
+    <span class="comment">// Calculation details</span>
+    basePrice: <span class="number">5500</span>,              <span class="comment">// From interpolation</span>
+    employeeMultiplier: <span class="number">1.331</span>,    <span class="comment">// 1.10^employees</span>
+    calculatedPrice: <span class="number">7321</span>,        <span class="comment">// basePrice × multiplier</span>
+    percentageOfRevenue: <span class="number">1.83</span>,    <span class="comment">// (price / revenue) × 100</span>
+
+    <span class="comment">// Guardrails</span>
+    minGuardrail: <span class="number">6000</span>,           <span class="comment">// revenue × 0.015</span>
+    maxGuardrail: <span class="number">12000</span>,          <span class="comment">// revenue × 0.03</span>
+
+    <span class="comment">// Extra services (added outside guardrails)</span>
+    domiciliationFee: <span class="number">0</span>,          <span class="comment">// 3000 if selected</span>
+    administrateurFee: <span class="number">0</span>,         <span class="comment">// 9500 if selected</span>
+    extraServices: <span class="number">0</span>,             <span class="comment">// domiciliation + administrateur</span>
+
+    <span class="comment">// Final pricing</span>
+    finalPrice: <span class="number">7321</span>,             <span class="comment">// calculatedPrice + extraServices</span>
+    monthlyPrice: <span class="number">610.08</span>          <span class="comment">// finalPrice / 12</span>
+}</pre>
+        </section>
+
+        <!-- Section 8: Creation Flow -->
+        <section id="creation-flow">
+            <h2>8. Creation Flow (Different Logic)</h2>
+
+            <div class="alert alert-info">
+                <div class="alert-title">No Formula Calculation</div>
+                Company creation uses fixed fees only. The pricing formula does NOT apply to this flow.
+            </div>
+
+            <h3>Creation Fees (One-time)</h3>
+            <table>
+                <tr>
+                    <th>Company Type</th>
+                    <th>Creation Fee</th>
+                </tr>
+                <tr>
+                    <td>Sàrl</td>
+                    <td>from 750 CHF</td>
+                </tr>
+                <tr>
+                    <td>SA</td>
+                    <td>from 1,150 CHF</td>
+                </tr>
+            </table>
+
+            <h3>Optional Annual Services</h3>
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>Available For</th>
+                    <th>Annual Fee</th>
+                </tr>
+                <tr>
+                    <td>Domiciliation</td>
+                    <td>Sàrl & SA</td>
+                    <td>3,000 CHF/year</td>
+                </tr>
+                <tr>
+                    <td>Administrative Director</td>
+                    <td>SA only</td>
+                    <td>from 9,500 CHF/year</td>
+                </tr>
+            </table>
+
+            <h3>Creation Flow Logic</h3>
+            <pre><span class="keyword">if</span> (structure === <span class="string">'creation'</span>) {
+    <span class="comment">// No formula - just fixed fees</span>
+    result.creationFee = creationType === <span class="string">'sa'</span> ? <span class="number">1150</span> : <span class="number">750</span>;
+
+    <span class="keyword">if</span> (services.domiciliation) {
+        result.domiciliationFee = <span class="number">3000</span>;
+    }
+    <span class="keyword">if</span> (services.administrateur && creationType === <span class="string">'sa'</span>) {
+        result.administrateurFee = <span class="number">9500</span>;
+    }
+
+    result.finalPrice = result.domiciliationFee + result.administrateurFee;
+    <span class="comment">// Note: creationFee is one-time, displayed separately</span>
+}</pre>
+        </section>
+
+        <!-- Section 9: Examples -->
+        <section id="examples">
+            <h2>9. Complete Examples</h2>
+
+            <div class="example-box">
+                <h4>Example 1: Standard Case - AUTO_PRICED</h4>
+                <p><strong>Input:</strong> Revenue = 400,000 CHF, Employees = 3</p>
+                <div class="example-calc">
+                    <strong>Step 1:</strong> Check triggers<br>
+                    - Revenue 400K ≤ 800K ✓<br>
+                    - Employees 3 ≤ 20 ✓<br><br>
+
+                    <strong>Step 2:</strong> Base price (exact bracket match)<br>
+                    - BasePrice = 5,500 CHF<br><br>
+
+                    <strong>Step 3:</strong> Apply multiplier<br>
+                    - Multiplier = 1.10³ = 1.331<br>
+                    - Price = 5,500 × 1.331 = 7,320.5 → <strong>7,321 CHF</strong><br><br>
+
+                    <strong>Step 4:</strong> Check guardrails<br>
+                    - Percentage = 7,321 / 400,000 = 1.83%<br>
+                    - Min (1.5%) = 6,000 CHF → 7,321 ≥ 6,000 ✓<br>
+                    - Max (3%) = 12,000 CHF → 7,321 ≤ 12,000 ✓<br><br>
+
+                    <span class="example-result">Result: AUTO_PRICED → 7,321 CHF/year (610.08 CHF/month)</span>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Example 2: Zero Employees - Min Guardrail Skipped</h4>
+                <p><strong>Input:</strong> Revenue = 600,000 CHF, Employees = 0</p>
+                <div class="example-calc">
+                    <strong>Step 2:</strong> Base price = 6,655 CHF<br><br>
+
+                    <strong>Step 3:</strong> Multiplier = 1.10⁰ = 1.000<br>
+                    - Price = 6,655 × 1.000 = <strong>6,655 CHF</strong><br><br>
+
+                    <strong>Step 4:</strong> Check guardrails<br>
+                    - Percentage = 6,655 / 600,000 = 1.11%<br>
+                    - Min (1.5%) = 9,000 CHF → 6,655 < 9,000 ✗<br>
+                    - <strong>BUT employees = 0 → SKIP MIN GUARDRAIL</strong><br><br>
+
+                    <span class="example-result">Result: AUTO_PRICED → 6,655 CHF/year (exception applied)</span>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Example 3: Zero Employees + Low Revenue - Both Guardrails Skipped</h4>
+                <p><strong>Input:</strong> Revenue = 100,000 CHF, Employees = 0</p>
+                <div class="example-calc">
+                    <strong>Step 2:</strong> Base price = 3,600 CHF<br><br>
+
+                    <strong>Step 3:</strong> Multiplier = 1.000<br>
+                    - Price = <strong>3,600 CHF</strong><br><br>
+
+                    <strong>Step 4:</strong> Check guardrails<br>
+                    - Percentage = 3,600 / 100,000 = 3.6%<br>
+                    - Max (3%) = 3,000 CHF → 3,600 > 3,000 ✗<br>
+                    - <strong>BUT employees = 0 AND revenue ≤ 200K → SKIP MAX GUARDRAIL</strong><br><br>
+
+                    <span class="example-result">Result: AUTO_PRICED → 3,600 CHF/year (both exceptions applied)</span>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Example 4: High Revenue Trigger</h4>
+                <p><strong>Input:</strong> Revenue = 900,000 CHF, Employees = 5</p>
+                <div class="example-calc">
+                    <strong>Step 1:</strong> Check triggers<br>
+                    - Revenue 900K > 800K ✗ → <strong>IMMEDIATE ON_QUOTE</strong><br><br>
+
+                    <span class="example-result">Result: ON_QUOTE (reason: 'revenue') - No price calculated</span>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Example 5: NOT_INTERESTING (Below Min Guardrail)</h4>
+                <p><strong>Input:</strong> Revenue = 500,000 CHF, Employees = 1</p>
+                <div class="example-calc">
+                    <strong>Step 2:</strong> Base price = 6,050 CHF<br><br>
+
+                    <strong>Step 3:</strong> Multiplier = 1.10¹ = 1.100<br>
+                    - Price = 6,050 × 1.100 = <strong>6,655 CHF</strong><br><br>
+
+                    <strong>Step 4:</strong> Check guardrails<br>
+                    - Percentage = 6,655 / 500,000 = 1.33%<br>
+                    - Min (1.5%) = 7,500 CHF → 6,655 < 7,500 ✗<br>
+                    - Employees = 1 (not 0) → min guardrail applies<br><br>
+
+                    <span class="example-result">Result: NOT_INTERESTING → Price displayed (6,655 CHF) but flagged for review</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 10: Pseudocode -->
+        <section id="pseudocode">
+            <h2>10. Pseudocode Implementation</h2>
+
+            <pre><span class="keyword">function</span> <span class="function">calculateQuote</span>(revenue, employees, services) {
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+    <span class="comment">// STEP 1: CHECK MANUAL QUOTE TRIGGERS (before any calculation)</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+
+    <span class="keyword">if</span> (revenue > MAX_REVENUE) {  <span class="comment">// 800,000</span>
+        <span class="keyword">return</span> {
+            status: <span class="string">'ON_QUOTE'</span>,
+            onQuoteReason: <span class="string">'revenue'</span>,
+            price: <span class="keyword">null</span>
+        };
+    }
+
+    <span class="keyword">if</span> (employees > MAX_EMPLOYEES) {  <span class="comment">// 20</span>
+        <span class="keyword">return</span> {
+            status: <span class="string">'ON_QUOTE'</span>,
+            onQuoteReason: <span class="string">'employees'</span>,
+            price: <span class="keyword">null</span>
+        };
+    }
+
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+    <span class="comment">// STEP 2: GET BASE PRICE (linear interpolation)</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+
+    <span class="keyword">const</span> basePrice = getBasePrice(revenue);  <span class="comment">// See Section 3</span>
+
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+    <span class="comment">// STEP 3: APPLY EMPLOYEE MULTIPLIER</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+
+    <span class="keyword">const</span> multiplier = Math.pow(<span class="number">1.10</span>, employees);
+    <span class="keyword">const</span> calculatedPrice = Math.round(basePrice * multiplier);
+
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+    <span class="comment">// STEP 4: CALCULATE GUARDRAILS</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+
+    <span class="keyword">const</span> minGuardrail = revenue * <span class="number">0.015</span>;  <span class="comment">// 1.5%</span>
+    <span class="keyword">const</span> maxGuardrail = revenue * <span class="number">0.03</span>;   <span class="comment">// 3%</span>
+    <span class="keyword">const</span> percentage = (calculatedPrice / revenue) * <span class="number">100</span>;
+
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+    <span class="comment">// STEP 5: CHECK GUARDRAILS WITH EXCEPTIONS</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+
+    <span class="keyword">let</span> status = <span class="string">'AUTO_PRICED'</span>;
+    <span class="keyword">let</span> onQuoteReason = <span class="keyword">null</span>;
+
+    <span class="comment">// Exception 1: Skip min guardrail when 0 employees</span>
+    <span class="keyword">const</span> skipMin = employees === <span class="number">0</span>;
+
+    <span class="keyword">if</span> (!skipMin && calculatedPrice < minGuardrail) {
+        status = <span class="string">'NOT_INTERESTING'</span>;
+        onQuoteReason = <span class="string">'guardrail_min'</span>;
+    }
+
+    <span class="comment">// Exception 2: Skip max guardrail when 0 employees AND revenue ≤ 200K</span>
+    <span class="keyword">const</span> skipMax = employees === <span class="number">0</span> && revenue <= <span class="number">200000</span>;
+
+    <span class="keyword">if</span> (!skipMax && calculatedPrice > maxGuardrail && status === <span class="string">'AUTO_PRICED'</span>) {
+        status = <span class="string">'ON_QUOTE'</span>;
+        onQuoteReason = <span class="string">'guardrail_max'</span>;
+    }
+
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+    <span class="comment">// STEP 6: ADD EXTRA SERVICES (outside guardrails)</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+
+    <span class="keyword">const</span> domiciliationFee = services.domiciliation ? <span class="number">3000</span> : <span class="number">0</span>;
+    <span class="keyword">const</span> administrateurFee = services.administrateur ? <span class="number">9500</span> : <span class="number">0</span>;
+    <span class="keyword">const</span> extraServices = domiciliationFee + administrateurFee;
+    <span class="keyword">const</span> finalPrice = calculatedPrice + extraServices;
+
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+    <span class="comment">// RETURN RESULT</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+
+    <span class="keyword">return</span> {
+        status,
+        onQuoteReason,
+        basePrice: Math.round(basePrice),
+        employeeMultiplier: multiplier,
+        calculatedPrice,
+        percentageOfRevenue: percentage,
+        minGuardrail: Math.round(minGuardrail),
+        maxGuardrail: Math.round(maxGuardrail),
+        domiciliationFee,
+        administrateurFee,
+        extraServices,
+        finalPrice,
+        monthlyPrice: finalPrice / <span class="number">12</span>
+    };
+}</pre>
+        </section>
+
+        <!-- Section 11: Configuration -->
+        <section id="config">
+            <h2>11. Configuration Reference</h2>
+
+            <h3>All Configurable Values</h3>
+            <pre><span class="keyword">const</span> CONFIG = {
+    <span class="comment">// Base prices by revenue bracket</span>
+    basePrices: {
+        <span class="number">100000</span>: <span class="number">3600</span>,
+        <span class="number">200000</span>: <span class="number">3960</span>,
+        <span class="number">300000</span>: <span class="number">4356</span>,
+        <span class="number">400000</span>: <span class="number">5500</span>,
+        <span class="number">500000</span>: <span class="number">6050</span>,
+        <span class="number">600000</span>: <span class="number">6655</span>,
+        <span class="number">700000</span>: <span class="number">7321</span>,
+        <span class="number">800000</span>: <span class="number">8053</span>
+    },
+
+    <span class="comment">// Employee impact</span>
+    employeeMultiplier: <span class="number">1.10</span>,
+
+    <span class="comment">// Guardrails (percentage of revenue)</span>
+    guardrails: {
+        minPercent: <span class="number">0.015</span>,  <span class="comment">// 1.5%</span>
+        maxPercent: <span class="number">0.03</span>    <span class="comment">// 3%</span>
+    },
+
+    <span class="comment">// Manual quote triggers</span>
+    manualQuoteTriggers: {
+        maxRevenue: <span class="number">800000</span>,
+        maxEmployees: <span class="number">20</span>
+    },
+
+    <span class="comment">// Guardrail exceptions</span>
+    exceptions: {
+        skipMinFor0Employees: <span class="keyword">true</span>,
+        skipMaxFor0EmployeesLowRevenue: <span class="keyword">true</span>,
+        lowRevenueThreshold: <span class="number">200000</span>
+    },
+
+    <span class="comment">// Service fees</span>
+    services: {
+        domiciliation: <span class="number">3000</span>,      <span class="comment">// Annual</span>
+        administrateur: <span class="number">9500</span>      <span class="comment">// Annual (SA only)</span>
+    },
+
+    <span class="comment">// Creation fees (one-time)</span>
+    creation: {
+        sarl: <span class="number">750</span>,
+        sa: <span class="number">1150</span>
+    }
+};</pre>
+        </section>
+
+        <!-- Section 12: Edge Cases -->
+        <section id="edge-cases">
+            <h2>12. Edge Cases & Testing</h2>
+
+            <h3>Test Cases Checklist</h3>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Revenue</th>
+                    <th>Employees</th>
+                    <th>Expected Status</th>
+                    <th>Expected Price</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>400,000</td>
+                    <td>3</td>
+                    <td>AUTO_PRICED</td>
+                    <td>7,321 CHF</td>
+                    <td>Standard case</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>600,000</td>
+                    <td>0</td>
+                    <td>AUTO_PRICED</td>
+                    <td>6,655 CHF</td>
+                    <td>Min exception (0 emp)</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>100,000</td>
+                    <td>0</td>
+                    <td>AUTO_PRICED</td>
+                    <td>3,600 CHF</td>
+                    <td>Both exceptions (0 emp + low rev)</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>900,000</td>
+                    <td>5</td>
+                    <td>ON_QUOTE</td>
+                    <td>null</td>
+                    <td>Revenue trigger</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>300,000</td>
+                    <td>25</td>
+                    <td>ON_QUOTE</td>
+                    <td>null</td>
+                    <td>Employee trigger</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>500,000</td>
+                    <td>1</td>
+                    <td>NOT_INTERESTING</td>
+                    <td>6,655 CHF</td>
+                    <td>Below min guardrail</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>100,000</td>
+                    <td>10</td>
+                    <td>ON_QUOTE</td>
+                    <td>9,343 CHF*</td>
+                    <td>Above max guardrail</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>50,000</td>
+                    <td>0</td>
+                    <td>AUTO_PRICED</td>
+                    <td>3,600 CHF</td>
+                    <td>Below min bracket</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>350,000</td>
+                    <td>2</td>
+                    <td>AUTO_PRICED</td>
+                    <td>5,963 CHF</td>
+                    <td>Interpolation test</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>800,000</td>
+                    <td>0</td>
+                    <td>AUTO_PRICED</td>
+                    <td>8,053 CHF</td>
+                    <td>Exact max bracket</td>
+                </tr>
+            </table>
+
+            <h3>Edge Cases to Verify</h3>
+            <ul>
+                <li><strong>Revenue = 0:</strong> Should handle gracefully (return error or skip calculation)</li>
+                <li><strong>Employees = 0:</strong> Multiplier should be exactly 1.000</li>
+                <li><strong>Exact bracket match:</strong> No interpolation needed</li>
+                <li><strong>Revenue = 800,001:</strong> Should trigger ON_QUOTE (> not ≥)</li>
+                <li><strong>Employees = 21:</strong> Should trigger ON_QUOTE</li>
+                <li><strong>Revenue = 200,000 with 0 emp:</strong> Max guardrail should be skipped (≤ 200K)</li>
+                <li><strong>Revenue = 200,001 with 0 emp:</strong> Max guardrail should apply</li>
+            </ul>
+
+            <div class="alert alert-success">
+                <div class="alert-title">Testing Tip</div>
+                Create unit tests for all cases in the table above. Ensure percentage calculations match expected values (use 4+ decimal places internally, display 2).
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>PHI Fiduciaire - Pricing Specification v4.0</strong></p>
+            <p>Document generated: February 3, 2026</p>
+            <p>For questions, contact the product team.</p>
+        </footer>
+    </div>
+</body>
+</html>

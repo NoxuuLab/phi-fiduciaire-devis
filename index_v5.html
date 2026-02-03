@@ -670,39 +670,39 @@
             domiciliation: 3000,
             // Directeur administratif: à partir de 9500 CHF/year
             administrateur: 9500,
-
-            // Base prices by revenue bracket (for interpolation)
-            basePrices: {
-                100000: 3600,
-                200000: 3960,
-                300000: 4356,
-                400000: 5500,
-                500000: 6050,
-                600000: 6655,
-                700000: 7321,
-                800000: 8053
+            // Base Fee (by employees)
+            baseFee: {
+                zero: 3600,      // employees == 0
+                small: 4500,     // employees <= 2
+                medium: 5500     // employees > 2
             },
-
-            // Employee multiplier (compound: price × 1.10^employees)
-            employeeMultiplier: 1.10,
-
+            // Revenue Add-on thresholds
+            revenueAddon: [
+                { max: 250000, addon: 0 },
+                { max: 500000, addon: 800 },
+                { max: 1000000, addon: 1600 },
+                { max: 2000000, addon: 2500 },
+                { max: Infinity, addon: 3500 }
+            ],
+            // Employee Add-on thresholds
+            employeeAddon: [
+                { max: 0, addon: 0 },
+                { max: 2, addon: 600 },
+                { max: 5, addon: 1400 },
+                { max: 10, addon: 3000 },
+                { max: 20, addon: 6000 }
+                // > 20 = ON_QUOTE
+            ],
+            // Risk Add-ons
+            riskAddons: {
+                vatRegistered: 600,
+                foreignActivity: 1200,
+                holdingStructure: 1000,
+            },
             // Guardrails (% of revenue)
             guardrails: {
-                minPercent: 0.015,      // 1.5% - below = NOT_INTERESTING
-                maxPercent: 0.03        // 3% - above = ON_QUOTE
-            },
-
-            // Manual quote triggers
-            manualQuoteTriggers: {
-                maxRevenue: 800000,     // Above this = ON_QUOTE
-                maxEmployees: 20        // Above this = ON_QUOTE
-            },
-
-            // Guardrail exceptions
-            exceptions: {
-                skipMinFor0Employees: true,              // 0 employees: skip min guardrail
-                skipMaxFor0EmployeesLowRevenue: true,    // 0 employees + CA ≤ 200K: skip max guardrail
-                lowRevenueThreshold: 200000
+                minPercent: 0.015,      // 1.5%
+                maxPercent: 0.03        // 3%
             }
         };
 
@@ -936,59 +936,23 @@
             console.log('Form submitted:', formData);
         });
 
-        // Get base price for a revenue amount (with linear interpolation)
-        function getBasePrice(revenue) {
-            const basePrices = pricing.basePrices;
-
-            // Exact match
-            if (basePrices[revenue]) {
-                return basePrices[revenue];
-            }
-
-            const brackets = Object.keys(basePrices).map(Number).sort((a, b) => a - b);
-
-            // Below minimum bracket
-            if (revenue < brackets[0]) {
-                return basePrices[brackets[0]];
-            }
-
-            // Above maximum bracket
-            if (revenue > brackets[brackets.length - 1]) {
-                return basePrices[brackets[brackets.length - 1]];
-            }
-
-            // Linear interpolation between brackets
-            for (let i = 0; i < brackets.length - 1; i++) {
-                const r1 = brackets[i];
-                const r2 = brackets[i + 1];
-
-                if (r1 < revenue && revenue <= r2) {
-                    const p1 = basePrices[r1];
-                    const p2 = basePrices[r2];
-                    return p1 + (p2 - p1) * (revenue - r1) / (r2 - r1);
-                }
-            }
-
-            return basePrices[brackets[brackets.length - 1]];
-        }
-
         // Calculate quote based on new pricing methodology
         function calculateQuote() {
             const result = {
-                status: 'AUTO_PRICED', // 'AUTO_PRICED' | 'NOT_INTERESTING' | 'ON_QUOTE'
-                onQuoteReason: null,   // 'revenue' | 'employees' | 'guardrail_min' | 'guardrail_max'
-                // New formula fields
-                basePrice: 0,
-                employeeMultiplier: 1,
-                calculatedPrice: 0,
-                percentageOfRevenue: 0,
-                minGuardrail: 0,
-                maxGuardrail: 0,
-                // Extra services
+                status: 'AUTO_PRICED', // or 'ON_QUOTE'
+                onQuoteReason: null, // 'employees' or 'guardrail_max'
+                baseFee: 0,
+                revenueAddon: 0,
+                employeeAddon: 0,
+                riskAddons: {},
+                riskAddonsTotal: 0,
                 domiciliationFee: 0,
                 administrateurFee: 0,
+                coreSubtotal: 0,
                 extraServices: 0,
-                // Final pricing
+                subtotal: 0,
+                guardrailApplied: null,
+                maxGuardrail: 0,
                 finalPrice: 0,
                 monthlyPrice: 0,
                 creationFee: 0
@@ -1003,68 +967,94 @@
                     result.administrateurFee = pricing.administrateur;
                 }
                 result.extraServices = result.domiciliationFee + result.administrateurFee;
+                result.subtotal = result.extraServices;
                 result.finalPrice = result.extraServices;
             } else {
-                // Existing company flow: new multiplicative pricing
+                // Non-creation flow: full pricing calculation
 
-                // Step 1: Check manual quote triggers FIRST
-                if (formData.revenue > pricing.manualQuoteTriggers.maxRevenue) {
-                    result.status = 'ON_QUOTE';
-                    result.onQuoteReason = 'revenue';
-                    result.monthlyPrice = 0;
-                    return result;
-                }
-
-                if (formData.employees > pricing.manualQuoteTriggers.maxEmployees) {
+                // Check for ON_QUOTE: more than 20 employees
+                if (formData.employees > 20) {
                     result.status = 'ON_QUOTE';
                     result.onQuoteReason = 'employees';
-                    result.monthlyPrice = 0;
-                    return result;
                 }
 
-                // Step 2: Get interpolated base price from revenue
-                result.basePrice = Math.round(getBasePrice(formData.revenue));
-
-                // Step 3: Apply employee multiplier (compound: 1.10^employees)
-                result.employeeMultiplier = Math.pow(pricing.employeeMultiplier, formData.employees);
-                result.calculatedPrice = Math.round(result.basePrice * result.employeeMultiplier);
-
-                // Step 4: Calculate guardrails and percentage
-                result.minGuardrail = Math.round(formData.revenue * pricing.guardrails.minPercent);
-                result.maxGuardrail = Math.round(formData.revenue * pricing.guardrails.maxPercent);
-                result.percentageOfRevenue = (result.calculatedPrice / formData.revenue) * 100;
-
-                // Step 5: Check guardrails with exceptions
-
-                // Check minimum guardrail (skip when 0 employees)
-                const skipMinGuardrail = pricing.exceptions.skipMinFor0Employees && formData.employees === 0;
-
-                if (!skipMinGuardrail && result.calculatedPrice < result.minGuardrail) {
-                    result.status = 'NOT_INTERESTING';
-                    result.onQuoteReason = 'guardrail_min';
+                // 1. Base Fee (by employees)
+                if (formData.employees === 0) {
+                    result.baseFee = pricing.baseFee.zero;
+                } else if (formData.employees <= 2) {
+                    result.baseFee = pricing.baseFee.small;
+                } else {
+                    result.baseFee = pricing.baseFee.medium;
                 }
 
-                // Check maximum guardrail (skip for 0 employees with low revenue)
-                const skipMaxGuardrail = pricing.exceptions.skipMaxFor0EmployeesLowRevenue &&
-                                          formData.employees === 0 &&
-                                          formData.revenue <= pricing.exceptions.lowRevenueThreshold;
-
-                if (!skipMaxGuardrail && result.calculatedPrice > result.maxGuardrail && result.status === 'AUTO_PRICED') {
-                    result.status = 'ON_QUOTE';
-                    result.onQuoteReason = 'guardrail_max';
+                // 2. Revenue Add-on
+                for (const tier of pricing.revenueAddon) {
+                    if (formData.revenue < tier.max) {
+                        result.revenueAddon = tier.addon;
+                        break;
+                    }
                 }
 
-                // Step 6: Add extra services (outside guardrails)
+                // 3. Employee Add-on
+                if (formData.employees > 20) {
+                    result.employeeAddon = 6000;
+                } else {
+                    for (const tier of pricing.employeeAddon) {
+                        if (formData.employees <= tier.max) {
+                            result.employeeAddon = tier.addon;
+                            break;
+                        }
+                    }
+                }
+
+                // 4. Risk Add-ons
+                if (formData.vatRegistered) {
+                    result.riskAddons.vatRegistered = pricing.riskAddons.vatRegistered;
+                    result.riskAddonsTotal += pricing.riskAddons.vatRegistered;
+                }
+                if (formData.foreignActivity) {
+                    result.riskAddons.foreignActivity = pricing.riskAddons.foreignActivity;
+                    result.riskAddonsTotal += pricing.riskAddons.foreignActivity;
+                }
+                if (formData.holdingStructure) {
+                    result.riskAddons.holdingStructure = pricing.riskAddons.holdingStructure;
+                    result.riskAddonsTotal += pricing.riskAddons.holdingStructure;
+                }
+
+                // 5. Domiciliation & Administrateur (not available for non-creation, but just in case)
                 if (formData.services.domiciliation) {
                     result.domiciliationFee = pricing.domiciliation;
                 }
                 if (formData.services.administrateur) {
                     result.administrateurFee = pricing.administrateur;
                 }
-                result.extraServices = result.domiciliationFee + result.administrateurFee;
 
-                // Final price = calculated price + extra services
-                result.finalPrice = result.calculatedPrice + result.extraServices;
+                // Core subtotal (subject to guardrails)
+                result.coreSubtotal = result.baseFee + result.revenueAddon + result.employeeAddon + result.riskAddonsTotal;
+                result.extraServices = result.domiciliationFee + result.administrateurFee;
+                result.subtotal = result.coreSubtotal + result.extraServices;
+
+                // Apply Guardrails on core subtotal only (if revenue > 0)
+                if (formData.revenue > 0) {
+                    const minPrice = formData.revenue * pricing.guardrails.minPercent;
+                    const maxPrice = formData.revenue * pricing.guardrails.maxPercent;
+                    result.minGuardrail = minPrice;
+                    result.maxGuardrail = maxPrice;
+
+                    if (result.coreSubtotal < minPrice) {
+                        result.status = 'NOT_INTERESTING';
+                        result.onQuoteReason = 'guardrail_min';
+                        result.finalPrice = result.subtotal;
+                    } else if (result.coreSubtotal > maxPrice && result.status !== 'ON_QUOTE') {
+                        result.status = 'ON_QUOTE';
+                        result.onQuoteReason = 'guardrail_max';
+                        result.finalPrice = result.subtotal;
+                    } else {
+                        result.finalPrice = result.subtotal;
+                    }
+                } else {
+                    result.finalPrice = result.subtotal;
+                }
             }
 
             // Creation fee (one-time, separate)
@@ -1223,20 +1213,18 @@
             if (quote.status === 'ON_QUOTE' || quote.status === 'NOT_INTERESTING') {
                 // Determine the reason message
                 let reasonMessage = '';
-                if (quote.onQuoteReason === 'revenue') {
-                    reasonMessage = `<strong>Raison:</strong> Le chiffre d'affaires (${formData.revenue.toLocaleString('fr-CH')} CHF) dépasse ${pricing.manualQuoteTriggers.maxRevenue.toLocaleString('fr-CH')} CHF. Un devis personnalisé sera préparé.`;
-                } else if (quote.onQuoteReason === 'employees') {
-                    reasonMessage = `<strong>Raison:</strong> Plus de ${pricing.manualQuoteTriggers.maxEmployees} employés (${formData.employees} employés). Les entreprises de cette taille nécessitent une analyse personnalisée.`;
+                if (quote.onQuoteReason === 'employees') {
+                    reasonMessage = `<strong>Raison:</strong> Plus de 20 employés (${formData.employees} employés). Les entreprises de cette taille nécessitent une analyse personnalisée.`;
                 } else if (quote.onQuoteReason === 'guardrail_max') {
                     const maxPercent = (pricing.guardrails.maxPercent * 100).toFixed(1);
-                    reasonMessage = `<strong>Raison:</strong> Le prix calculé (${quote.calculatedPrice.toLocaleString('fr-CH')} CHF = ${quote.percentageOfRevenue.toFixed(2)}%) dépasse ${maxPercent}% du chiffre d'affaires (max: ${quote.maxGuardrail.toLocaleString('fr-CH')} CHF).`;
+                    reasonMessage = `<strong>Raison:</strong> Le prix comptable calculé (${quote.coreSubtotal.toLocaleString('fr-CH')} CHF) dépasse ${maxPercent}% du chiffre d'affaires (max: ${quote.maxGuardrail.toLocaleString('fr-CH')} CHF). Les services domiciliation et directeur administratif sont exclus de ce calcul.`;
                 } else if (quote.onQuoteReason === 'guardrail_min') {
                     const minPercent = (pricing.guardrails.minPercent * 100).toFixed(1);
-                    reasonMessage = `<strong>Raison:</strong> Le prix calculé (${quote.calculatedPrice.toLocaleString('fr-CH')} CHF = ${quote.percentageOfRevenue.toFixed(2)}%) est inférieur à ${minPercent}% du chiffre d'affaires (min: ${quote.minGuardrail.toLocaleString('fr-CH')} CHF). Ce mandat ne serait pas rentable.`;
+                    reasonMessage = `<strong>Raison:</strong> Le prix comptable calculé (${quote.coreSubtotal.toLocaleString('fr-CH')} CHF) est inférieur à ${minPercent}% du chiffre d'affaires (min: ${quote.minGuardrail.toLocaleString('fr-CH')} CHF). Ce mandat nécessite une revue manuelle.`;
                 }
 
                 html += `
-                    <div style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, ${quote.status === 'NOT_INTERESTING' ? '#f39c12 0%, #d68910' : '#e74c3c 0%, #c0392b'} 100%); border-radius: 12px; text-align: center;">
+                    <div style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border-radius: 12px; text-align: center;">
                         <div style="color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">${quote.status === 'NOT_INTERESTING' ? 'Mandat non rentable' : 'Devis sur demande'}</div>
                         <div style="color: rgba(255,255,255,0.9); font-size: 1rem;">
                             ${quote.status === 'NOT_INTERESTING' ? 'Ce mandat nécessite une revue manuelle.<br>Le prix calculé est en dessous du seuil de rentabilité.' : 'Votre situation nécessite une analyse personnalisée.<br>Un conseiller PHI Fiduciaire vous contactera prochainement.'}
@@ -1253,64 +1241,90 @@
 
                     <div id="onQuoteDetails" style="display: none; margin-top: 1.5rem; text-align: left;">
                         <!-- Reason box -->
-                        <div style="background: rgba(231, 76, 60, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid ${quote.status === 'NOT_INTERESTING' ? '#f39c12' : '#e74c3c'}; margin-bottom: 1.5rem;">
+                        <div style="background: rgba(231, 76, 60, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #e74c3c; margin-bottom: 1.5rem;">
                             <div style="font-size: 0.9rem; color: var(--text-dark);">
                                 ${reasonMessage}
                             </div>
                         </div>
 
                         <!-- Calculation breakdown -->
-                        ${quote.basePrice > 0 ? `
                         <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
                             <h4 style="font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 1rem; font-size: 1rem;">Détail du calcul</h4>
 
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);">Prix de base (CA: ${formData.revenue.toLocaleString('fr-CH')} CHF)</span>
-                                <span style="font-weight: 600; color: var(--navy);">${quote.basePrice.toLocaleString('fr-CH')} CHF</span>
+                                <span style="color: var(--text-dark);">Forfait de base (${formData.employees === 0 ? '0 employé' : formData.employees <= 2 ? '1-2 employés' : formData.employees <= 20 ? '3+ employés' : '>20 employés'})</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.baseFee.toFixed(2)} CHF</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);">Multiplicateur employés (×1.10<sup>${formData.employees}</sup>)</span>
-                                <span style="font-weight: 600; color: var(--navy);">×${quote.employeeMultiplier.toFixed(3)}</span>
+                                <span style="color: var(--text-dark);">Supplément chiffre d'affaires</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.revenueAddon.toFixed(2)} CHF</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);"><strong>Prix comptable calculé</strong></span>
-                                <span style="font-weight: 700; color: var(--navy);">${quote.calculatedPrice.toLocaleString('fr-CH')} CHF</span>
+                                <span style="color: var(--text-dark);">Supplément employés</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.employeeAddon.toFixed(2)} CHF</span>
                             </div>
                             ${quote.domiciliationFee > 0 ? `
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);">+ Domiciliation (250 CHF/mois)</span>
-                                <span style="font-weight: 600; color: var(--navy);">${quote.domiciliationFee.toLocaleString('fr-CH')} CHF</span>
+                                <span style="color: var(--text-dark);">Domiciliation (250 CHF/mois)</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.domiciliationFee.toFixed(2)} CHF</span>
                             </div>
                             ` : ''}
                             ${quote.administrateurFee > 0 ? `
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);">+ Directeur administratif</span>
-                                <span style="font-weight: 600; color: var(--navy);">à partir de ${quote.administrateurFee.toLocaleString('fr-CH')} CHF</span>
+                                <span style="color: var(--text-dark);">Directeur administratif</span>
+                                <span style="font-weight: 600; color: var(--navy);">à partir de ${quote.administrateurFee.toFixed(2)} CHF</span>
+                            </div>
+                            ` : ''}
+                            ${quote.riskAddonsTotal > 0 ? `
+                            <div style="padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
+                                <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.25rem;">Risk Add-ons:</div>
+                                ${quote.riskAddons.vatRegistered ? `<div style="display: flex; justify-content: space-between; padding: 0.25rem 0;"><span style="color: var(--text-dark); padding-left: 1rem;">+ Assujetti TVA</span><span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.vatRegistered.toFixed(2)} CHF</span></div>` : ''}
+                                ${quote.riskAddons.foreignActivity ? `<div style="display: flex; justify-content: space-between; padding: 0.25rem 0;"><span style="color: var(--text-dark); padding-left: 1rem;">+ Activité à l'étranger</span><span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.foreignActivity.toFixed(2)} CHF</span></div>` : ''}
+                                ${quote.riskAddons.holdingStructure ? `<div style="display: flex; justify-content: space-between; padding: 0.25rem 0;"><span style="color: var(--text-dark); padding-left: 1rem;">+ Structure holding</span><span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.holdingStructure.toFixed(2)} CHF</span></div>` : ''}
                             </div>
                             ` : ''}
 
                             <div style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(231, 76, 60, 0.1); border-radius: 6px;">
-                                <span style="font-weight: 600; color: var(--navy);">Prix total calculé</span>
-                                <span style="font-weight: 700; color: #e74c3c; font-size: 1.1rem;">${quote.finalPrice.toLocaleString('fr-CH')} CHF/an</span>
+                                <span style="font-weight: 600; color: var(--navy);">Prix calculé</span>
+                                <span style="font-weight: 700; color: #e74c3c; font-size: 1.1rem;">${quote.subtotal.toFixed(2)} CHF/an</span>
                             </div>
 
+                            ${formData.revenue > 0 ? `
                             <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(201, 169, 97, 0.1); border-radius: 6px; font-size: 0.85rem;">
                                 <div style="color: var(--text-dark);">
-                                    <strong>Pourcentage du CA:</strong> ${quote.percentageOfRevenue.toFixed(2)}%<br>
-                                    <strong>Guardrails:</strong> ${(pricing.guardrails.minPercent * 100).toFixed(1)}% - ${(pricing.guardrails.maxPercent * 100).toFixed(1)}%<br>
-                                    • Minimum: ${quote.minGuardrail.toLocaleString('fr-CH')} CHF<br>
-                                    • Maximum: ${quote.maxGuardrail.toLocaleString('fr-CH')} CHF
+                                    <strong>Guardrails appliqués:</strong><br>
+                                    • Minimum (${(pricing.guardrails.minPercent * 100).toFixed(1)}% du CA): ${(formData.revenue * pricing.guardrails.minPercent).toLocaleString('fr-CH')} CHF<br>
+                                    • Maximum (${(pricing.guardrails.maxPercent * 100).toFixed(1)}% du CA): ${(formData.revenue * pricing.guardrails.maxPercent).toLocaleString('fr-CH')} CHF
                                 </div>
                             </div>
+                            ` : ''}
                         </div>
-                        ` : ''}
                     </div>
                 `;
             } else {
-                // AUTO_PRICED - Pricing breakdown with new formula
+                // Pricing breakdown
                 let stepNumber = 1;
 
-                // Pricing components - new formula display
+                // Creation fees (if applicable)
+                if (quote.creationFee > 0) {
+                    html += `
+                        <div style="margin-bottom: 2rem;">
+                            <h4 style="font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center;">
+                                <span style="background: var(--navy); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem; font-size: 0.9rem;">${stepNumber}</span>
+                                Frais de création (one-time)
+                            </h4>
+                            <div style="background: rgba(30, 58, 95, 0.03); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-weight: 600; color: var(--text-dark);">Création ${formData.creationType.toUpperCase()}</span>
+                                    <span style="font-weight: 600; color: var(--navy); font-size: 1.1rem;">à partir de ${quote.creationFee.toFixed(2)} CHF</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    stepNumber++;
+                }
+
+                // Pricing components
                 html += `
                     <div style="margin-bottom: 2rem;">
                         <h4 style="font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center;">
@@ -1319,16 +1333,16 @@
                         </h4>
                         <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);">Prix de base (CA: ${formData.revenue.toLocaleString('fr-CH')} CHF)</span>
-                                <span style="font-weight: 600; color: var(--navy);">${quote.basePrice.toLocaleString('fr-CH')} CHF</span>
+                                <span style="color: var(--text-dark);">Forfait de base (${formData.employees === 0 ? '0 employé' : formData.employees <= 2 ? '1-2 employés' : '3+ employés'})</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.baseFee.toFixed(2)} CHF</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);">Multiplicateur employés (×1.10<sup>${formData.employees}</sup>)</span>
-                                <span style="font-weight: 600; color: var(--navy);">×${quote.employeeMultiplier.toFixed(3)}</span>
+                                <span style="color: var(--text-dark);">Supplément chiffre d'affaires</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.revenueAddon.toFixed(2)} CHF</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);"><strong>Prix comptable</strong></span>
-                                <span style="font-weight: 700; color: var(--navy);">${quote.calculatedPrice.toLocaleString('fr-CH')} CHF</span>
+                                <span style="color: var(--text-dark);">Supplément employés</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.employeeAddon.toFixed(2)} CHF</span>
                             </div>
                 `;
 
@@ -1336,8 +1350,8 @@
                 if (quote.domiciliationFee > 0) {
                     html += `
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);">+ Domiciliation (250 CHF/mois)</span>
-                                <span style="font-weight: 600; color: var(--navy);">${quote.domiciliationFee.toLocaleString('fr-CH')} CHF</span>
+                                <span style="color: var(--text-dark);">Domiciliation (250 CHF/mois)</span>
+                                <span style="font-weight: 600; color: var(--navy);">${quote.domiciliationFee.toFixed(2)} CHF</span>
                             </div>
                     `;
                 }
@@ -1346,23 +1360,52 @@
                 if (quote.administrateurFee > 0) {
                     html += `
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--border);">
-                                <span style="color: var(--text-dark);">+ Directeur administratif</span>
-                                <span style="font-weight: 600; color: var(--navy);">à partir de ${quote.administrateurFee.toLocaleString('fr-CH')} CHF</span>
+                                <span style="color: var(--text-dark);">Directeur administratif</span>
+                                <span style="font-weight: 600; color: var(--navy);">à partir de ${quote.administrateurFee.toFixed(2)} CHF</span>
                             </div>
                     `;
                 }
 
+                // Risk add-ons
+                if (quote.riskAddonsTotal > 0) {
+                    html += `<div style="margin-top: 0.5rem; padding-top: 0.5rem;">`;
+                    if (quote.riskAddons.vatRegistered) {
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span style="color: var(--text-dark);">+ Assujetti TVA</span>
+                                <span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.vatRegistered.toFixed(2)} CHF</span>
+                            </div>
+                        `;
+                    }
+                    if (quote.riskAddons.foreignActivity) {
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span style="color: var(--text-dark);">+ Activité à l'étranger</span>
+                                <span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.foreignActivity.toFixed(2)} CHF</span>
+                            </div>
+                        `;
+                    }
+                    if (quote.riskAddons.holdingStructure) {
+                        html += `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span style="color: var(--text-dark);">+ Structure holding</span>
+                                <span style="font-weight: 500; color: var(--navy);">${quote.riskAddons.holdingStructure.toFixed(2)} CHF</span>
+                            </div>
+                        `;
+                    }
+                    html += `</div>`;
+                }
+
                 html += `
                             <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding: 1rem; background: rgba(201, 169, 97, 0.08); border-radius: 6px; border-top: 2px solid var(--gold);">
-                                <span style="font-weight: 600; color: var(--navy);">Total annuel</span>
-                                <span style="font-weight: 700; color: var(--gold); font-size: 1.1rem;">${quote.finalPrice.toLocaleString('fr-CH')} CHF</span>
-                            </div>
-                            <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(39, 174, 96, 0.1); border-radius: 6px; text-align: center;">
-                                <span style="font-size: 0.85rem; color: #27ae60; font-weight: 600;">${quote.percentageOfRevenue.toFixed(2)}% du CA</span>
+                                <span style="font-weight: 600; color: var(--navy);">Sous-total</span>
+                                <span style="font-weight: 700; color: var(--gold); font-size: 1.1rem;">${quote.subtotal.toFixed(2)} CHF</span>
                             </div>
                         </div>
                     </div>
                 `;
+
+                // Guardrail applied
 
                 // Final total
                 html += `
@@ -1371,12 +1414,18 @@
                             <div>
                                 <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; margin-bottom: 0.25rem;">TOTAL ANNUEL</div>
                             </div>
-                            <span style="color: var(--gold); font-weight: 700; font-size: 2.2rem;">${quote.finalPrice.toLocaleString('fr-CH')} CHF</span>
+                            <span style="color: var(--gold); font-weight: 700; font-size: 2.2rem;">${quote.finalPrice.toFixed(2)} CHF</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2);">
                             <div style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">Équivalent mensuel</div>
                             <span style="color: white; font-weight: 600; font-size: 1.3rem;">${quote.monthlyPrice.toFixed(2)} CHF/mois</span>
                         </div>
+                        ${quote.creationFee > 0 ? `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; margin-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                            <div style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">+ Frais de création (one-time)</div>
+                            <span style="color: white; font-weight: 600; font-size: 1.1rem;">à partir de ${quote.creationFee.toFixed(2)} CHF</span>
+                        </div>
+                        ` : ''}
                     </div>
                 `;
 
