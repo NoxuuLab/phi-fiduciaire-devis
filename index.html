@@ -401,11 +401,115 @@
             }
         }
 
+        /* Personne physique flow styles */
+        .yn-question {
+            margin-bottom: 1.5rem;
+        }
+
+        .yn-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.6rem;
+        }
+
+        .yn-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .yn-btn {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .yn-btn:hover {
+            border-color: var(--navy);
+            background: rgba(30, 58, 95, 0.04);
+        }
+
+        .yn-btn.selected {
+            border-color: var(--navy);
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .pp-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .pp-section-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .checkbox-options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .checkbox-option-small {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.8rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-option-small input[type="checkbox"] {
+            accent-color: var(--navy);
+            width: 16px;
+            height: 16px;
+        }
+
+        .checkbox-option-small.selected {
+            border-color: var(--navy);
+            background: rgba(30, 58, 95, 0.05);
+        }
+
+        .pp-contact-summary {
+            background: rgba(201, 169, 97, 0.08);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            border-left: 3px solid var(--gold);
+        }
+
+        .pp-contact-summary p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .options-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
         @media (max-width: 768px) {
             .logo {
                 font-size: 2rem;
             }
-            
+
             .card {
                 padding: 2rem 1.5rem;
             }
@@ -418,8 +522,16 @@
                 grid-template-columns: 1fr;
             }
 
+            .options-grid-3 {
+                grid-template-columns: 1fr;
+            }
+
             .navigation {
                 flex-direction: column;
+            }
+
+            .checkbox-options-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -436,17 +548,15 @@
                 <div class="progress-fill" id="progressBar"></div>
             </div>
 
-            <!-- Step 1: Structure -->
+            <!-- Step 1: Client Type -->
             <div class="step active" id="step1">
-                <p class="step-indicator">ÉTAPE 1 SUR 7</p>
-                <h2>Structure juridique</h2>
-                <p class="question">Quelle est la forme juridique de votre entreprise?</p>
-                
+                <p class="step-indicator">ÉTAPE 1 SUR 8</p>
+                <h2>Type de client</h2>
+                <p class="question">Pour qui souhaitez-vous établir un devis?</p>
+
                 <div class="options-grid">
-                    <button class="option-btn" data-value="independant">Indépendant</button>
-                    <button class="option-btn" data-value="sarl">Sàrl</button>
-                    <button class="option-btn" data-value="sa">SA</button>
-                    <button class="option-btn" data-value="creation">Création de société</button>
+                    <button class="option-btn" data-value="morale">Personne morale<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Entreprise, société, association</span></button>
+                    <button class="option-btn" data-value="physique">Personne physique<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Particulier, indépendant</span></button>
                 </div>
 
                 <div class="navigation">
@@ -455,15 +565,312 @@
                 </div>
             </div>
 
-            <!-- Step 2: Creation Type (if applicable) -->
-            <div class="step" id="step2">
-                <p class="step-indicator">ÉTAPE 2 SUR 7</p>
-                <h2>Type de création</h2>
-                <p class="question">Quel type de société souhaitez-vous créer?</p>
-                
+            <!-- PP Step 1: Service selection -->
+            <div class="step" id="stepPP1">
+                <p class="step-indicator">ÉTAPE 1 SUR 4 — PERSONNE PHYSIQUE</p>
+                <h2>Type de service</h2>
+                <p class="question">Pour quel service souhaitez-vous un devis ?</p>
+
                 <div class="options-grid">
+                    <button class="option-btn" data-pp-service="fiscale">Déclaration fiscale annuelle<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Déclaration d'impôt, optimisation fiscale</span></button>
+                    <button class="option-btn" data-pp-service="immobilier">Vente immobilière<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Calcul de l'impôt sur le gain immobilier</span></button>
+                    <button class="option-btn" data-pp-service="succession">Succession / héritage<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Déclaration de succession, partage</span></button>
+                    <button class="option-btn" data-pp-service="autre">Autre<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Autre demande ou situation particulière</span></button>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← Retour</button>
+                    <button class="btn btn-primary" id="nextPP1" disabled>Continuer →</button>
+                </div>
+            </div>
+
+            <!-- PP Step 2: Personal situation -->
+            <div class="step" id="stepPP2">
+                <p class="step-indicator">ÉTAPE 2 SUR 4 — PERSONNE PHYSIQUE</p>
+                <h2>Votre situation personnelle</h2>
+                <p class="question">Quelques informations pour personnaliser votre devis</p>
+
+                <div class="pp-section">
+                    <p class="pp-section-label">Statut civil</p>
+                    <div class="options-grid">
+                        <button class="option-btn" data-pp-civil="celibataire">Célibataire</button>
+                        <button class="option-btn" data-pp-civil="marie">Marié·e</button>
+                        <button class="option-btn" data-pp-civil="divorce">Divorcé·e</button>
+                        <button class="option-btn" data-pp-civil="veuf">Veuf·ve</button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="ppChildren">Enfants à charge</label>
+                    <input type="number" id="ppChildren" min="0" step="1" value="0">
+                </div>
+
+                <div class="input-group">
+                    <label for="ppCanton">Canton de domicile</label>
+                    <select id="ppCanton" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; cursor: pointer;">
+                        <option value="">Sélectionner un canton</option>
+                        <option value="AG">Argovie (AG)</option>
+                        <option value="AI">Appenzell Rhodes-Int. (AI)</option>
+                        <option value="AR">Appenzell Rhodes-Ext. (AR)</option>
+                        <option value="BE">Berne (BE)</option>
+                        <option value="BL">Bâle-Campagne (BL)</option>
+                        <option value="BS">Bâle-Ville (BS)</option>
+                        <option value="FR">Fribourg (FR)</option>
+                        <option value="GE">Genève (GE)</option>
+                        <option value="GL">Glaris (GL)</option>
+                        <option value="GR">Grisons (GR)</option>
+                        <option value="JU">Jura (JU)</option>
+                        <option value="LU">Lucerne (LU)</option>
+                        <option value="NE">Neuchâtel (NE)</option>
+                        <option value="NW">Nidwald (NW)</option>
+                        <option value="OW">Obwald (OW)</option>
+                        <option value="SG">Saint-Gall (SG)</option>
+                        <option value="SH">Schaffhouse (SH)</option>
+                        <option value="SO">Soleure (SO)</option>
+                        <option value="SZ">Schwyz (SZ)</option>
+                        <option value="TG">Thurgovie (TG)</option>
+                        <option value="TI">Tessin (TI)</option>
+                        <option value="UR">Uri (UR)</option>
+                        <option value="VD">Vaud (VD)</option>
+                        <option value="VS">Valais (VS)</option>
+                        <option value="ZG">Zoug (ZG)</option>
+                        <option value="ZH">Zurich (ZH)</option>
+                    </select>
+                </div>
+
+                <div class="pp-section">
+                    <p class="pp-section-label">Situation professionnelle</p>
+                    <div class="options-grid options-grid-3">
+                        <button class="option-btn" data-pp-emploi="salarie">Salarié·e</button>
+                        <button class="option-btn" data-pp-emploi="independant">Indépendant·e</button>
+                        <button class="option-btn" data-pp-emploi="les-deux">Les deux</button>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="goToStep('pp1')">← Retour</button>
+                    <button class="btn btn-primary" id="nextPP2" disabled>Continuer →</button>
+                </div>
+            </div>
+
+            <!-- PP Step 3: Specific questions (conditional by service) -->
+            <div class="step" id="stepPP3">
+                <p class="step-indicator">ÉTAPE 3 SUR 4 — PERSONNE PHYSIQUE</p>
+                <h2 id="pp3Title">Questions spécifiques</h2>
+                <p class="question" id="pp3Subtitle">En savoir plus sur votre situation</p>
+
+                <!-- Fiscale section -->
+                <div id="pp3Fiscale" style="display:none">
+                    <div class="yn-question">
+                        <p class="yn-label">Plusieurs employeurs ou sources de revenus ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="multipleEmployeurs" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="multipleEmployeurs" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Revenus étrangers ou biens à l'étranger ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="revenusEtrangers" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="revenusEtrangers" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Retrait de capital 2e ou 3e pilier cette année ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="retraitCapital" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="retraitCapital" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Propriétaire d'un bien immobilier ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="proprietaireImmo" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="proprietaireImmo" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Frontalier·ère ou expatrié·e ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="frontalier" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="frontalier" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Événement majeur cette année ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="evenementMajeur" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="evenementMajeur" data-pp-v="false">Non</button>
+                        </div>
+                        <div id="evenementsSection" style="display:none; margin-top: 0.75rem;">
+                            <p class="yn-label" style="margin-bottom: 0.5rem;">Lesquels ? (plusieurs choix possibles)</p>
+                            <div class="checkbox-options-grid">
+                                <label class="checkbox-option-small" id="evtDivorceLabel">
+                                    <input type="checkbox" id="evtDivorce"> Divorce
+                                </label>
+                                <label class="checkbox-option-small" id="evtHeritageLabel">
+                                    <input type="checkbox" id="evtHeritage"> Héritage
+                                </label>
+                                <label class="checkbox-option-small" id="evtVenteImmoLabel">
+                                    <input type="checkbox" id="evtVenteImmo"> Vente immobilière
+                                </label>
+                                <label class="checkbox-option-small" id="evtCreationEntrepriseLabel">
+                                    <input type="checkbox" id="evtCreationEntreprise"> Création d'entreprise
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Immobilier section -->
+                <div id="pp3Immobilier" style="display:none">
+                    <div class="input-group">
+                        <label for="ppDateAcquisition">Date d'acquisition du bien</label>
+                        <input type="date" id="ppDateAcquisition">
+                    </div>
+                    <div class="input-group">
+                        <label for="ppPrixAchat">Prix d'achat approximatif (CHF)</label>
+                        <input type="number" id="ppPrixAchat" min="0" step="10000" placeholder="ex: 650000">
+                    </div>
+                    <div class="input-group">
+                        <label for="ppMontantTravaux">Montant approximatif des travaux (CHF)</label>
+                        <input type="number" id="ppMontantTravaux" min="0" step="1000" placeholder="0 si aucun travaux">
+                    </div>
+                    <div class="pp-section">
+                        <p class="pp-section-label">Usage du bien</p>
+                        <div class="options-grid">
+                            <button class="option-btn" data-pp-usage="principale">Résidence principale</button>
+                            <button class="option-btn" data-pp-usage="locatif">Locatif</button>
+                        </div>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Réinvestissement prévu dans un autre bien ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="reinvestissement" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="reinvestissement" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Succession section -->
+                <div id="pp3Succession" style="display:none">
+                    <div class="input-group">
+                        <label for="ppLienParente">Lien de parenté avec le défunt</label>
+                        <input type="text" id="ppLienParente" placeholder="ex: Enfant, Conjoint, Frère/Sœur…">
+                    </div>
+                    <div class="input-group">
+                        <label for="ppCantonDefunt">Canton de domicile du défunt</label>
+                        <select id="ppCantonDefunt" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; cursor: pointer;">
+                            <option value="">Sélectionner un canton</option>
+                            <option value="AG">Argovie (AG)</option>
+                            <option value="AI">Appenzell Rhodes-Int. (AI)</option>
+                            <option value="AR">Appenzell Rhodes-Ext. (AR)</option>
+                            <option value="BE">Berne (BE)</option>
+                            <option value="BL">Bâle-Campagne (BL)</option>
+                            <option value="BS">Bâle-Ville (BS)</option>
+                            <option value="FR">Fribourg (FR)</option>
+                            <option value="GE">Genève (GE)</option>
+                            <option value="GL">Glaris (GL)</option>
+                            <option value="GR">Grisons (GR)</option>
+                            <option value="JU">Jura (JU)</option>
+                            <option value="LU">Lucerne (LU)</option>
+                            <option value="NE">Neuchâtel (NE)</option>
+                            <option value="NW">Nidwald (NW)</option>
+                            <option value="OW">Obwald (OW)</option>
+                            <option value="SG">Saint-Gall (SG)</option>
+                            <option value="SH">Schaffhouse (SH)</option>
+                            <option value="SO">Soleure (SO)</option>
+                            <option value="SZ">Schwyz (SZ)</option>
+                            <option value="TG">Thurgovie (TG)</option>
+                            <option value="TI">Tessin (TI)</option>
+                            <option value="UR">Uri (UR)</option>
+                            <option value="VD">Vaud (VD)</option>
+                            <option value="VS">Valais (VS)</option>
+                            <option value="ZG">Zoug (ZG)</option>
+                            <option value="ZH">Zurich (ZH)</option>
+                        </select>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Bien immobilier dans la succession ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="bienImmo" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="bienImmo" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Biens à l'étranger ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="biensEtranger" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="biensEtranger" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                    <div class="yn-question">
+                        <p class="yn-label">Plusieurs héritiers impliqués ?</p>
+                        <div class="yn-buttons">
+                            <button class="yn-btn" data-pp-q="plusieursHeritiers" data-pp-v="true">Oui</button>
+                            <button class="yn-btn" data-pp-q="plusieursHeritiers" data-pp-v="false">Non</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Autre section -->
+                <div id="pp3Autre" style="display:none">
+                    <div class="input-group">
+                        <label for="ppDescription">Décrivez brièvement votre situation et ce que vous recherchez</label>
+                        <textarea id="ppDescription" rows="5" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; resize: vertical;" placeholder="Décrivez votre situation…"></textarea>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="goToStep('pp2')">← Retour</button>
+                    <button class="btn btn-primary" id="nextPP3" disabled>Continuer →</button>
+                </div>
+            </div>
+
+            <!-- PP Step 4: Contact details -->
+            <div class="step" id="stepPP4">
+                <p class="step-indicator">ÉTAPE 4 SUR 4 — PERSONNE PHYSIQUE</p>
+                <h2>Vos coordonnées</h2>
+                <p class="question">Pour recevoir votre devis personnalisé</p>
+
+                <div class="input-group">
+                    <label for="ppPrenom">Prénom *</label>
+                    <input type="text" id="ppPrenom" required>
+                </div>
+                <div class="input-group">
+                    <label for="ppNom">Nom *</label>
+                    <input type="text" id="ppNom" required>
+                </div>
+                <div class="input-group">
+                    <label for="ppEmail">Email *</label>
+                    <input type="email" id="ppEmail" required>
+                </div>
+                <div class="input-group">
+                    <label for="ppTelephone">Téléphone *</label>
+                    <input type="tel" id="ppTelephone" required>
+                </div>
+
+                <div class="pp-contact-summary">
+                    <p>Un conseiller PHI Fiduciaire vous contactera dans les meilleurs délais pour discuter de votre demande et établir votre devis personnalisé.</p>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="goToStep('pp3')">← Retour</button>
+                    <button class="btn btn-primary" id="submitPP">Envoyer ma demande →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Structure -->
+            <div class="step" id="step2">
+                <p class="step-indicator">ÉTAPE 2 SUR 8</p>
+                <h2>Structure juridique</h2>
+                <p class="question">Quelle est la forme juridique de votre entreprise?</p>
+
+                <div class="options-grid">
+                    <button class="option-btn" data-value="independant">Indépendant</button>
                     <button class="option-btn" data-value="sarl">Sàrl</button>
                     <button class="option-btn" data-value="sa">SA</button>
+                    <button class="option-btn" data-value="creation">Création de société</button>
                 </div>
 
                 <div class="navigation">
@@ -472,9 +879,26 @@
                 </div>
             </div>
 
-            <!-- Step 3: Risk Add-ons -->
+            <!-- Step 3: Creation Type (if applicable) -->
             <div class="step" id="step3">
-                <p class="step-indicator">ÉTAPE 3 SUR 7</p>
+                <p class="step-indicator">ÉTAPE 3 SUR 8</p>
+                <h2>Type de création</h2>
+                <p class="question">Quel type de société souhaitez-vous créer?</p>
+
+                <div class="options-grid">
+                    <button class="option-btn" data-value="sarl">Sàrl</button>
+                    <button class="option-btn" data-value="sa">SA</button>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="goToStep(2)">← Retour</button>
+                    <button class="btn btn-primary" id="next3" disabled>Continuer →</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Risk Add-ons (creation only) -->
+            <div class="step" id="step4">
+                <p class="step-indicator">ÉTAPE 4 SUR 8</p>
                 <h2>Situation de l'entreprise</h2>
                 <p class="question">Cochez les options qui s'appliquent à votre entreprise (optionnel)</p>
 
@@ -494,14 +918,14 @@
                 </div>
 
                 <div class="navigation">
-                    <button class="btn btn-secondary" id="back3">← Retour</button>
-                    <button class="btn btn-primary" id="next3">Continuer →</button>
+                    <button class="btn btn-secondary" id="back4risk">← Retour</button>
+                    <button class="btn btn-primary" id="next4risk">Continuer →</button>
                 </div>
             </div>
 
-            <!-- Step 4: Services Selection -->
-            <div class="step" id="step4">
-                <p class="step-indicator">ÉTAPE 4 SUR 7</p>
+            <!-- Step 5: Services Selection -->
+            <div class="step" id="step5">
+                <p class="step-indicator">ÉTAPE 5 SUR 8</p>
                 <h2>Services souhaités</h2>
                 <p class="question">Quels services souhaitez-vous? (sélectionnez au moins un)</p>
 
@@ -533,14 +957,14 @@
                 </div>
 
                 <div class="navigation">
-                    <button class="btn btn-secondary" id="back4">← Retour</button>
-                    <button class="btn btn-primary" id="next4" disabled>Continuer →</button>
+                    <button class="btn btn-secondary" id="back5">← Retour</button>
+                    <button class="btn btn-primary" id="next5" disabled>Continuer →</button>
                 </div>
             </div>
 
-            <!-- Step 5: Company Size - Employees -->
-            <div class="step" id="step5">
-                <p class="step-indicator">ÉTAPE 5 SUR 7</p>
+            <!-- Step 6: Company Size - Employees -->
+            <div class="step" id="step6">
+                <p class="step-indicator">ÉTAPE 6 SUR 8</p>
                 <h2>Taille de l'entreprise</h2>
                 <p class="question">Combien d'employés avez-vous?</p>
 
@@ -550,14 +974,14 @@
                 </div>
 
                 <div class="navigation">
-                    <button class="btn btn-secondary" onclick="goToStep(4)">← Retour</button>
-                    <button class="btn btn-primary" id="next5" disabled>Continuer →</button>
+                    <button class="btn btn-secondary" onclick="goToStep(5)">← Retour</button>
+                    <button class="btn btn-primary" id="next6" disabled>Continuer →</button>
                 </div>
             </div>
 
-            <!-- Step 6: Company Size - Revenue -->
-            <div class="step" id="step6">
-                <p class="step-indicator">ÉTAPE 6 SUR 7</p>
+            <!-- Step 7: Company Size - Revenue -->
+            <div class="step" id="step7">
+                <p class="step-indicator">ÉTAPE 7 SUR 8</p>
                 <h2>Chiffre d'affaires</h2>
                 <p class="question">Quel est votre chiffre d'affaires annuel?</p>
 
@@ -567,14 +991,14 @@
                 </div>
 
                 <div class="navigation">
-                    <button class="btn btn-secondary" onclick="goToStep(5)">← Retour</button>
-                    <button class="btn btn-primary" id="next6" disabled>Continuer →</button>
+                    <button class="btn btn-secondary" onclick="goToStep(6)">← Retour</button>
+                    <button class="btn btn-primary" id="next7" disabled>Continuer →</button>
                 </div>
             </div>
 
-            <!-- Step 7: Contact Info -->
-            <div class="step" id="step7">
-                <p class="step-indicator">ÉTAPE 7 SUR 7</p>
+            <!-- Step 8: Contact Info -->
+            <div class="step" id="step8">
+                <p class="step-indicator">ÉTAPE 8 SUR 8</p>
                 <h2>Vos coordonnées</h2>
                 <p class="question">Pour recevoir votre devis personnalisé</p>
                 
@@ -604,7 +1028,7 @@
                 </div>
 
                 <div class="navigation">
-                    <button class="btn btn-secondary" id="back7">← Retour</button>
+                    <button class="btn btn-secondary" id="back8">← Retour</button>
                     <button class="btn btn-primary" id="submit">Recevoir mon devis</button>
                 </div>
             </div>
@@ -634,12 +1058,39 @@
                     <button class="btn btn-primary" onclick="location.reload()">Nouvelle simulation</button>
                 </div>
             </div>
+
+            <!-- Success: Personne physique -->
+            <div class="step" id="successPhysique">
+                <div class="success-message">
+                    <div class="success-icon">✓</div>
+                    <h2>Demande envoyée</h2>
+                    <p class="question">Merci pour votre demande. Un conseiller PHI Fiduciaire vous contactera dans les meilleurs délais.</p>
+                </div>
+
+                <div class="quote-summary" style="margin-top: 2rem;">
+                    <h3>Récapitulatif de votre demande</h3>
+                    <div id="ppSummary"></div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(30, 58, 95, 0.05); border-radius: 12px; border-left: 4px solid var(--gold);">
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin: 0;">
+                        <strong style="color: var(--navy);">Prochaine étape :</strong> Notre équipe analysera votre dossier et vous contactera pour établir un devis personnalisé adapté à votre situation.
+                    </p>
+                </div>
+
+                <div class="navigation" style="margin-top: 2rem;">
+                    <button class="btn btn-secondary" style="visibility: hidden;"></button>
+                    <button class="btn btn-primary" onclick="location.reload()">Nouvelle simulation</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
         // Form data storage
         const formData = {
+            clientType: '',    // 'morale' | 'physique'
             structure: '',
             creationType: '',
             employees: 0,
@@ -657,7 +1108,44 @@
                 rhSalaires: false,
                 tvaDeclarations: false
             },
-            contact: {}
+            contact: {},
+            // Personne physique data
+            physique: {
+                service: '',           // 'fiscale' | 'immobilier' | 'succession' | 'autre'
+                civilStatus: '',       // 'celibataire' | 'marie' | 'divorce' | 'veuf'
+                children: 0,
+                canton: '',
+                emploi: '',            // 'salarie' | 'independant' | 'les-deux'
+                // Fiscale specific
+                fiscale: {
+                    multipleEmployeurs: null,
+                    revenusEtrangers: null,
+                    retraitCapital: null,
+                    proprietaireImmo: null,
+                    frontalier: null,
+                    evenementMajeur: null,
+                    evenements: { divorce: false, heritage: false, venteImmo: false, creationEntreprise: false }
+                },
+                // Immobilier specific
+                immobilier: {
+                    dateAcquisition: '',
+                    prixAchat: null,
+                    montantTravaux: null,
+                    usageBien: '',
+                    reinvestissement: null
+                },
+                // Succession specific
+                succession: {
+                    lienParente: '',
+                    cantonDefunt: '',
+                    bienImmo: null,
+                    biensEtranger: null,
+                    plusieursHeritiers: null
+                },
+                // Autre
+                autre: { description: '' },
+                contact: {}
+            }
         };
 
         // Pricing logic based on new methodology
@@ -708,51 +1196,302 @@
 
         // Initialize
         let currentStep = 1;
+        let ppStep = 0;  // Tracks step in personne physique flow (1-4)
         updateProgress();
 
-        // Step 1: Structure selection
+        // Step 1: Client type selection (Personne physique / Personne morale)
         document.querySelectorAll('#step1 .option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('#step1 .option-btn').forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
-                formData.structure = this.dataset.value;
+                formData.clientType = this.dataset.value;
                 document.getElementById('next1').disabled = false;
             });
         });
 
         document.getElementById('next1').addEventListener('click', function() {
-            if (formData.structure === 'creation') {
+            if (formData.clientType === 'morale') {
                 goToStep(2);
             } else {
-                goToStep(4); // Skip creation type and situation for existing companies
+                goToStep('pp1');
             }
         });
 
-        // Step 2: Creation type (conditional)
+        // ============================================================
+        // PERSONNE PHYSIQUE FLOW
+        // ============================================================
+
+        // PP Step 1: Service selection
+        document.querySelectorAll('#stepPP1 .option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#stepPP1 .option-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                formData.physique.service = this.dataset.ppService;
+                document.getElementById('nextPP1').disabled = false;
+            });
+        });
+
+        document.getElementById('nextPP1').addEventListener('click', function() {
+            goToStep('pp2');
+        });
+
+        // PP Step 2: Personal situation
+        function validatePP2() {
+            const ok = formData.physique.civilStatus !== '' &&
+                       formData.physique.canton !== '' &&
+                       formData.physique.emploi !== '';
+            document.getElementById('nextPP2').disabled = !ok;
+        }
+
+        document.querySelectorAll('#stepPP2 [data-pp-civil]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#stepPP2 [data-pp-civil]').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                formData.physique.civilStatus = this.dataset.ppCivil;
+                validatePP2();
+            });
+        });
+
+        document.getElementById('ppChildren').addEventListener('input', function() {
+            const v = parseInt(this.value);
+            formData.physique.children = isNaN(v) ? 0 : Math.max(0, v);
+        });
+
+        document.getElementById('ppCanton').addEventListener('change', function() {
+            formData.physique.canton = this.value;
+            validatePP2();
+        });
+
+        document.querySelectorAll('#stepPP2 [data-pp-emploi]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#stepPP2 [data-pp-emploi]').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                formData.physique.emploi = this.dataset.ppEmploi;
+                validatePP2();
+            });
+        });
+
+        document.getElementById('nextPP2').addEventListener('click', function() {
+            goToStep('pp3');
+        });
+
+        // PP Step 3: Show correct section and set title
+        function showPP3Section() {
+            const service = formData.physique.service;
+            const sections = { fiscale: 'pp3Fiscale', immobilier: 'pp3Immobilier', succession: 'pp3Succession', autre: 'pp3Autre' };
+            const titles = {
+                fiscale: 'Déclaration fiscale annuelle',
+                immobilier: 'Vente immobilière',
+                succession: 'Succession / héritage',
+                autre: 'Votre demande'
+            };
+            const subtitles = {
+                fiscale: 'Répondez à ces questions pour affiner votre devis',
+                immobilier: 'Informations sur le bien immobilier',
+                succession: 'Informations sur la succession',
+                autre: 'Décrivez votre situation'
+            };
+            Object.values(sections).forEach(id => document.getElementById(id).style.display = 'none');
+            if (sections[service]) document.getElementById(sections[service]).style.display = 'block';
+            document.getElementById('pp3Title').textContent = titles[service] || 'Questions spécifiques';
+            document.getElementById('pp3Subtitle').textContent = subtitles[service] || '';
+        }
+
+        // PP Step 3: Validate based on active service
+        function validatePP3() {
+            const service = formData.physique.service;
+            let ok = false;
+            if (service === 'fiscale') {
+                const f = formData.physique.fiscale;
+                const allAnswered = f.multipleEmployeurs !== null &&
+                                    f.revenusEtrangers !== null &&
+                                    f.retraitCapital !== null &&
+                                    f.proprietaireImmo !== null &&
+                                    f.frontalier !== null &&
+                                    f.evenementMajeur !== null;
+                const evtOk = f.evenementMajeur !== true ||
+                              Object.values(f.evenements).some(v => v === true);
+                ok = allAnswered && evtOk;
+            } else if (service === 'immobilier') {
+                const i = formData.physique.immobilier;
+                ok = i.dateAcquisition !== '' &&
+                     i.prixAchat !== null && i.prixAchat > 0 &&
+                     i.usageBien !== '' &&
+                     i.reinvestissement !== null;
+            } else if (service === 'succession') {
+                const s = formData.physique.succession;
+                ok = s.lienParente.trim() !== '' &&
+                     s.cantonDefunt !== '' &&
+                     s.bienImmo !== null &&
+                     s.biensEtranger !== null &&
+                     s.plusieursHeritiers !== null;
+            } else if (service === 'autre') {
+                ok = formData.physique.autre.description.trim().length > 10;
+            }
+            document.getElementById('nextPP3').disabled = !ok;
+        }
+
+        // PP Step 3: Yes/No button handlers (shared across sections)
+        document.querySelectorAll('#stepPP3 .yn-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const q = this.dataset.ppQ;
+                const v = this.dataset.ppV === 'true';
+                // Deselect siblings in same yn-buttons group
+                this.closest('.yn-buttons').querySelectorAll('.yn-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+
+                // Route value to correct data sub-object
+                const service = formData.physique.service;
+                if (service === 'fiscale' && formData.physique.fiscale.hasOwnProperty(q)) {
+                    formData.physique.fiscale[q] = v;
+                    // Show/hide evenements checkboxes
+                    if (q === 'evenementMajeur') {
+                        document.getElementById('evenementsSection').style.display = v ? 'block' : 'none';
+                        if (!v) {
+                            // Reset checkboxes
+                            ['evtDivorce', 'evtHeritage', 'evtVenteImmo', 'evtCreationEntreprise'].forEach(id => {
+                                document.getElementById(id).checked = false;
+                                document.getElementById(id + 'Label').classList.remove('selected');
+                            });
+                            formData.physique.fiscale.evenements = { divorce: false, heritage: false, venteImmo: false, creationEntreprise: false };
+                        }
+                    }
+                } else if (service === 'immobilier' && formData.physique.immobilier.hasOwnProperty(q)) {
+                    formData.physique.immobilier[q] = v;
+                } else if (service === 'succession') {
+                    if (formData.physique.succession.hasOwnProperty(q)) {
+                        formData.physique.succession[q] = v;
+                    }
+                }
+                validatePP3();
+            });
+        });
+
+        // PP Step 3: Fiscale - evenement checkboxes
+        ['evtDivorce', 'evtHeritage', 'evtVenteImmo', 'evtCreationEntreprise'].forEach(id => {
+            document.getElementById(id).addEventListener('change', function() {
+                const label = document.getElementById(id + 'Label');
+                label.classList.toggle('selected', this.checked);
+                const keyMap = { evtDivorce: 'divorce', evtHeritage: 'heritage', evtVenteImmo: 'venteImmo', evtCreationEntreprise: 'creationEntreprise' };
+                formData.physique.fiscale.evenements[keyMap[id]] = this.checked;
+                validatePP3();
+            });
+        });
+
+        // PP Step 3: Immobilier inputs
+        document.getElementById('ppDateAcquisition').addEventListener('input', function() {
+            formData.physique.immobilier.dateAcquisition = this.value;
+            validatePP3();
+        });
+
+        document.getElementById('ppPrixAchat').addEventListener('input', function() {
+            formData.physique.immobilier.prixAchat = parseFloat(this.value) || null;
+            validatePP3();
+        });
+
+        document.getElementById('ppMontantTravaux').addEventListener('input', function() {
+            formData.physique.immobilier.montantTravaux = parseFloat(this.value) || 0;
+        });
+
+        document.querySelectorAll('#pp3Immobilier [data-pp-usage]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#pp3Immobilier [data-pp-usage]').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                formData.physique.immobilier.usageBien = this.dataset.ppUsage;
+                validatePP3();
+            });
+        });
+
+        // PP Step 3: Succession inputs
+        document.getElementById('ppLienParente').addEventListener('input', function() {
+            formData.physique.succession.lienParente = this.value;
+            validatePP3();
+        });
+
+        document.getElementById('ppCantonDefunt').addEventListener('change', function() {
+            formData.physique.succession.cantonDefunt = this.value;
+            validatePP3();
+        });
+
+        // PP Step 3: Autre textarea
+        document.getElementById('ppDescription').addEventListener('input', function() {
+            formData.physique.autre.description = this.value;
+            validatePP3();
+        });
+
+        document.getElementById('nextPP3').addEventListener('click', function() {
+            goToStep('pp4');
+        });
+
+        // PP Step 4: Submit
+        document.getElementById('submitPP').addEventListener('click', function() {
+            const prenom = document.getElementById('ppPrenom').value.trim();
+            const nom = document.getElementById('ppNom').value.trim();
+            const email = document.getElementById('ppEmail').value.trim();
+            const tel = document.getElementById('ppTelephone').value.trim();
+
+            if (!prenom || !nom || !email || !tel) {
+                alert('Veuillez remplir tous les champs obligatoires');
+                return;
+            }
+
+            formData.physique.contact = { prenom, nom, email, telephone: tel };
+
+            // Build summary
+            const serviceLabels = {
+                fiscale: 'Déclaration fiscale annuelle',
+                immobilier: 'Vente immobilière',
+                succession: 'Succession / héritage',
+                autre: 'Autre'
+            };
+            const civilLabels = { celibataire: 'Célibataire', marie: 'Marié·e', divorce: 'Divorcé·e', veuf: 'Veuf·ve' };
+            const emploiLabels = { salarie: 'Salarié·e', independant: 'Indépendant·e', 'les-deux': 'Les deux' };
+            const ph = formData.physique;
+
+            let html = `
+                <div class="summary-item"><span class="summary-label">Service demandé</span><span class="summary-value">${serviceLabels[ph.service] || ph.service}</span></div>
+                <div class="summary-item"><span class="summary-label">Statut civil</span><span class="summary-value">${civilLabels[ph.civilStatus] || ph.civilStatus}</span></div>
+                <div class="summary-item"><span class="summary-label">Enfants à charge</span><span class="summary-value">${ph.children}</span></div>
+                <div class="summary-item"><span class="summary-label">Canton</span><span class="summary-value">${ph.canton}</span></div>
+                <div class="summary-item"><span class="summary-label">Situation professionnelle</span><span class="summary-value">${emploiLabels[ph.emploi] || ph.emploi}</span></div>
+                <div class="summary-item"><span class="summary-label">Nom</span><span class="summary-value">${prenom} ${nom}</span></div>
+                <div class="summary-item"><span class="summary-label">Email</span><span class="summary-value">${email}</span></div>
+                <div class="summary-item"><span class="summary-label">Téléphone</span><span class="summary-value">${tel}</span></div>
+            `;
+            document.getElementById('ppSummary').innerHTML = html;
+
+            goToStep('successPhysique');
+        });
+
+        // ============================================================
+        // END PERSONNE PHYSIQUE FLOW
+        // ============================================================
+
+        // Step 2: Structure selection
         document.querySelectorAll('#step2 .option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('#step2 .option-btn').forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
-                formData.creationType = this.dataset.value;
+                formData.structure = this.dataset.value;
                 document.getElementById('next2').disabled = false;
             });
         });
 
         document.getElementById('next2').addEventListener('click', function() {
-            goToStep(3);
+            if (formData.structure === 'creation') {
+                goToStep(3);
+            } else {
+                goToStep(5); // Skip creation type and situation for existing companies
+            }
         });
 
-        // Step 3: Risk Add-ons selection (optional)
-        document.querySelectorAll('#step3 input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const parent = this.closest('.checkbox-option');
-                if (this.checked) {
-                    parent.classList.add('selected');
-                } else {
-                    parent.classList.remove('selected');
-                }
-                // Update formData based on checkbox id
-                formData[this.id] = this.checked;
+        // Step 3: Creation type (conditional)
+        document.querySelectorAll('#step3 .option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#step3 .option-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                formData.creationType = this.dataset.value;
+                document.getElementById('next3').disabled = false;
             });
         });
 
@@ -760,8 +1499,25 @@
             goToStep(4);
         });
 
-        document.getElementById('back3').addEventListener('click', function() {
-            goToStep(2); // Always goes back to creation type (step 3 only shows for creation flow)
+        // Step 4: Risk Add-ons selection (creation only, optional)
+        document.querySelectorAll('#step4 input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const parent = this.closest('.checkbox-option');
+                if (this.checked) {
+                    parent.classList.add('selected');
+                } else {
+                    parent.classList.remove('selected');
+                }
+                formData[this.id] = this.checked;
+            });
+        });
+
+        document.getElementById('next4risk').addEventListener('click', function() {
+            goToStep(5);
+        });
+
+        document.getElementById('back4risk').addEventListener('click', function() {
+            goToStep(3); // Always goes back to creation type (step 4 only shows for creation flow)
         });
 
         // Step 4: Services selection
@@ -830,7 +1586,7 @@
             });
         }
 
-        document.querySelectorAll('#step4 input[type="checkbox"]').forEach(checkbox => {
+        document.querySelectorAll('#step5 input[type="checkbox"]').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 const parent = this.closest('.checkbox-option');
                 if (this.checked) {
@@ -855,42 +1611,27 @@
             });
         });
 
-        document.getElementById('next4').addEventListener('click', function() {
+        document.getElementById('next5').addEventListener('click', function() {
             if (formData.structure === 'creation') {
-                goToStep(7); // Creation: skip employees/revenue, go to contact
+                goToStep(8); // Creation: skip employees/revenue, go to contact
             } else {
-                goToStep(5);
+                goToStep(6);
             }
         });
 
-        document.getElementById('back4').addEventListener('click', function() {
+        document.getElementById('back5').addEventListener('click', function() {
             if (formData.structure === 'creation') {
-                goToStep(3); // Back to situation de l'entreprise
+                goToStep(4); // Back to risk add-ons
             } else {
-                goToStep(1); // Back to structure selection
+                goToStep(2); // Back to structure selection
             }
         });
 
-        // Step 5: Employees (number input)
+        // Step 6: Employees (number input)
         document.getElementById('numberOfEmployees').addEventListener('input', function() {
             const value = parseInt(this.value);
             if (!isNaN(value) && value >= 0) {
                 formData.employees = value;
-                document.getElementById('next5').disabled = false;
-            } else {
-                document.getElementById('next5').disabled = true;
-            }
-        });
-
-        document.getElementById('next5').addEventListener('click', function() {
-            goToStep(6);
-        });
-
-        // Step 6: Revenue (number input)
-        document.getElementById('annualRevenue').addEventListener('input', function() {
-            const value = parseInt(this.value);
-            if (!isNaN(value) && value >= 0) {
-                formData.revenue = value;
                 document.getElementById('next6').disabled = false;
             } else {
                 document.getElementById('next6').disabled = true;
@@ -901,16 +1642,31 @@
             goToStep(7);
         });
 
-        // Step 7: Back button
-        document.getElementById('back7').addEventListener('click', function() {
-            if (formData.structure === 'creation') {
-                goToStep(4); // Creation: back to services
+        // Step 7: Revenue (number input)
+        document.getElementById('annualRevenue').addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (!isNaN(value) && value >= 0) {
+                formData.revenue = value;
+                document.getElementById('next7').disabled = false;
             } else {
-                goToStep(6); // Non-creation: back to revenue
+                document.getElementById('next7').disabled = true;
             }
         });
 
-        // Step 7: Submit
+        document.getElementById('next7').addEventListener('click', function() {
+            goToStep(8);
+        });
+
+        // Step 8: Back button
+        document.getElementById('back8').addEventListener('click', function() {
+            if (formData.structure === 'creation') {
+                goToStep(5); // Creation: back to services
+            } else {
+                goToStep(7); // Non-creation: back to revenue
+            }
+        });
+
+        // Step 8: Submit
         document.getElementById('submit').addEventListener('click', function() {
             const prenom = document.getElementById('prenom').value;
             const nom = document.getElementById('nom').value;
@@ -1416,12 +2172,31 @@
 
             if (step === 'success') {
                 document.getElementById('success').classList.add('active');
-                currentStep = 8;
+                currentStep = 9;
+                ppStep = 0;
+            } else if (step === 'successPhysique') {
+                document.getElementById('successPhysique').classList.add('active');
+                ppStep = 5;
+            } else if (step === 'pp1') {
+                document.getElementById('stepPP1').classList.add('active');
+                ppStep = 1;
+            } else if (step === 'pp2') {
+                document.getElementById('stepPP2').classList.add('active');
+                ppStep = 2;
+            } else if (step === 'pp3') {
+                document.getElementById('stepPP3').classList.add('active');
+                ppStep = 3;
+                showPP3Section();
+                validatePP3();
+            } else if (step === 'pp4') {
+                document.getElementById('stepPP4').classList.add('active');
+                ppStep = 4;
             } else {
                 document.getElementById(`step${step}`).classList.add('active');
                 currentStep = step;
-                // Update services visibility when entering step 4
-                if (step === 4) {
+                ppStep = 0;
+                // Update services visibility when entering step 5
+                if (step === 5) {
                     updateServicesVisibility();
                     updateServicesNextButton();
                 }
@@ -1432,8 +2207,13 @@
         }
 
         function updateProgress() {
-            const progress = (currentStep / 7) * 100;
-            document.getElementById('progressBar').style.width = `${progress}%`;
+            let progress;
+            if (ppStep > 0) {
+                progress = (ppStep / 4) * 100;
+            } else {
+                progress = (currentStep / 8) * 100;
+            }
+            document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
         }
     </script>
 </body>
