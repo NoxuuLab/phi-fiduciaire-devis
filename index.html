@@ -1524,10 +1524,10 @@
         function updateServicesNextButton() {
             if (formData.structure === 'creation') {
                 // For creation, services are optional (domiciliation/admin only)
-                document.getElementById('next4').disabled = false;
+                document.getElementById('next5').disabled = false;
             } else {
                 const anySelected = Object.values(formData.services).some(v => v === true);
-                document.getElementById('next4').disabled = !anySelected;
+                document.getElementById('next5').disabled = !anySelected;
             }
         }
 
