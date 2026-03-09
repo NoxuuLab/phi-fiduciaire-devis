@@ -565,17 +565,48 @@
                 </div>
             </div>
 
-            <!-- PP Step 1: Service selection -->
+            <!-- PP Step 1: Situation personnelle -->
             <div class="step" id="stepPP1">
-                <p class="step-indicator">ÉTAPE 1 SUR 4 — PERSONNE PHYSIQUE</p>
-                <h2>Type de service</h2>
-                <p class="question">Pour quel service souhaitez-vous un devis ?</p>
+                <p class="step-indicator">ÉTAPE 1 SUR 5 — PERSONNE PHYSIQUE</p>
+                <h2>Votre situation personnelle</h2>
+                <p class="question">Les éléments de base de votre dossier fiscal.</p>
 
-                <div class="options-grid">
-                    <button class="option-btn" data-pp-service="fiscale">Déclaration fiscale annuelle<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Déclaration d'impôt, optimisation fiscale</span></button>
-                    <button class="option-btn" data-pp-service="immobilier">Vente immobilière<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Calcul de l'impôt sur le gain immobilier</span></button>
-                    <button class="option-btn" data-pp-service="succession">Succession / héritage<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Déclaration de succession, partage</span></button>
-                    <button class="option-btn" data-pp-service="autre">Autre<span style="display:block;font-size:0.8rem;font-weight:400;margin-top:0.25rem;opacity:0.8;">Autre demande ou situation particulière</span></button>
+                <div class="pp-section">
+                    <p class="pp-section-label">État civil *</p>
+                    <div class="options-grid">
+                        <button class="option-btn" data-pp-etat="celibataire">Célibataire</button>
+                        <button class="option-btn" data-pp-etat="couple">Marié(e) / Couple</button>
+                        <button class="option-btn" data-pp-etat="divorce">Divorcé(e) / Séparé(e)</button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="ppEnfants">Enfants à charge</label>
+                    <input type="number" id="ppEnfants" min="0" step="1" value="0">
+                </div>
+
+                <div class="pp-section">
+                    <p class="pp-section-label">Canton de résidence *</p>
+                    <div class="options-grid">
+                        <button class="option-btn" data-pp-canton="ge">Genève</button>
+                        <button class="option-btn" data-pp-canton="vd">Vaud</button>
+                        <button class="option-btn" data-pp-canton="autre">Autre canton</button>
+                    </div>
+                </div>
+
+                <div class="pp-section">
+                    <p class="pp-section-label">Situation internationale (plusieurs choix possibles)</p>
+                    <div class="checkbox-options-grid">
+                        <label class="checkbox-option-small" id="ppIntFrontalierLabel">
+                            <input type="checkbox" id="ppIntFrontalier"> Frontalier
+                        </label>
+                        <label class="checkbox-option-small" id="ppIntRevenusEtrangersLabel">
+                            <input type="checkbox" id="ppIntRevenusEtrangers"> Revenus étrangers
+                        </label>
+                        <label class="checkbox-option-small" id="ppIntImmoEtrangerLabel">
+                            <input type="checkbox" id="ppIntImmoEtranger"> Bien immobilier à l'étranger
+                        </label>
+                    </div>
                 </div>
 
                 <div class="navigation">
@@ -584,279 +615,154 @@
                 </div>
             </div>
 
-            <!-- PP Step 2: Personal situation -->
+            <!-- PP Step 2: Revenus -->
             <div class="step" id="stepPP2">
-                <p class="step-indicator">ÉTAPE 2 SUR 4 — PERSONNE PHYSIQUE</p>
-                <h2>Votre situation personnelle</h2>
-                <p class="question">Quelques informations pour personnaliser votre devis</p>
+                <p class="step-indicator">ÉTAPE 2 SUR 5 — PERSONNE PHYSIQUE</p>
+                <h2>Vos sources de revenus</h2>
+                <p class="question">Sélectionnez les catégories présentes dans votre déclaration.</p>
 
                 <div class="pp-section">
-                    <p class="pp-section-label">Statut civil</p>
-                    <div class="options-grid">
-                        <button class="option-btn" data-pp-civil="celibataire">Célibataire</button>
-                        <button class="option-btn" data-pp-civil="marie">Marié·e</button>
-                        <button class="option-btn" data-pp-civil="divorce">Divorcé·e</button>
-                        <button class="option-btn" data-pp-civil="veuf">Veuf·ve</button>
+                    <div class="checkbox-options-grid">
+                        <label class="checkbox-option-small" id="ppRevSalaireLabel">
+                            <input type="checkbox" id="ppRevSalaire"> Salaire
+                        </label>
+                        <label class="checkbox-option-small" id="ppRevIndependantLabel">
+                            <input type="checkbox" id="ppRevIndependant"> Activité indépendante
+                        </label>
+                        <label class="checkbox-option-small" id="ppRevChomageLabel">
+                            <input type="checkbox" id="ppRevChomage"> Chômage / APG
+                        </label>
+                        <label class="checkbox-option-small" id="ppRevRetraiteLabel">
+                            <input type="checkbox" id="ppRevRetraite"> Rente / Retraite
+                        </label>
+                        <label class="checkbox-option-small" id="ppRevLocatifLabel">
+                            <input type="checkbox" id="ppRevLocatif"> Revenus locatifs
+                        </label>
+                        <label class="checkbox-option-small" id="ppRevPensionLabel">
+                            <input type="checkbox" id="ppRevPension"> Pension alimentaire
+                        </label>
                     </div>
                 </div>
 
-                <div class="input-group">
-                    <label for="ppChildren">Enfants à charge</label>
-                    <input type="number" id="ppChildren" min="0" step="1" value="0">
-                </div>
-
-                <div class="input-group">
-                    <label for="ppCanton">Canton de domicile</label>
-                    <select id="ppCanton" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; cursor: pointer;">
-                        <option value="">Sélectionner un canton</option>
-                        <option value="AG">Argovie (AG)</option>
-                        <option value="AI">Appenzell Rhodes-Int. (AI)</option>
-                        <option value="AR">Appenzell Rhodes-Ext. (AR)</option>
-                        <option value="BE">Berne (BE)</option>
-                        <option value="BL">Bâle-Campagne (BL)</option>
-                        <option value="BS">Bâle-Ville (BS)</option>
-                        <option value="FR">Fribourg (FR)</option>
-                        <option value="GE">Genève (GE)</option>
-                        <option value="GL">Glaris (GL)</option>
-                        <option value="GR">Grisons (GR)</option>
-                        <option value="JU">Jura (JU)</option>
-                        <option value="LU">Lucerne (LU)</option>
-                        <option value="NE">Neuchâtel (NE)</option>
-                        <option value="NW">Nidwald (NW)</option>
-                        <option value="OW">Obwald (OW)</option>
-                        <option value="SG">Saint-Gall (SG)</option>
-                        <option value="SH">Schaffhouse (SH)</option>
-                        <option value="SO">Soleure (SO)</option>
-                        <option value="SZ">Schwyz (SZ)</option>
-                        <option value="TG">Thurgovie (TG)</option>
-                        <option value="TI">Tessin (TI)</option>
-                        <option value="UR">Uri (UR)</option>
-                        <option value="VD">Vaud (VD)</option>
-                        <option value="VS">Valais (VS)</option>
-                        <option value="ZG">Zoug (ZG)</option>
-                        <option value="ZH">Zurich (ZH)</option>
+                <div class="input-group" id="ppIndepModeBlock" style="display: none;">
+                    <label for="ppIndepMode">Comptabilité indépendante</label>
+                    <select id="ppIndepMode" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; cursor: pointer;">
+                        <option value="preparee">Comptabilité déjà préparée</option>
+                        <option value="non_preparee">Documents à trier / reconstituer</option>
                     </select>
                 </div>
 
-                <div class="pp-section">
-                    <p class="pp-section-label">Situation professionnelle</p>
-                    <div class="options-grid options-grid-3">
-                        <button class="option-btn" data-pp-emploi="salarie">Salarié·e</button>
-                        <button class="option-btn" data-pp-emploi="independant">Indépendant·e</button>
-                        <button class="option-btn" data-pp-emploi="les-deux">Les deux</button>
-                    </div>
+                <div class="input-group">
+                    <label for="ppCertificats">Certificats de revenus</label>
+                    <select id="ppCertificats" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; cursor: pointer;">
+                        <option value="1">1 certificat</option>
+                        <option value="2_3">2 à 3 certificats (+CHF 20)</option>
+                        <option value="4_plus">4 ou plus (+CHF 50)</option>
+                    </select>
                 </div>
 
                 <div class="navigation">
                     <button class="btn btn-secondary" onclick="goToStep('pp1')">← Retour</button>
-                    <button class="btn btn-primary" id="nextPP2" disabled>Continuer →</button>
+                    <button class="btn btn-primary" id="nextPP2">Continuer →</button>
                 </div>
             </div>
 
-            <!-- PP Step 3: Specific questions (conditional by service) -->
+            <!-- PP Step 3: Patrimoine -->
             <div class="step" id="stepPP3">
-                <p class="step-indicator">ÉTAPE 3 SUR 4 — PERSONNE PHYSIQUE</p>
-                <h2 id="pp3Title">Questions spécifiques</h2>
-                <p class="question" id="pp3Subtitle">En savoir plus sur votre situation</p>
+                <p class="step-indicator">ÉTAPE 3 SUR 5 — PERSONNE PHYSIQUE</p>
+                <h2>Patrimoine à déclarer</h2>
+                <p class="question">Éléments impactant la complexité du traitement.</p>
 
-                <!-- Fiscale section -->
-                <div id="pp3Fiscale" style="display:none">
-                    <div class="yn-question">
-                        <p class="yn-label">Plusieurs employeurs ou sources de revenus ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="multipleEmployeurs" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="multipleEmployeurs" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Revenus étrangers ou biens à l'étranger ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="revenusEtrangers" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="revenusEtrangers" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Retrait de capital 2e ou 3e pilier cette année ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="retraitCapital" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="retraitCapital" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Propriétaire d'un bien immobilier ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="proprietaireImmo" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="proprietaireImmo" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Frontalier·ère ou expatrié·e ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="frontalier" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="frontalier" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Événement majeur cette année ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="evenementMajeur" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="evenementMajeur" data-pp-v="false">Non</button>
-                        </div>
-                        <div id="evenementsSection" style="display:none; margin-top: 0.75rem;">
-                            <p class="yn-label" style="margin-bottom: 0.5rem;">Lesquels ? (plusieurs choix possibles)</p>
-                            <div class="checkbox-options-grid">
-                                <label class="checkbox-option-small" id="evtDivorceLabel">
-                                    <input type="checkbox" id="evtDivorce"> Divorce
-                                </label>
-                                <label class="checkbox-option-small" id="evtHeritageLabel">
-                                    <input type="checkbox" id="evtHeritage"> Héritage
-                                </label>
-                                <label class="checkbox-option-small" id="evtVenteImmoLabel">
-                                    <input type="checkbox" id="evtVenteImmo"> Vente immobilière
-                                </label>
-                                <label class="checkbox-option-small" id="evtCreationEntrepriseLabel">
-                                    <input type="checkbox" id="evtCreationEntreprise"> Création d'entreprise
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Immobilier section -->
-                <div id="pp3Immobilier" style="display:none">
-                    <div class="input-group">
-                        <label for="ppDateAcquisition">Date d'acquisition du bien</label>
-                        <input type="date" id="ppDateAcquisition">
-                    </div>
-                    <div class="input-group">
-                        <label for="ppPrixAchat">Prix d'achat approximatif (CHF)</label>
-                        <input type="number" id="ppPrixAchat" min="0" step="10000" placeholder="ex: 650000">
-                    </div>
-                    <div class="input-group">
-                        <label for="ppMontantTravaux">Montant approximatif des travaux (CHF)</label>
-                        <input type="number" id="ppMontantTravaux" min="0" step="1000" placeholder="0 si aucun travaux">
-                    </div>
-                    <div class="pp-section">
-                        <p class="pp-section-label">Usage du bien</p>
-                        <div class="options-grid">
-                            <button class="option-btn" data-pp-usage="principale">Résidence principale</button>
-                            <button class="option-btn" data-pp-usage="locatif">Locatif</button>
-                        </div>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Réinvestissement prévu dans un autre bien ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="reinvestissement" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="reinvestissement" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Succession section -->
-                <div id="pp3Succession" style="display:none">
-                    <div class="input-group">
-                        <label for="ppLienParente">Lien de parenté avec le défunt</label>
-                        <input type="text" id="ppLienParente" placeholder="ex: Enfant, Conjoint, Frère/Sœur…">
-                    </div>
-                    <div class="input-group">
-                        <label for="ppCantonDefunt">Canton de domicile du défunt</label>
-                        <select id="ppCantonDefunt" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; cursor: pointer;">
-                            <option value="">Sélectionner un canton</option>
-                            <option value="AG">Argovie (AG)</option>
-                            <option value="AI">Appenzell Rhodes-Int. (AI)</option>
-                            <option value="AR">Appenzell Rhodes-Ext. (AR)</option>
-                            <option value="BE">Berne (BE)</option>
-                            <option value="BL">Bâle-Campagne (BL)</option>
-                            <option value="BS">Bâle-Ville (BS)</option>
-                            <option value="FR">Fribourg (FR)</option>
-                            <option value="GE">Genève (GE)</option>
-                            <option value="GL">Glaris (GL)</option>
-                            <option value="GR">Grisons (GR)</option>
-                            <option value="JU">Jura (JU)</option>
-                            <option value="LU">Lucerne (LU)</option>
-                            <option value="NE">Neuchâtel (NE)</option>
-                            <option value="NW">Nidwald (NW)</option>
-                            <option value="OW">Obwald (OW)</option>
-                            <option value="SG">Saint-Gall (SG)</option>
-                            <option value="SH">Schaffhouse (SH)</option>
-                            <option value="SO">Soleure (SO)</option>
-                            <option value="SZ">Schwyz (SZ)</option>
-                            <option value="TG">Thurgovie (TG)</option>
-                            <option value="TI">Tessin (TI)</option>
-                            <option value="UR">Uri (UR)</option>
-                            <option value="VD">Vaud (VD)</option>
-                            <option value="VS">Valais (VS)</option>
-                            <option value="ZG">Zoug (ZG)</option>
-                            <option value="ZH">Zurich (ZH)</option>
-                        </select>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Bien immobilier dans la succession ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="bienImmo" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="bienImmo" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Biens à l'étranger ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="biensEtranger" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="biensEtranger" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                    <div class="yn-question">
-                        <p class="yn-label">Plusieurs héritiers impliqués ?</p>
-                        <div class="yn-buttons">
-                            <button class="yn-btn" data-pp-q="plusieursHeritiers" data-pp-v="true">Oui</button>
-                            <button class="yn-btn" data-pp-q="plusieursHeritiers" data-pp-v="false">Non</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Autre section -->
-                <div id="pp3Autre" style="display:none">
-                    <div class="input-group">
-                        <label for="ppDescription">Décrivez brièvement votre situation et ce que vous recherchez</label>
-                        <textarea id="ppDescription" rows="5" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; resize: vertical;" placeholder="Décrivez votre situation…"></textarea>
+                <div class="pp-section">
+                    <div class="checkbox-options-grid">
+                        <label class="checkbox-option-small" id="ppPatTitresLabel">
+                            <input type="checkbox" id="ppPatTitres"> Portefeuille titres
+                        </label>
+                        <label class="checkbox-option-small" id="ppPatImmoCHLabel">
+                            <input type="checkbox" id="ppPatImmoCH"> Immobilier en Suisse
+                        </label>
+                        <label class="checkbox-option-small" id="ppPatImmoEtrangerLabel">
+                            <input type="checkbox" id="ppPatImmoEtranger"> Immobilier à l'étranger
+                        </label>
+                        <label class="checkbox-option-small" id="ppPatPilier3Label">
+                            <input type="checkbox" id="ppPatPilier3"> 3e pilier
+                        </label>
+                        <label class="checkbox-option-small" id="ppPatSocieteLabel">
+                            <input type="checkbox" id="ppPatSociete"> Participation dans une société
+                        </label>
+                        <label class="checkbox-option-small" id="ppPatCryptoLabel">
+                            <input type="checkbox" id="ppPatCrypto"> Cryptomonnaies
+                        </label>
                     </div>
                 </div>
 
                 <div class="navigation">
                     <button class="btn btn-secondary" onclick="goToStep('pp2')">← Retour</button>
-                    <button class="btn btn-primary" id="nextPP3" disabled>Continuer →</button>
+                    <button class="btn btn-primary" id="nextPP3">Continuer →</button>
                 </div>
             </div>
 
-            <!-- PP Step 4: Contact details -->
+            <!-- PP Step 4: Complexité -->
             <div class="step" id="stepPP4">
-                <p class="step-indicator">ÉTAPE 4 SUR 4 — PERSONNE PHYSIQUE</p>
-                <h2>Vos coordonnées</h2>
-                <p class="question">Pour recevoir votre devis personnalisé</p>
+                <p class="step-indicator">ÉTAPE 4 SUR 5 — PERSONNE PHYSIQUE</p>
+                <h2>Éléments particuliers</h2>
+                <p class="question">Situations influençant le temps de traitement.</p>
+
+                <div class="pp-section">
+                    <div class="checkbox-options-grid">
+                        <label class="checkbox-option-small" id="ppCxImmeubleLabel">
+                            <input type="checkbox" id="ppCxImmeuble"> Plusieurs immeubles
+                        </label>
+                        <label class="checkbox-option-small" id="ppCxSuccessionLabel">
+                            <input type="checkbox" id="ppCxSuccession"> Succession / héritage
+                        </label>
+                        <label class="checkbox-option-small" id="ppCxFormationLabel">
+                            <input type="checkbox" id="ppCxFormation"> Frais de formation
+                        </label>
+                    </div>
+                </div>
 
                 <div class="input-group">
-                    <label for="ppPrenom">Prénom *</label>
-                    <input type="text" id="ppPrenom" required>
-                </div>
-                <div class="input-group">
-                    <label for="ppNom">Nom *</label>
-                    <input type="text" id="ppNom" required>
-                </div>
-                <div class="input-group">
-                    <label for="ppEmail">Email *</label>
-                    <input type="email" id="ppEmail" required>
-                </div>
-                <div class="input-group">
-                    <label for="ppTelephone">Téléphone *</label>
-                    <input type="tel" id="ppTelephone" required>
-                </div>
-
-                <div class="pp-contact-summary">
-                    <p>Un conseiller PHI Fiduciaire vous contactera dans les meilleurs délais pour discuter de votre demande et établir votre devis personnalisé.</p>
+                    <label for="ppDocsReady">Préparation des documents</label>
+                    <select id="ppDocsReady" style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-dark); background: var(--white); width: 100%; cursor: pointer;">
+                        <option value="prets">Dossier complet et trié</option>
+                        <option value="partiel">Partiellement trié</option>
+                        <option value="desordre">Documents en désordre (+CHF 60)</option>
+                    </select>
                 </div>
 
                 <div class="navigation">
                     <button class="btn btn-secondary" onclick="goToStep('pp3')">← Retour</button>
-                    <button class="btn btn-primary" id="submitPP">Envoyer ma demande →</button>
+                    <button class="btn btn-primary" id="nextPP4">Continuer →</button>
+                </div>
+            </div>
+
+            <!-- PP Step 5: Coordonnées -->
+            <div class="step" id="stepPP5">
+                <p class="step-indicator">ÉTAPE 5 SUR 5 — PERSONNE PHYSIQUE</p>
+                <h2>Vos coordonnées</h2>
+                <p class="question">Pour recevoir votre estimation et être contacté par notre équipe.</p>
+
+                <div class="input-group">
+                    <label for="ppNomPrenom">Prénom et nom *</label>
+                    <input type="text" id="ppNomPrenom" placeholder="Ex : Sophie Müller" autocomplete="name">
+                </div>
+                <div class="input-group">
+                    <label for="ppEmail">Email *</label>
+                    <input type="email" id="ppEmail" placeholder="Ex : s.muller@email.com" autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <label for="ppTelephone">Téléphone *</label>
+                    <input type="tel" id="ppTelephone" placeholder="Ex : +41 79 000 00 00" autocomplete="tel">
+                </div>
+
+                <div id="ppFormError" style="display: none; margin-top: 0.75rem; padding: 0.75rem 1rem; background: rgba(239,68,68,0.08); border-left: 3px solid #ef4444; border-radius: 4px;">
+                    <p id="ppFormErrorText" style="font-size: 0.875rem; color: #b91c1c; font-weight: 600; margin: 0;"></p>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="goToStep('pp4')">← Retour</button>
+                    <button class="btn btn-primary" id="submitPP">Voir mon estimation →</button>
                 </div>
             </div>
 
@@ -1059,27 +965,34 @@
                 </div>
             </div>
 
-            <!-- Success: Personne physique -->
-            <div class="step" id="successPhysique">
+            <!-- PP Step 6: Résultat -->
+            <div class="step" id="stepPP6">
                 <div class="success-message">
                     <div class="success-icon">✓</div>
-                    <h2>Demande envoyée</h2>
-                    <p class="question">Merci pour votre demande. Un conseiller PHI Fiduciaire vous contactera dans les meilleurs délais.</p>
+                    <h2 id="ppResultTitle">Votre devis estimatif</h2>
+                    <p class="question">Estimation calculée sur la base de votre situation</p>
                 </div>
 
                 <div class="quote-summary" style="margin-top: 2rem;">
-                    <h3>Récapitulatif de votre demande</h3>
-                    <div id="ppSummary"></div>
+                    <div style="text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
+                        <p style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-light); margin-bottom: 0.75rem;">Honoraires estimés</p>
+                        <p id="ppResultPrice" style="font-size: 2.25rem; font-weight: 700; color: var(--navy); letter-spacing: -0.03em; line-height: 1;"></p>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">Estimation indicative · Devis définitif sur consultation</p>
+                    </div>
+
+                    <div id="ppResultWarning" style="display: none; margin-bottom: 1rem; padding: 0.75rem 1rem; background: rgba(249,115,22,0.08); border-left: 3px solid #f97316; font-size: 0.85rem; color: #9a3412; font-weight: 600; line-height: 1.5;"></div>
+
+                    <div id="ppResultChips" style="display: flex; flex-wrap: wrap; gap: 0.4rem;"></div>
                 </div>
 
-                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(30, 58, 95, 0.05); border-radius: 12px; border-left: 4px solid var(--gold);">
-                    <p style="font-size: 0.9rem; color: var(--text-light); margin: 0;">
-                        <strong style="color: var(--navy);">Prochaine étape :</strong> Notre équipe analysera votre dossier et vous contactera pour établir un devis personnalisé adapté à votre situation.
+                <div style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(30, 58, 95, 0.05); border-radius: 12px; border-left: 4px solid var(--gold);">
+                    <p style="font-size: 0.875rem; color: var(--text-light); margin: 0;">
+                        <strong style="color: var(--navy);">Prochaine étape :</strong> Un conseiller PHI Fiduciaire vous contactera pour confirmer votre devis et répondre à vos questions.
                     </p>
                 </div>
 
                 <div class="navigation" style="margin-top: 2rem;">
-                    <button class="btn btn-secondary" style="visibility: hidden;"></button>
+                    <button class="btn btn-secondary" onclick="window.print()">Imprimer le devis</button>
                     <button class="btn btn-primary" onclick="location.reload()">Nouvelle simulation</button>
                 </div>
             </div>
@@ -1218,250 +1131,183 @@
         });
 
         // ============================================================
-        // PERSONNE PHYSIQUE FLOW
+        // PERSONNE PHYSIQUE FLOW — Déclaration fiscale
         // ============================================================
 
-        // PP Step 1: Service selection
-        document.querySelectorAll('#stepPP1 .option-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('#stepPP1 .option-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                formData.physique.service = this.dataset.ppService;
-                document.getElementById('nextPP1').disabled = false;
-            });
-        });
+        // PP state object (separate from formData to avoid conflicts)
+        const ppData = {
+            etat: null, enfants: 0, canton: null,
+            international: { frontalier: false, revenusEtrangers: false, immoEtranger: false },
+            revenus: { salaire: false, independant: false, chomage: false, retraite: false, locatif: false, pension: false },
+            indepMode: 'preparee', certificats: '1',
+            patrimoine: { titres: false, immoCH: false, immoEtranger: false, pilier3: false, societe: false, crypto: false },
+            complexite: { plusieursImmeubles: false, succession: false, formation: false },
+            docsReady: 'prets'
+        };
 
-        document.getElementById('nextPP1').addEventListener('click', function() {
-            goToStep('pp2');
-        });
-
-        // PP Step 2: Personal situation
-        function validatePP2() {
-            const ok = formData.physique.civilStatus !== '' &&
-                       formData.physique.canton !== '' &&
-                       formData.physique.emploi !== '';
-            document.getElementById('nextPP2').disabled = !ok;
+        // PP Step 1: État civil + Canton (both required to enable next)
+        function validatePP1() {
+            document.getElementById('nextPP1').disabled = !(ppData.etat && ppData.canton);
         }
 
-        document.querySelectorAll('#stepPP2 [data-pp-civil]').forEach(btn => {
+        document.querySelectorAll('[data-pp-etat]').forEach(btn => {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('#stepPP2 [data-pp-civil]').forEach(b => b.classList.remove('selected'));
+                document.querySelectorAll('[data-pp-etat]').forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
-                formData.physique.civilStatus = this.dataset.ppCivil;
-                validatePP2();
+                ppData.etat = this.dataset.ppEtat;
+                validatePP1();
             });
         });
 
-        document.getElementById('ppChildren').addEventListener('input', function() {
-            const v = parseInt(this.value);
-            formData.physique.children = isNaN(v) ? 0 : Math.max(0, v);
+        document.getElementById('ppEnfants').addEventListener('input', function() {
+            ppData.enfants = Math.max(0, parseInt(this.value) || 0);
         });
 
-        document.getElementById('ppCanton').addEventListener('change', function() {
-            formData.physique.canton = this.value;
-            validatePP2();
-        });
-
-        document.querySelectorAll('#stepPP2 [data-pp-emploi]').forEach(btn => {
+        document.querySelectorAll('[data-pp-canton]').forEach(btn => {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('#stepPP2 [data-pp-emploi]').forEach(b => b.classList.remove('selected'));
+                document.querySelectorAll('[data-pp-canton]').forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
-                formData.physique.emploi = this.dataset.ppEmploi;
-                validatePP2();
+                ppData.canton = this.dataset.ppCanton;
+                validatePP1();
             });
         });
 
-        document.getElementById('nextPP2').addEventListener('click', function() {
-            goToStep('pp3');
-        });
-
-        // PP Step 3: Show correct section and set title
-        function showPP3Section() {
-            const service = formData.physique.service;
-            const sections = { fiscale: 'pp3Fiscale', immobilier: 'pp3Immobilier', succession: 'pp3Succession', autre: 'pp3Autre' };
-            const titles = {
-                fiscale: 'Déclaration fiscale annuelle',
-                immobilier: 'Vente immobilière',
-                succession: 'Succession / héritage',
-                autre: 'Votre demande'
-            };
-            const subtitles = {
-                fiscale: 'Répondez à ces questions pour affiner votre devis',
-                immobilier: 'Informations sur le bien immobilier',
-                succession: 'Informations sur la succession',
-                autre: 'Décrivez votre situation'
-            };
-            Object.values(sections).forEach(id => document.getElementById(id).style.display = 'none');
-            if (sections[service]) document.getElementById(sections[service]).style.display = 'block';
-            document.getElementById('pp3Title').textContent = titles[service] || 'Questions spécifiques';
-            document.getElementById('pp3Subtitle').textContent = subtitles[service] || '';
-        }
-
-        // PP Step 3: Validate based on active service
-        function validatePP3() {
-            const service = formData.physique.service;
-            let ok = false;
-            if (service === 'fiscale') {
-                const f = formData.physique.fiscale;
-                const allAnswered = f.multipleEmployeurs !== null &&
-                                    f.revenusEtrangers !== null &&
-                                    f.retraitCapital !== null &&
-                                    f.proprietaireImmo !== null &&
-                                    f.frontalier !== null &&
-                                    f.evenementMajeur !== null;
-                const evtOk = f.evenementMajeur !== true ||
-                              Object.values(f.evenements).some(v => v === true);
-                ok = allAnswered && evtOk;
-            } else if (service === 'immobilier') {
-                const i = formData.physique.immobilier;
-                ok = i.dateAcquisition !== '' &&
-                     i.prixAchat !== null && i.prixAchat > 0 &&
-                     i.usageBien !== '' &&
-                     i.reinvestissement !== null;
-            } else if (service === 'succession') {
-                const s = formData.physique.succession;
-                ok = s.lienParente.trim() !== '' &&
-                     s.cantonDefunt !== '' &&
-                     s.bienImmo !== null &&
-                     s.biensEtranger !== null &&
-                     s.plusieursHeritiers !== null;
-            } else if (service === 'autre') {
-                ok = formData.physique.autre.description.trim().length > 10;
-            }
-            document.getElementById('nextPP3').disabled = !ok;
-        }
-
-        // PP Step 3: Yes/No button handlers (shared across sections)
-        document.querySelectorAll('#stepPP3 .yn-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const q = this.dataset.ppQ;
-                const v = this.dataset.ppV === 'true';
-                // Deselect siblings in same yn-buttons group
-                this.closest('.yn-buttons').querySelectorAll('.yn-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-
-                // Route value to correct data sub-object
-                const service = formData.physique.service;
-                if (service === 'fiscale' && formData.physique.fiscale.hasOwnProperty(q)) {
-                    formData.physique.fiscale[q] = v;
-                    // Show/hide evenements checkboxes
-                    if (q === 'evenementMajeur') {
-                        document.getElementById('evenementsSection').style.display = v ? 'block' : 'none';
-                        if (!v) {
-                            // Reset checkboxes
-                            ['evtDivorce', 'evtHeritage', 'evtVenteImmo', 'evtCreationEntreprise'].forEach(id => {
-                                document.getElementById(id).checked = false;
-                                document.getElementById(id + 'Label').classList.remove('selected');
-                            });
-                            formData.physique.fiscale.evenements = { divorce: false, heritage: false, venteImmo: false, creationEntreprise: false };
-                        }
-                    }
-                } else if (service === 'immobilier' && formData.physique.immobilier.hasOwnProperty(q)) {
-                    formData.physique.immobilier[q] = v;
-                } else if (service === 'succession') {
-                    if (formData.physique.succession.hasOwnProperty(q)) {
-                        formData.physique.succession[q] = v;
-                    }
-                }
-                validatePP3();
-            });
-        });
-
-        // PP Step 3: Fiscale - evenement checkboxes
-        ['evtDivorce', 'evtHeritage', 'evtVenteImmo', 'evtCreationEntreprise'].forEach(id => {
+        [['ppIntFrontalier','frontalier'],['ppIntRevenusEtrangers','revenusEtrangers'],['ppIntImmoEtranger','immoEtranger']].forEach(([id, key]) => {
             document.getElementById(id).addEventListener('change', function() {
-                const label = document.getElementById(id + 'Label');
-                label.classList.toggle('selected', this.checked);
-                const keyMap = { evtDivorce: 'divorce', evtHeritage: 'heritage', evtVenteImmo: 'venteImmo', evtCreationEntreprise: 'creationEntreprise' };
-                formData.physique.fiscale.evenements[keyMap[id]] = this.checked;
-                validatePP3();
+                this.closest('label').classList.toggle('selected', this.checked);
+                ppData.international[key] = this.checked;
             });
         });
 
-        // PP Step 3: Immobilier inputs
-        document.getElementById('ppDateAcquisition').addEventListener('input', function() {
-            formData.physique.immobilier.dateAcquisition = this.value;
-            validatePP3();
-        });
+        document.getElementById('nextPP1').addEventListener('click', () => goToStep('pp2'));
 
-        document.getElementById('ppPrixAchat').addEventListener('input', function() {
-            formData.physique.immobilier.prixAchat = parseFloat(this.value) || null;
-            validatePP3();
-        });
-
-        document.getElementById('ppMontantTravaux').addEventListener('input', function() {
-            formData.physique.immobilier.montantTravaux = parseFloat(this.value) || 0;
-        });
-
-        document.querySelectorAll('#pp3Immobilier [data-pp-usage]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('#pp3Immobilier [data-pp-usage]').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                formData.physique.immobilier.usageBien = this.dataset.ppUsage;
-                validatePP3();
+        // PP Step 2: Revenus
+        [['ppRevSalaire','salaire'],['ppRevIndependant','independant'],['ppRevChomage','chomage'],
+         ['ppRevRetraite','retraite'],['ppRevLocatif','locatif'],['ppRevPension','pension']].forEach(([id, key]) => {
+            document.getElementById(id).addEventListener('change', function() {
+                this.closest('label').classList.toggle('selected', this.checked);
+                ppData.revenus[key] = this.checked;
+                if (key === 'independant') {
+                    document.getElementById('ppIndepModeBlock').style.display = this.checked ? 'block' : 'none';
+                }
             });
         });
 
-        // PP Step 3: Succession inputs
-        document.getElementById('ppLienParente').addEventListener('input', function() {
-            formData.physique.succession.lienParente = this.value;
-            validatePP3();
+        document.getElementById('ppIndepMode').addEventListener('change', function() { ppData.indepMode = this.value; });
+        document.getElementById('ppCertificats').addEventListener('change', function() { ppData.certificats = this.value; });
+        document.getElementById('nextPP2').addEventListener('click', () => goToStep('pp3'));
+
+        // PP Step 3: Patrimoine
+        [['ppPatTitres','titres'],['ppPatImmoCH','immoCH'],['ppPatImmoEtranger','immoEtranger'],
+         ['ppPatPilier3','pilier3'],['ppPatSociete','societe'],['ppPatCrypto','crypto']].forEach(([id, key]) => {
+            document.getElementById(id).addEventListener('change', function() {
+                this.closest('label').classList.toggle('selected', this.checked);
+                ppData.patrimoine[key] = this.checked;
+            });
         });
 
-        document.getElementById('ppCantonDefunt').addEventListener('change', function() {
-            formData.physique.succession.cantonDefunt = this.value;
-            validatePP3();
+        document.getElementById('nextPP3').addEventListener('click', () => goToStep('pp4'));
+
+        // PP Step 4: Complexité
+        [['ppCxImmeuble','plusieursImmeubles'],['ppCxSuccession','succession'],['ppCxFormation','formation']].forEach(([id, key]) => {
+            document.getElementById(id).addEventListener('change', function() {
+                this.closest('label').classList.toggle('selected', this.checked);
+                ppData.complexite[key] = this.checked;
+            });
         });
 
-        // PP Step 3: Autre textarea
-        document.getElementById('ppDescription').addEventListener('input', function() {
-            formData.physique.autre.description = this.value;
-            validatePP3();
-        });
+        document.getElementById('ppDocsReady').addEventListener('change', function() { ppData.docsReady = this.value; });
+        document.getElementById('nextPP4').addEventListener('click', () => goToStep('pp5'));
 
-        document.getElementById('nextPP3').addEventListener('click', function() {
-            goToStep('pp4');
-        });
-
-        // PP Step 4: Submit
+        // PP Step 5: Submit + pricing calculation
         document.getElementById('submitPP').addEventListener('click', function() {
-            const prenom = document.getElementById('ppPrenom').value.trim();
-            const nom = document.getElementById('ppNom').value.trim();
+            const nom = document.getElementById('ppNomPrenom').value.trim();
             const email = document.getElementById('ppEmail').value.trim();
             const tel = document.getElementById('ppTelephone').value.trim();
+            const errEl = document.getElementById('ppFormError');
+            const errText = document.getElementById('ppFormErrorText');
 
-            if (!prenom || !nom || !email || !tel) {
-                alert('Veuillez remplir tous les champs obligatoires');
-                return;
+            if (!nom || !email || !tel) {
+                errText.textContent = 'Veuillez remplir tous les champs obligatoires.';
+                errEl.style.display = 'block'; return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                errText.textContent = 'Veuillez saisir une adresse email valide.';
+                errEl.style.display = 'block'; return;
+            }
+            errEl.style.display = 'none';
+            calculateAndShowPP(nom, email, tel);
+        });
+
+        function calculateAndShowPP(nom, email, tel) {
+            let base = 220;
+            const spread = 20;
+            const chips = [];
+            const warnings = [];
+
+            // État civil
+            if (ppData.etat === 'couple')       { base += 30; chips.push('Marié(e) / Couple'); }
+            else if (ppData.etat === 'celibataire') chips.push('Célibataire');
+            else if (ppData.etat === 'divorce')     chips.push('Divorcé(e)');
+
+            // Enfants +CHF 20/enfant
+            if (ppData.enfants > 0) { base += ppData.enfants * 20; chips.push(ppData.enfants + ' enfant' + (ppData.enfants > 1 ? 's' : '')); }
+
+            // International
+            if (ppData.international.frontalier)        { base += 80;  chips.push('Frontalier'); }
+            if (ppData.international.revenusEtrangers)  { base += 80;  chips.push('Revenus étrangers'); }
+            if (ppData.international.immoEtranger)      { base += 180; chips.push('Immo à l\'étranger'); }
+
+            // Patrimoine
+            if (ppData.patrimoine.titres)       { base += 100; chips.push('Titres'); }
+            if (ppData.patrimoine.immoCH)       { base += 90;  chips.push('Immo Suisse'); }
+            if (ppData.patrimoine.immoEtranger) { base += 180; chips.push('Immo étranger (pat.)'); }
+            if (ppData.patrimoine.pilier3)      { base += 20;  chips.push('3e pilier'); }
+            if (ppData.patrimoine.societe)      { base += 200; chips.push('Participation société'); }
+            if (ppData.patrimoine.crypto)       { base += 100; chips.push('Cryptomonnaies'); }
+
+            // Complexité
+            if (ppData.complexite.plusieursImmeubles) { base += 150; chips.push('Plusieurs immeubles'); }
+            if (ppData.complexite.succession)          { base += 200; chips.push('Succession'); }
+
+            // Certificats
+            if (ppData.certificats === '2_3')    { base += 20; chips.push('2–3 certificats'); }
+            if (ppData.certificats === '4_plus') { base += 50; chips.push('4+ certificats'); }
+
+            // Documents
+            if (ppData.docsReady === 'desordre') { base += 60; chips.push('Documents à trier'); }
+
+            // Indépendant
+            let indepMin = 0, indepMax = 0;
+            if (ppData.revenus.independant) {
+                chips.push('Activité indépendante');
+                if (ppData.indepMode === 'preparee') {
+                    indepMin = 240; indepMax = 450;
+                    warnings.push('Comptabilité préparée : 2–3h estimées à CHF 120–150/h.');
+                } else {
+                    indepMin = 960; indepMax = 1800;
+                    warnings.push('Documents à trier : complexité élevée (8–12h estimées). Un devis sur consultation est recommandé.');
+                }
             }
 
-            formData.physique.contact = { prenom, nom, email, telephone: tel };
+            const priceMin = Math.max(base - spread + indepMin, 220);
+            const priceMax = base + spread + indepMax;
 
-            // Build summary
-            const serviceLabels = {
-                fiscale: 'Déclaration fiscale annuelle',
-                immobilier: 'Vente immobilière',
-                succession: 'Succession / héritage',
-                autre: 'Autre'
-            };
-            const civilLabels = { celibataire: 'Célibataire', marie: 'Marié·e', divorce: 'Divorcé·e', veuf: 'Veuf·ve' };
-            const emploiLabels = { salarie: 'Salarié·e', independant: 'Indépendant·e', 'les-deux': 'Les deux' };
-            const ph = formData.physique;
+            // Populate result screen
+            const prenom = nom.split(/\s+/)[0];
+            document.getElementById('ppResultTitle').textContent = prenom ? prenom + ', voici votre estimation' : 'Votre devis estimatif';
+            document.getElementById('ppResultPrice').textContent =
+                'CHF ' + priceMin.toLocaleString('fr-CH') + ' – CHF ' + priceMax.toLocaleString('fr-CH');
 
-            let html = `
-                <div class="summary-item"><span class="summary-label">Service demandé</span><span class="summary-value">${serviceLabels[ph.service] || ph.service}</span></div>
-                <div class="summary-item"><span class="summary-label">Statut civil</span><span class="summary-value">${civilLabels[ph.civilStatus] || ph.civilStatus}</span></div>
-                <div class="summary-item"><span class="summary-label">Enfants à charge</span><span class="summary-value">${ph.children}</span></div>
-                <div class="summary-item"><span class="summary-label">Canton</span><span class="summary-value">${ph.canton}</span></div>
-                <div class="summary-item"><span class="summary-label">Situation professionnelle</span><span class="summary-value">${emploiLabels[ph.emploi] || ph.emploi}</span></div>
-                <div class="summary-item"><span class="summary-label">Nom</span><span class="summary-value">${prenom} ${nom}</span></div>
-                <div class="summary-item"><span class="summary-label">Email</span><span class="summary-value">${email}</span></div>
-                <div class="summary-item"><span class="summary-label">Téléphone</span><span class="summary-value">${tel}</span></div>
-            `;
-            document.getElementById('ppSummary').innerHTML = html;
+            const warnEl = document.getElementById('ppResultWarning');
+            if (warnings.length) { warnEl.innerHTML = warnings.join('<br>'); warnEl.style.display = 'block'; }
+            else warnEl.style.display = 'none';
 
-            goToStep('successPhysique');
-        });
+            const chipStyle = 'display:inline-block;padding:0.2rem 0.6rem;background:rgba(30,58,95,0.07);border:1px solid var(--border);border-radius:4px;font-size:0.75rem;font-weight:600;color:var(--navy);';
+            document.getElementById('ppResultChips').innerHTML = chips.map(c => `<span style="${chipStyle}">${c}</span>`).join('');
+
+            goToStep('pp6');
+        }
 
         // ============================================================
         // END PERSONNE PHYSIQUE FLOW
@@ -2174,9 +2020,6 @@
                 document.getElementById('success').classList.add('active');
                 currentStep = 9;
                 ppStep = 0;
-            } else if (step === 'successPhysique') {
-                document.getElementById('successPhysique').classList.add('active');
-                ppStep = 5;
             } else if (step === 'pp1') {
                 document.getElementById('stepPP1').classList.add('active');
                 ppStep = 1;
@@ -2186,11 +2029,15 @@
             } else if (step === 'pp3') {
                 document.getElementById('stepPP3').classList.add('active');
                 ppStep = 3;
-                showPP3Section();
-                validatePP3();
             } else if (step === 'pp4') {
                 document.getElementById('stepPP4').classList.add('active');
                 ppStep = 4;
+            } else if (step === 'pp5') {
+                document.getElementById('stepPP5').classList.add('active');
+                ppStep = 5;
+            } else if (step === 'pp6') {
+                document.getElementById('stepPP6').classList.add('active');
+                ppStep = 6;
             } else {
                 document.getElementById(`step${step}`).classList.add('active');
                 currentStep = step;
@@ -2209,7 +2056,7 @@
         function updateProgress() {
             let progress;
             if (ppStep > 0) {
-                progress = (ppStep / 4) * 100;
+                progress = (Math.min(ppStep, 5) / 5) * 100;
             } else {
                 progress = (currentStep / 8) * 100;
             }
